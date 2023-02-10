@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cards&amp;Monsters</string>
+    <string name="health_string" translatable="false">2000</string>
+    <string name="blood_drop_icon">Blood drop icon</string>
 </resources>
