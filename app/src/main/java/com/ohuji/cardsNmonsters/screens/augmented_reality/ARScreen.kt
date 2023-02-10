@@ -1,5 +1,6 @@
 package com.ohuji.cardsNmonsters.screens.augmented_reality
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -16,15 +17,14 @@ import io.github.sceneview.math.Position
 @Composable
 fun ARScreen() {
     val nodes = remember { mutableStateListOf<ArNode>() }
+    val context = LocalContext.current
 
-    val a = ArModelNode (
+    val model = ArModelNode (
         placementMode = PlacementMode.BEST_AVAILABLE,
         instantAnchor = false,
         hitPosition = Position(0.0f, 0.0f, -2.0f),
         followHitPosition = true,
     ).apply {
-        val context = LocalContext.current
-
         loadModelGlbAsync(
             context = context,
             //glbFileLocation = "models/goblin_shredder_shield.glb",
@@ -34,6 +34,11 @@ fun ARScreen() {
         )
     }
 
+    val healthBar = HealthBarNode (
+        context = context,
+        lifecycle = null,
+    )
+
     Box(modifier = Modifier.fillMaxSize()) {
         ARScene(
             modifier = Modifier.fillMaxSize(),
@@ -41,7 +46,8 @@ fun ARScreen() {
             planeRenderer = true,
             onCreate = { arSceneView ->
                 // Apply your configuration
-                arSceneView.addChild(a)
+                arSceneView.addChild(model)
+                arSceneView.cameraNode.addChild(healthBar)
             },
             onSessionCreate = { session ->
                 // Configure the ARCore session
