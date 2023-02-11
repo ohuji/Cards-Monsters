@@ -1,0 +1,74 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  local_test_job:
+    name: Running local tests
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Print Java version
+        run: java -version
+      - name: Change wrapper permissions
+        run: chmod +x gradlew
+      - name: Restore Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+        - name: Run debug tests
+            run: ./gradlew testDebugUnitTest --continue
+        - name: Upload test results
+            if: ${{ always() }}
+            uses: actions/upload-artifact@v2
+            with:
+              name: local-test-results
+              path: app/build/local-test-results
+
+  android_test_job:
+    name: Android tests
+    runs-on: macos-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Change wrapper permissions
+        run: chmod +x gradlew
+      - name: Restore Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+        - name: Run android tests
+          uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: 33
+            script: ./gradlew connectedDebugAndroidTest
+
+        - name: Upload test results
+          if: ${{ always() }}
+          uses: actions/upload-artifact@v2
+          with:
+            name: android-test-results
+            path: app/build/android-test-results
