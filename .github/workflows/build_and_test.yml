@@ -33,14 +33,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-        - name: Run debug tests
-            run: ./gradlew testDebugUnitTest --continue
-        - name: Upload test results
-            if: ${{ always() }}
-            uses: actions/upload-artifact@v2
-            with:
-              name: local-test-results
-              path: app/build/local-test-results
+      - name: Run debug tests
+        run: ./gradlew testDebugUnitTest --continue
+      - name: Upload test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: local-test-results
+          path: app/build/local-test-results
 
   android_test_job:
     name: Android tests
@@ -60,15 +60,15 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-        - name: Run android tests
-          uses: reactivecircus/android-emulator-runner@v2
-          with:
-            api-level: 33
-            script: ./gradlew connectedDebugAndroidTest
+      - name: Run android tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          script: ./gradlew connectedDebugAndroidTest
 
-        - name: Upload test results
-          if: ${{ always() }}
-          uses: actions/upload-artifact@v2
-          with:
-            name: android-test-results
-            path: app/build/android-test-results
+      - name: Upload test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-test-results
+          path: app/build/android-test-results
