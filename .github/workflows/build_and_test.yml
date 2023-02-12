@@ -44,7 +44,7 @@ jobs:
 
   android_test_job:
     name: Android Tests
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     continue-on-error: true
     steps:
       - name: Checkout
