@@ -43,7 +43,7 @@ jobs:
           path: '**/build/reports/tests/'
 
   android_test_job:
-    runs-on: macos-latest
+    runs-on: macos-11
     strategy:
       matrix:
         api-level: [ 33, 28 ]
