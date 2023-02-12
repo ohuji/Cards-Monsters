@@ -60,11 +60,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Instrumentation Tests
+      - name: Android Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          script: ./gradlew connectedAndroidTest
+          script: ./gradlew connectedAndroidTest --continue
 
       - name: Upload Android Test Reports
         if: ${{ always() }}
