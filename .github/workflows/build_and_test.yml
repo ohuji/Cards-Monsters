@@ -49,26 +49,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Android Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          script: ./gradlew connectedAndroidTest --continue
+      - name: Gradle Android
+        uses: Raul6469/android-gradle-action@2.0.0
+      - name: Run tests
+        run:  ./gradlew connectedAndroidTest
 
-      - name: Upload Android Test Reports
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: android-test-reports
-          path: '**/build/reports/androidTests/'
+#      - name: Change wrapper permissions
+#        run: chmod +x ./gradlew
+#      - name: Restore Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
+#      - name: Android Tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          script: ./gradlew connectedAndroidTest --continue
+#
+#      - name: Upload Android Test Reports
+#        if: ${{ always() }}
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: android-test-reports
+#          path: '**/build/reports/androidTests/'
