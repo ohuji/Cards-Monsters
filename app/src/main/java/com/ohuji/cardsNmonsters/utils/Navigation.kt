@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
 
+
 @Composable
 fun NavigationHost() {
     val navController = rememberNavController()

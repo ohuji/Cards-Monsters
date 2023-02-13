@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
 }
 
@@ -36,8 +38,10 @@ android {
     }
     buildFeatures {
         compose true
+        viewBinding true
     }
     composeOptions {
+        //TODO: update to 1.3.2 if maps doesn't work
         kotlinCompilerExtensionVersion '1.2.0'
     }
     packagingOptions {
@@ -57,6 +61,7 @@ dependencies {
     implementation 'androidx.compose.material3:material3:1.0.1'
     implementation 'io.github.sceneview:arsceneview:0.9.4'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -84,4 +89,20 @@ dependencies {
     testImplementation("androidx.room:room-testing:$room_version")
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
+
+    // Google maps
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    // Google maps for compose
+    implementation 'com.google.maps.android:maps-compose:2.8.0'
+
+    // KTX for the Maps SDK for Android
+    implementation 'com.google.maps.android:maps-ktx:3.2.1'
+    // KTX for the Maps SDK for Android Utility Library
+    implementation 'com.google.maps.android:maps-utils-ktx:3.2.1'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.42"
+    kapt "com.google.dagger:hilt-android-compiler:2.42"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
 }
