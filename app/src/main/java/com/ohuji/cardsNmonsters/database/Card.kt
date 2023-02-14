@@ -1,22 +1,14 @@
 package com.ohuji.cardsNmonsters.database
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-@Entity
+@Entity(tableName = "Card")
 data class Card(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val cardId: Long,
     val cardName: String,
     val cardModel: String,
-    var cardElement: String,
-    var cardDamage: Int,
-    var decksIn: Long,
+    val cardElement: String,
+    val cardDamage: Int,
     )

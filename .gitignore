@@ -8,6 +8,9 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/vcs.xml
+/.idea/sonarlint/
+#/.idea/codeStyles/Project.xml
+#/.idea/codeStyles/codeStyleConfig.xml
 .DS_Store
 /build
 /captures
