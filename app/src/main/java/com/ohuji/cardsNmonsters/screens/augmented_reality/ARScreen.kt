@@ -40,6 +40,14 @@ fun ARScreen(navController: NavController) {
         lifecycle = null,
     )
 
+    val firstCard = CardNode (
+        context = context,
+        lifecycle = null,
+        layout = "test",
+        x = -0.4f,
+        y = -1.1f,
+    )
+
     Box(modifier = Modifier.fillMaxSize()) {
         ARScene(
             modifier = Modifier.fillMaxSize(),
@@ -48,6 +56,8 @@ fun ARScreen(navController: NavController) {
             onCreate = { arSceneView ->
                 // Apply your configuration
                 arSceneView.addChild(model)
+
+                arSceneView.cameraNode.addChild(firstCard)
                 arSceneView.cameraNode.addChild(healthBar)
             },
             onSessionCreate = { session ->
@@ -58,6 +68,10 @@ fun ARScreen(navController: NavController) {
             },
             onTap = { hitResult ->
                 // User tapped in the AR view
+
+                if (hitResult.hitPose.ty() in -10.0..-0.5 && hitResult.hitPose.tx() in -10.0..-0.1) {
+                    Log.d("TAPDBG", "firstCard TAP")
+                }
             }
         )
     }
