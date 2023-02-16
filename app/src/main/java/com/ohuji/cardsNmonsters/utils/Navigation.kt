@@ -2,6 +2,7 @@ package com.ohuji.cardsNmonsters.utils
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomNavigation
@@ -22,14 +23,24 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
+import com.ohuji.cardsNmonsters.screens.maps.MapState
+import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
+import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationHost(deckViewModel: DeckViewModel) {
+fun NavigationHost(
+    deckViewModel: DeckViewModel,
+    state: MapState,
+    setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
+    calculateZoneViewCenter: () -> LatLngBounds,
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -45,10 +56,19 @@ fun NavigationHost(deckViewModel: DeckViewModel) {
 
             }
             composable("map_screen") {
-
+                MapScreen(
+                    state = state,
+                    navController = navController,
+                    setupClusterManager = setupClusterManager,
+                    calculateZoneViewCenter = calculateZoneViewCenter,
+                )
             }
             composable("deck_building_screen") {
-                DeckScreen(viewModel = deckViewModel, navController = navController, application = Application())
+                DeckScreen(
+                    viewModel = deckViewModel,
+                    navController = navController,
+                    application = Application()
+                )
             }
             composable("collectables_screen") {
 
@@ -81,7 +101,10 @@ fun NavigationBar(navController: NavController) {
                             "home" -> Icon(Icons.Filled.Home, contentDescription = "Home")
                             "map" -> Icon(Icons.Filled.Place, contentDescription = "Map")
                             "deck_building" -> Icon(Icons.Filled.List, contentDescription = "Decks")
-                            "collectables" -> Icon(Icons.Filled.Star, contentDescription = "Collectables")
+                            "collectables" -> Icon(
+                                Icons.Filled.Star,
+                                contentDescription = "Collectables"
+                            )
                             else -> Icon(Icons.Default.Home, contentDescription = "Home")
                         }
                     }
