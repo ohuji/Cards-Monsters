@@ -1,0 +1,11 @@
+Model Information:
+* title:	Bunny Rat Monster
+* source:	https://sketchfab.com/3d-models/bunny-rat-monster-a38d3a0d4d4248f298189be7106d9faa
+* author:	zul (https://sketchfab.com/dwn76)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Bunny Rat Monster" (https://sketchfab.com/3d-models/bunny-rat-monster-a38d3a0d4d4248f298189be7106d9faa) by zul (https://sketchfab.com/dwn76) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

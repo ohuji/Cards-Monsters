@@ -26,6 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
+import com.ohuji.cardsNmonsters.screens.collectables.CollectablesScreen
+import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapState
@@ -37,6 +39,7 @@ import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 @Composable
 fun NavigationHost(
     deckViewModel: DeckViewModel,
+    collectablesViewModel: CollectablesViewModel,
     state: MapState,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
@@ -48,7 +51,7 @@ fun NavigationHost(
             NavigationBar(navController = navController)
         }
     ) {
-        NavHost(navController, startDestination = "deck_building_screen") {
+        NavHost(navController, startDestination = "map_screen") {
             composable("ar_screen") {
                 ARScreen(navController = navController)
             }
@@ -71,7 +74,7 @@ fun NavigationHost(
                 )
             }
             composable("collectables_screen") {
-
+                CollectablesScreen(navController = navController, viewModel = collectablesViewModel, application = Application())
             }
             composable("collectable_screen") {
 

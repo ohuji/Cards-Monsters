@@ -77,6 +77,10 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
     def room_version = "2.5.0"
 
+    //For AR URI
+//    implementation 'com.google.ar.sceneform:renderable:1.18.0'
+ //   implementation 'com.google.ar.sceneform:assets:1.18.0'
+
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     // To use Kotlin annotation processing tool (kapt)

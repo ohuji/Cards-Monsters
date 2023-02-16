@@ -28,7 +28,7 @@ fun ARScreen(navController: NavController) {
     ).apply {
         loadModelGlbAsync(
             context = context,
-            //glbFileLocation = "models/goblin_shredder_shield.glb",
+            //glbFileLocation = "models/goblin2.glb",
             glbFileLocation = "https://storage.googleapis.com/ar-answers-in-search-models/static/GiantPanda/model.glb",
             autoAnimate = true,
             centerOrigin = Position(x = 0.0f, y = -1.0f, z = 0.0f),

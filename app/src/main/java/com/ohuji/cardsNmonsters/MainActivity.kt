@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.ui.theme.CardsMonstersTheme
@@ -24,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val deckViewModel: DeckViewModel by viewModels()
+    private val collectablesViewModel: CollectablesViewModel by viewModels()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val mapViewModel: MapViewModel by viewModels()
 
@@ -59,7 +61,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost(deckViewModel,
+                    NavigationHost(deckViewModel, collectablesViewModel,
                     state = mapViewModel.state.value,
                     setupClusterManager = mapViewModel::setupClusterManager,
                     calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds)

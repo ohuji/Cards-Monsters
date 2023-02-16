@@ -45,49 +45,20 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) { db.cardsNMonstersDao.addCard(card) }
     }
 
-   suspend fun addDeck(deckName: String) {
+   fun addDeck(deckName: String) {
         val deck = Deck(0, deckName)
         viewModelScope.launch(Dispatchers.IO) { db.cardsNMonstersDao.addDeck(deck) }
     }
 
-    fun addCardsToDeck(deckId: Long, selectedCards: List<Card>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // Get all cards and a reference to the deck
-            val cards = db.cardsNMonstersDao.getAllCards().value ?: return@launch
-            val deck = db.cardsNMonstersDao.findDeckById(deckId).value ?: return@launch
-
-            // Shuffle the cards
-            val shuffledCards = cards.shuffled()
-
-            // Take the first five shuffled cards
-            val selectedCards = shuffledCards.take(5)
-
-            // Create CardNDeckCrossRef objects to associate the selected cards with the deck
-            val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
-
-            // Insert the new associations into the database
-            db.cardsNMonstersDao.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
-        }
-    }
-
-    fun addCardsToDeck2(deckId: Long, selectedCards: List<Card>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // Create CardNDeckCrossRef objects to associate the selected cards with the deck
-            val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
-
-            // Insert the new associations into the database
-            db.cardsNMonstersDao.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
-        }
-    }
     fun addCardsToDeck3(deckId: Long, selectedCards: List<Card>) {
         Log.d("DBG", "Tultiin addcardstodec3")
         viewModelScope.launch(Dispatchers.IO) {
             // Get a reference to the deck
             val deck = db.cardsNMonstersDao.findDeckById(deckId).value?.deckId  //?: return@launch
-Log.d("DBG","tollanen deck $deck")
+            Log.d("DBG","tollanen deck $deck")
             // Create CardNDeckCrossRef objects to associate the selected cards with the deck
             val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
-Log.d("DBG", "tollanen refse $cardNDeckCrossRefs")
+            Log.d("DBG", "tollanen refse $cardNDeckCrossRefs")
             // Print out the selected cards and card IDs
             Log.d("DBG", "Selected Cards:")
             selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
