@@ -7,6 +7,6 @@
     <ImageView
         android:layout_gravity="center"
         android:layout_width="65dp"
-        android:layout_height="95dp"
-        android:src="@drawable/civilian_card_back" />
+        android:layout_height="100dp"
+        android:src="@drawable/fire_card" />
 </FrameLayout>

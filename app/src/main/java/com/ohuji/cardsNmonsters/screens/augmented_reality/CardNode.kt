@@ -12,7 +12,10 @@ open class CardNode(context: Context, lifecycle: Lifecycle?, layout: String, x: 
         isSelectable = false
         position = Position(x = x, y = y, z = -2.0f)
         when (layout) {
-            "test" -> loadView(context, lifecycle, com.ohuji.cardsNmonsters.R.layout.test_card_node_layout)
+            "Fire" -> loadView(context, lifecycle, com.ohuji.cardsNmonsters.R.layout.fire_card_node_layout)
+            else -> {
+                loadView(context, lifecycle, com.ohuji.cardsNmonsters.R.layout.test_card_node_layout)
+            }
         }
     }
 

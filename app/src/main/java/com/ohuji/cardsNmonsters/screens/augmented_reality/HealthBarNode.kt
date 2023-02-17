@@ -19,12 +19,11 @@ open class HealthBarNode(context: Context, lifecycle: Lifecycle?) :
         position = Position(x = 0.0f, y = 0.8f, z = -2.0f)
         loadView(context, lifecycle, com.ohuji.cardsNmonsters.R.layout.healthbar_node_layout)
     }
-}
 
-  /*  override fun onViewLoaded(renderableInstance: RenderableInstance, view: View) {
+    override fun onViewLoaded(renderableInstance: RenderableInstance, view: View) {
         super.onViewLoaded(renderableInstance, view)
 
-        textView = view.findViewById(R.id.textView)
+        textView = view.findViewById(com.ohuji.cardsNmonsters.R.id.textView)
         renderableInstance.apply {
             isShadowCaster = false
             isShadowReceiver = false
@@ -37,4 +36,4 @@ open class HealthBarNode(context: Context, lifecycle: Lifecycle?) :
         set(value) {
             textView?.text = value
         }
-}*/
+}

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 
-@Database(entities = [Deck::class, Card::class, CardNDeckCrossRef::class, Monster::class, Collectable::class], version = 2, exportSchema = false)
+@Database(entities = [Deck::class, Card::class, CardNDeckCrossRef::class, Monster::class, Collectable::class], version = 3, exportSchema = false)
 abstract class CardsNMonstersDatabase: RoomDatabase() {
     abstract val cardsNMonstersDao: CardsNMonstersDao
     abstract val monstersDao: MonsterDao

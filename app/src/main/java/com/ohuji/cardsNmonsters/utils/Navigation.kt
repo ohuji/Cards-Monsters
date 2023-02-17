@@ -53,7 +53,10 @@ fun NavigationHost(
     ) {
         NavHost(navController, startDestination = "map_screen") {
             composable("ar_screen") {
-                ARScreen(navController = navController)
+                ARScreen(
+                    navController = navController,
+                    viewModel = deckViewModel,
+                )
             }
             composable("home_screen") {
 

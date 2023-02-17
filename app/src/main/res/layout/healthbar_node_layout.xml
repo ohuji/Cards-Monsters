@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="72dp"
         android:gravity="center"
-        android:text="@string/health_string"
+        android:text=""
         android:textColor="@android:color/holo_red_dark"
         android:textSize="20sp"
         android:textStyle="bold"
