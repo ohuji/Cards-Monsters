@@ -51,7 +51,7 @@ fun NavigationHost(
             NavigationBar(navController = navController)
         }
     ) {
-        NavHost(navController, startDestination = "map_screen") {
+        NavHost(navController, startDestination = "ar_screen") {
             composable("ar_screen") {
                 ARScreen(
                     navController = navController,

@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.database.FullDeck
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
+import dev.romainguy.kotlin.math.scale
 import io.github.sceneview.ar.ARScene
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.ArNode
@@ -36,8 +37,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel) {
     ).apply {
         loadModelGlbAsync(
             context = context,
-            //glbFileLocation = "models/goblin2.glb",
-            glbFileLocation = "https://storage.googleapis.com/ar-answers-in-search-models/static/GiantPanda/model.glb",
+            glbFileLocation = "models/adult_dragon.glb",
             autoAnimate = true,
             centerOrigin = Position(x = 0.0f, y = -1.0f, z = 0.0f),
         )
@@ -118,7 +118,9 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel) {
                         } else {
                             healthBar.text = health.toString()
                         }
-                    } else if (hitResult.hitPose.ty() in -10.0..-0.5 && hitResult.hitPose.tx() in -0.4..-0.2) {
+                    }
+
+                    if (hitResult.hitPose.ty() in -10.0..-0.5 && hitResult.hitPose.tx() in -0.4..-0.2) {
                         Log.d("TAPDBG", "secondCard TAP")
                         when(cards.cards[0].cardElement) {
                             "Fire" -> health -= 100
