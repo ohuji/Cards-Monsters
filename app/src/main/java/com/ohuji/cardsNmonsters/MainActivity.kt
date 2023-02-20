@@ -51,7 +51,6 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED -> {
             mapViewModel.getDeviceLocation(fusedLocationProviderClient)
-            mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
         }
         else -> {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
