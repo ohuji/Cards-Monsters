@@ -16,7 +16,7 @@ open class HealthBarNode(context: Context, lifecycle: Lifecycle?) :
 
     init {
         isSelectable = false
-        position = Position(x = 0.0f, y = 0.8f, z = -2.0f)
+        position = Position(x = 0.0f, y = 0.5f, z = -2.0f)
         loadView(context, lifecycle, R.layout.healthbar_node_layout)
     }
 
@@ -24,6 +24,7 @@ open class HealthBarNode(context: Context, lifecycle: Lifecycle?) :
         super.onViewLoaded(renderableInstance, view)
 
         textView = view.findViewById(R.id.textView)
+
         renderableInstance.apply {
             isShadowCaster = false
             isShadowReceiver = false
