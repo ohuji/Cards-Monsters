@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
@@ -28,6 +29,12 @@ class MainActivity : ComponentActivity() {
     private val collectablesViewModel: CollectablesViewModel by viewModels()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val mapViewModel: MapViewModel by viewModels()
+    private val database by lazy { CardsNMonstersDatabase.getInstance(this)}
+
+    override fun onDestroy() {
+        super.onDestroy()
+        database.databaseWriteExecutor.shutdown()
+    }
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -68,6 +75,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
 }

@@ -60,9 +60,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController, applicati
                 //   viewModel.viewModelScope.launch(Dispatchers.IO) {
                 delay(500) // delay for 500 ms to ensure deck is inserted
                 if (newDeckId != null) {
-                    viewModel.addCardsToDeck3(newDeckId, selectedCardIds)
+                    viewModel.addCardsToDeck(newDeckId, selectedCardIds)
                 } else {
-                    viewModel.addCardsToDeck3(1L, selectedCardIds)
+                    viewModel.addCardsToDeck(1L, selectedCardIds)
                 }
             }
             deckName = ""
@@ -106,7 +106,6 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController, applicati
             Text(text = uber.deck.deckName)
             LazyColumn {
                 item {
-
                 }
                 items(uber.cards) { card ->
                     Text(text = card.cardName)

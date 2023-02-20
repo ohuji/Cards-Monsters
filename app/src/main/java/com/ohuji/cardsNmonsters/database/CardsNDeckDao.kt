@@ -11,7 +11,7 @@ import androidx.room.Update
 
 
 @Dao
-interface CardsNMonstersDao {
+interface CardsNDeckDao {
 
     // Card related
     @Insert
@@ -56,3 +56,4 @@ interface CardsNMonstersDao {
     @Query("SELECT * FROM Deck WHERE deckId = :deckId")
     fun getDeckWithCard(deckId: Long): LiveData<FullDeck>
 }
+
