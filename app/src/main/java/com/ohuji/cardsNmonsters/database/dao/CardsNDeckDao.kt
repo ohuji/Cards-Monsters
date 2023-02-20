@@ -1,4 +1,4 @@
-package com.ohuji.cardsNmonsters.database
+package com.ohuji.cardsNmonsters.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -8,6 +8,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.ohuji.cardsNmonsters.database.entities.Card
+import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
+import com.ohuji.cardsNmonsters.database.Deck
+import com.ohuji.cardsNmonsters.database.FullDeck
 
 
 @Dao

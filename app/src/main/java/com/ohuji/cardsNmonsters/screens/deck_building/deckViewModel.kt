@@ -6,9 +6,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import com.ohuji.cardsNmonsters.database.Card
+import com.ohuji.cardsNmonsters.database.entities.Card
 import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
-import com.ohuji.cardsNmonsters.database.CardsNDeckRepository
+import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import com.ohuji.cardsNmonsters.database.Deck
 import com.ohuji.cardsNmonsters.database.FullDeck
 import kotlinx.coroutines.launch

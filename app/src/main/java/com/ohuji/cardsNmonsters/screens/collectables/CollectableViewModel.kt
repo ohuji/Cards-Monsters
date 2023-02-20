@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.ohuji.cardsNmonsters.database.Collectable
-import com.ohuji.cardsNmonsters.database.CollectableRepository
-import com.ohuji.cardsNmonsters.database.Monster
-import com.ohuji.cardsNmonsters.database.MonsterRepository
+import com.ohuji.cardsNmonsters.database.entities.Collectable
+import com.ohuji.cardsNmonsters.repository.CollectableRepository
+import com.ohuji.cardsNmonsters.database.entities.Monster
+import com.ohuji.cardsNmonsters.repository.MonsterRepository
 import kotlinx.coroutines.launch
 
 

@@ -1,7 +1,9 @@
-package com.ohuji.cardsNmonsters.database
+package com.ohuji.cardsNmonsters.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
+import com.ohuji.cardsNmonsters.database.entities.Collectable
 
 class CollectableRepository( application: Application) {
     private val db = CardsNMonstersDatabase.getInstance(application)

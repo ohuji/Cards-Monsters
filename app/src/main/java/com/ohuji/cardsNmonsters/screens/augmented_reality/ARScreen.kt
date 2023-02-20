@@ -90,7 +90,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel) {
                     painter = painterResource(R.drawable.wood_background),
                     contentDescription = "Contact profile picture",
                     modifier = Modifier.fillMaxSize(),
-                    contentScale =  ContentScale.Crop
+                    contentScale = ContentScale.Crop
                 )
                 Row(
                     modifier = Modifier.fillMaxSize(),
@@ -117,7 +117,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel) {
                             else ->
                                 Image(
                                     painter = painterResource(R.drawable.civilian_card_back),
-                                    contentDescription = "Contact profile picture",
+                                    contentDescription = "Default card",
                                     modifier = Modifier.size(100.dp)
                                         .clickable {
                                             Log.d("TAPDBG", "tap test")

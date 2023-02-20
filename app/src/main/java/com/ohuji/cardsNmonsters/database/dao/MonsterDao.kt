@@ -1,10 +1,11 @@
-package com.ohuji.cardsNmonsters.database
+package com.ohuji.cardsNmonsters.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.ohuji.cardsNmonsters.database.entities.Monster
 
 @Dao
 interface MonsterDao{

@@ -1,8 +1,13 @@
 package com.ohuji.cardsNmonsters.database
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.ohuji.cardsNmonsters.database.dao.CardsNDeckDao
+import com.ohuji.cardsNmonsters.database.dao.CollectableDao
+import com.ohuji.cardsNmonsters.database.dao.MonsterDao
+import com.ohuji.cardsNmonsters.database.entities.Card
+import com.ohuji.cardsNmonsters.database.entities.Collectable
+import com.ohuji.cardsNmonsters.database.entities.Monster
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

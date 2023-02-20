@@ -1,4 +1,4 @@
-package com.ohuji.cardsNmonsters.database
+package com.ohuji.cardsNmonsters.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

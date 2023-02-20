@@ -1,7 +1,12 @@
-package com.ohuji.cardsNmonsters.database
+package com.ohuji.cardsNmonsters.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import com.ohuji.cardsNmonsters.database.entities.Card
+import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
+import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
+import com.ohuji.cardsNmonsters.database.Deck
+import com.ohuji.cardsNmonsters.database.FullDeck
 
 class CardsNDeckRepository( application: Application) {
     private val db = CardsNMonstersDatabase.getInstance(application)
