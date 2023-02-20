@@ -4,6 +4,7 @@ package com.ohuji.cardsNmonsters.screens.maps.clusters
  * A set of utility functions for centering the camera given some [LatLng] points.
  * Author: Mitch Tabian 2022
  */
+
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 

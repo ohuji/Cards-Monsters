@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED -> {
             mapViewModel.getDeviceLocation(fusedLocationProviderClient)
+            mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
         }
         else -> {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -69,9 +70,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavigationHost(deckViewModel, collectablesViewModel,
-                    state = mapViewModel.state.value,
+                    mapViewModel = mapViewModel,
                     setupClusterManager = mapViewModel::setupClusterManager,
-                    calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds)
+                    calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,
+                    fusedLocationProviderClient = fusedLocationProviderClient
+                    )
                 }
             }
         }

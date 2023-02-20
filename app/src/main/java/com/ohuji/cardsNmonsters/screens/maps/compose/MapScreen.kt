@@ -1,22 +1,16 @@
 package com.ohuji.cardsNmonsters.screens.maps.compose
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
-import com.ohuji.cardsNmonsters.screens.maps.MapState
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -24,15 +18,33 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+
+
+
 
 @Composable
 fun MapScreen(
-    state: MapState,
+    mapViewModel: MapViewModel,
     navController: NavController,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
+    fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
+    val state by remember {
+        mapViewModel.state
+    }
 
+    val location by remember {
+        mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
+    }
+
+    Log.i("MapScreen", "location: $location")
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(
         // Only enable if user has accepted location permissions.
@@ -75,16 +87,16 @@ fun MapScreen(
             // NOTE: Some features of the MarkerInfoWindow don't work currently. See docs:
             // https://github.com/googlemaps/android-maps-compose#obtaining-access-to-the-raw-googlemap-experimental
             // So you can use clusters as an alternative to markers.
-            MarkerInfoWindow(
-                state = rememberMarkerState(position = LatLng(49.1, -122.5)),
-                snippet = "Some stuff",
-                onClick = {
-                    // This won't work :(
-                    System.out.println("Mitchs_: Cannot be clicked")
-                    true
-                },
-                draggable = true
-            )
+            //MarkerInfoWindow(
+            //    state = rememberMarkerState(position = LatLng(49.1, -122.5)),
+            //    snippet = "Some stuff",
+            //    onClick = {
+            //        // This won't work :(
+            //        System.out.println("Mitchs_: Cannot be clicked")
+            //        true
+            //    },
+            //    draggable = true
+            //)
         }
     }
 //    // Center camera to include all the Zones.

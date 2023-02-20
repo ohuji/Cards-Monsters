@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
@@ -30,7 +31,7 @@ import com.ohuji.cardsNmonsters.screens.collectables.CollectablesScreen
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
-import com.ohuji.cardsNmonsters.screens.maps.MapState
+import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 
@@ -40,9 +41,10 @@ import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 fun NavigationHost(
     deckViewModel: DeckViewModel,
     collectablesViewModel: CollectablesViewModel,
-    state: MapState,
+    mapViewModel: MapViewModel,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
+    fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     val navController = rememberNavController()
 
@@ -63,10 +65,11 @@ fun NavigationHost(
             }
             composable("map_screen") {
                 MapScreen(
-                    state = state,
+                    mapViewModel = mapViewModel,
                     navController = navController,
                     setupClusterManager = setupClusterManager,
                     calculateZoneViewCenter = calculateZoneViewCenter,
+                    fusedLocationProviderClient = fusedLocationProviderClient,
                 )
             }
             composable("deck_building_screen") {
