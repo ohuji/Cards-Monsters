@@ -2,11 +2,11 @@ package com.ohuji.cardsNmonsters.repository
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import com.ohuji.cardsNmonsters.database.entities.Card
 import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
 import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
 import com.ohuji.cardsNmonsters.database.Deck
 import com.ohuji.cardsNmonsters.database.FullDeck
+import com.ohuji.cardsNmonsters.database.entities.Card
 
 class CardsNDeckRepository( application: Application) {
     private val db = CardsNMonstersDatabase.getInstance(application)
@@ -32,6 +32,9 @@ class CardsNDeckRepository( application: Application) {
         db.databaseWriteExecutor.execute { cardsNDeckDao.deleteDeck(deck) }
     }
 
+    fun deleteFullDeck(deckId: Long) {
+        db.databaseWriteExecutor.execute { cardsNDeckDao.deleteFullDeckById(deckId) }
+    }
     fun addCardNDeckCrossRefs(vararg cardNDeckCrossRef: CardNDeckCrossRef) {
         db.databaseWriteExecutor.execute { cardsNDeckDao.addCardNDeckCrossRefs(*cardNDeckCrossRef) }
     }
@@ -44,3 +47,28 @@ class CardsNDeckRepository( application: Application) {
         return cardsNDeckDao.getDeckWithCard(deckId)
     }
 }
+
+
+/*
+//TESTING
+suspend fun getCardCountsInDeck(deckId: Long): Map<Long, Int> {
+        val cardsInDeck = cardsNDeckDao.getDeckWithCard(deckId)
+        return cardsInDeck. groupBy { it.cardId }.mapValues { it.value.size }
+    }
+    suspend fun getCardsInDeck(deckId: Long): List<Card> {
+        val cardNDeckCrossRefs = cardsNDeckDao.getCardNDeckCrossRefsForDeck(deckId)
+        val cardIds = cardNDeckCrossRefs.map { it.cardId }
+        return cardsNDeckDao.getCardsByIds(cardIds)
+    }
+
+    suspend fun updateCardNDeckCrossRefs(vararg cardNDeckCrossRefs: CardNDeckCrossRef) {
+        withContext(Dispatchers.IO) {
+            cardNDeckCrossRefs.forEach { cardNDeckCrossRef ->
+                val existingRef = cardsNDeckDao.getCardNDeckCrossRef(cardNDeckCrossRef.deckId, cardNDeckCrossRef.cardId)
+                // Update the existing reference with the new count
+                existingRef.count += cardNDeckCrossRef.count
+                cardsNDeckDao.updateCardNDeckCrossRef(existingRef)
+            }
+        }
+    }
+ */

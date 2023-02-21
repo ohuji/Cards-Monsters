@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesScreen
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
+import com.ohuji.cardsNmonsters.screens.deck_building.DeckDetailScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
@@ -78,6 +79,10 @@ fun NavigationHost(
                     navController = navController,
                     application = Application()
                 )
+            }
+            composable("deck_detail_screen/{deckId}") {
+                val deckId = it.arguments?.getString("deckId")?.toLong() ?: 0
+                DeckDetailScreen(deckViewModel = deckViewModel, deckId = deckId, navController = navController)
             }
             composable("collectables_screen") {
                 CollectablesScreen(navController = navController, viewModel = collectablesViewModel, application = Application())

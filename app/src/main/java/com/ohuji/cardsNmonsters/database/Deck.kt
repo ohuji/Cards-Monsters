@@ -24,15 +24,33 @@ data class FullDeck(
     val cards: List<Card>
 )
 
+
 @Entity(primaryKeys = ["deckId", "cardId"])
 data class CardNDeckCrossRef(
     val deckId: Long,
     val cardId: Long
-
 )
 
-@Entity(primaryKeys = ["bookId","authorId"])
-data class BookAndAuthorEntity (
-    val bookId: Long,
-    val authorId: Long
+
+
+
+/* //TESTING
+//TESTING
+data class DeckCard(
+    val card: Card,
+    var count: Int
 )
+data class FullDeck(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "deckId")
+    var deckId: Long = 0L,
+    @ColumnInfo(name = "deckName")
+    var deckName: String,
+    @Ignore
+    var cards: List<DeckCard> = emptyList()
+) {
+    constructor() : this(0, "", emptyList())
+   // constructor(deckName: String, cards: List<DeckCard>) : this(0L, deckName, cards)
+}
+
+ */

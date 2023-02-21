@@ -6,11 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
-import com.ohuji.cardsNmonsters.database.entities.Card
 import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
-import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import com.ohuji.cardsNmonsters.database.Deck
 import com.ohuji.cardsNmonsters.database.FullDeck
+import com.ohuji.cardsNmonsters.database.entities.Card
+import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import kotlinx.coroutines.launch
 
 
@@ -49,10 +49,10 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
             Log.d("DBG", "Card IDs:")
             cardNDeckCrossRefs.forEach { Log.d("DBG", "${it.cardId}") }
 
-            // Insert the new associations into the database
            repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
         }
     }
+
 
     fun getDeckWithCards(deckId: Long): LiveData<FullDeck> {
         val deck = Transformations.map(repository.getDeckWithCard(deckId)) {
@@ -61,43 +61,133 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         return deck
     }
 
+    fun deleteFullDeck(deckId: Long) {
+        repository.deleteFullDeck(deckId)
+    }
 }
+
 /*
-class DeckViewModel2(application: Application) : AndroidViewModel(application) {
-    private val db = CardsNMonstersDatabase.getInstance(application)
+//TESTING
+    fun addCardsToDeck(deckId: Long, selectedCards: List<Card>) {
+        viewModelScope.launch {
+            val deck = repository.findDeckById(deckId).value?.deckId
 
-    fun getAllDecks(): LiveData<List<Deck>> {
-        val decks = Transformations.map(db.cardsNDecksDao.getAllDecks()) {
-            it
+            viewModelScope.launch {
+                // Get a reference to the deck
+                val deck = repository.findDeckById(deckId).value?.deckId   //?: return@launch
+                Log.d("DBG", "tollanen deck $deck")
+                // Create CardNDeckCrossRef objects to associate the selected cards with the deck
+                //   val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
+                //  Log.d("DBG", "tollanen refse $cardNDeckCrossRefs")
+                // Print out the selected cards and card IDs
+                Log.d("DBG", "Selected Cards:")
+                selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
+                Log.d("DBG", "Card IDs:")
+                //   cardNDeckCrossRefs.forEach { Log.d("DBG", "${it.cardId}") }
+
+                //  repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
+
+                val cardNDeckCrossRefs = mutableListOf<CardNDeckCrossRef>()
+
+                // Create CardNDeckCrossRef objects to associate the selected cards with the deck
+                val cardsInDeck = withContext(Dispatchers.IO) { repository.getCardsInDeck(deckId) }
+                val cardCounts = cardsInDeck.groupBy { it.cardId }.mapValues { it.value.size }
+                for (selectedCard in selectedCards) {
+                    val count = cardCounts[selectedCard.cardId] ?: 0
+                    val cardNDeckCrossRef = CardNDeckCrossRef(deckId, selectedCard.cardId, count)
+                    cardNDeckCrossRefs.add(cardNDeckCrossRef)
+                }
+
+                // Print out the selected cards and card IDs
+                Log.d("DBG", "Selected Cards:")
+                selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
+                Log.d("DBG", "Card IDs:")
+                cardNDeckCrossRefs.forEach {
+                    Log.d("DBG", "${it.cardId} ${it.count}")
+                    withContext(Dispatchers.IO) { repository.updateCardNDeckCrossRefs(it) }
+                }
+                withContext(Dispatchers.IO) { repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray()) }
+
+            }
         }
-        return decks
     }
 
-    fun findDeckById(deckId: Long): LiveData<Deck> {
-        val deck = Transformations.map(db.cardsNDecksDao.findDeckById(deckId)) {
-            it
+
+    fun addCardsToDeck8(deckId: Long, selectedCards: List<Card>) {
+        viewModelScope.launch {
+            repository.findDeckById(deckId).observeForever { deck ->
+                if (deck != null) {
+                    if (selectedCards.isNotEmpty()) {
+                        val cardNDeckCrossRefs = mutableListOf<CardNDeckCrossRef>()
+
+                        // Create CardNDeckCrossRef objects to associate the selected cards with the deck
+                        val cardsInDeck = withContext(Dispatchers.IO) { repository.getCardsInDeck(deckId) }
+                        val cardCounts = cardsInDeck.groupBy { it.cardId }.mapValues { it.value.size }
+                        for (selectedCard in selectedCards) {
+                            val count = cardCounts[selectedCard.cardId] ?: 0
+                            val cardNDeckCrossRef = CardNDeckCrossRef(deckId, selectedCard.cardId, count)
+                            cardNDeckCrossRefs.add(cardNDeckCrossRef)
+                        }
+
+                        // Print out the selected cards and card IDs
+                        Log.d("DBG", "Selected Cards:")
+                        selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
+                        Log.d("DBG", "Card IDs:")
+                        cardNDeckCrossRefs.forEach {
+                            Log.d("DBG", "${it.cardId} ${it.count}")
+                            repository.updateCardNDeckCrossRefs(it)
+                        }
+
+                        repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
+                    } else {
+                        Log.d("addCardsToDeck", "No cards selected")
+                    }
+                } else {
+                    Log.e("addCardsToDeck", "Deck with id $deckId not found")
+                }
+            }
         }
-        return deck
     }
 
-    fun getAllCards(): LiveData<List<Card>> {
-        val cards = Transformations.map(db.cardsNDecksDao.getAllCards()) {
-            it
+
+
+    fun addCardsToDeck4(deckId: Long, selectedCards: List<Card>) {
+        viewModelScope.launch {
+            val deck = repository.findDeckById(deckId).value?.deckId
+
+            if (deck != null) {
+                val cardNDeckCrossRefs = mutableListOf<CardNDeckCrossRef>()
+
+                // Create CardNDeckCrossRef objects to associate the selected cards with the deck
+                val cardsInDeck = repository.getCardsInDeck(deckId)
+                val cardCounts = cardsInDeck.groupBy { it.cardId }.mapValues { it.value.size }
+                for (selectedCard in selectedCards) {
+                    val count = cardCounts[selectedCard.cardId] ?: 0
+                    val cardNDeckCrossRef = CardNDeckCrossRef(deckId, selectedCard.cardId, count)
+                    cardNDeckCrossRefs.add(cardNDeckCrossRef)
+                }
+
+                // Print out the selected cards and card IDs
+                Log.d("DBG", "Selected Cards:")
+                selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
+                Log.d("DBG", "Card IDs:")
+                cardNDeckCrossRefs.forEach {
+                    Log.d("DBG", "${it.cardId} ${it.count}")
+                    repository.updateCardNDeckCrossRefs(it)
+                }
+
+                repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
+            } else {
+                Log.e("addCardsToDeck", "Deck with id $deckId not found")
+            }
         }
-        return cards
     }
 
-   fun addDeck(deckName: String) {
-        val deck = Deck(0, deckName)
-        viewModelScope.launch(Dispatchers.IO) { db.cardsNDecksDao.addDeck(deck) }
-    }
 
-    fun addCardsToDeck3(deckId: Long, selectedCards: List<Card>) {
-        Log.d("DBG", "Tultiin addcardstodec3")
-        viewModelScope.launch(Dispatchers.IO) {
-            // Get a reference to the deck
-            val deck = db.cardsNDecksDao.findDeckById(deckId).value?.deckId  //?: return@launch
-            Log.d("DBG","tollanen deck $deck")
+    fun addCardsToDeck2(deckId: Long, selectedCards: List<Card>) {
+        viewModelScope.launch {
+            val deck = repository.findDeckById(deckId).value?.deckId
+
             // Create CardNDeckCrossRef objects to associate the selected cards with the deck
             val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
             Log.d("DBG", "tollanen refse $cardNDeckCrossRefs")
@@ -105,38 +195,17 @@ class DeckViewModel2(application: Application) : AndroidViewModel(application) {
             Log.d("DBG", "Selected Cards:")
             selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
             Log.d("DBG", "Card IDs:")
-            cardNDeckCrossRefs.forEach { Log.d("DBG", "${it.cardId}") }
+            cardNDeckCrossRefs.forEach {
+                repository.updateCardNDeckCrossRefs(CardNDeckCrossRef(deckId, it.cardId, it.count ))
+                Log.d("DBG", "${it.cardId} ${it.count}") }
 
-            // Insert the new associations into the database
-            db.cardsNDecksDao.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
+
+
+                repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
+            }
         }
-    }
 
-    fun getDeckWithCards(deckId: Long): LiveData<FullDeck> {
-        val deck = Transformations.map(db.cardsNDecksDao.getDeckWithCard(deckId)) {
-            it
-        }
-        return deck
 
-    }
-}
+    //TESTING ENDS
 
- */
-
-/*
-fun newFullDeck(deckId: Long): LiveData<FullDeck> {
-        val fullDeck = MutableLiveData<FullDeck>()
-        viewModelScope.launch(Dispatchers.IO) {
-            val deck = db.cardsNMonstersDao.findDeckById(deckId).value
-            val cards = db.cardsNMonstersDao.getFullDeck().value
-                ?.find { it.deck.deckId == deckId }?.cards ?: emptyList()
-            fullDeck.postValue(deck?.let { FullDeck(deck = it, cards = cards) })
-        }
-        return fullDeck
-    }
-
-     fun addCard(cardName: String, cardModel: String, cardElement: String, cardDamage: Int) {
-        val card = Card(0, cardName, cardModel, cardElement, cardDamage)
-        viewModelScope.launch(Dispatchers.IO) { db.cardsNMonstersDao.addCard(card) }
-    }
  */
