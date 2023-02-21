@@ -34,14 +34,14 @@ import kotlin.reflect.KProperty
 @HiltViewModel
 class MapViewModel @Inject constructor() : ViewModel() {
 
-    val state: MutableState<MapState> = mutableStateOf(
+    var state: MutableState<MapState> = mutableStateOf(
         MapState(
             lastKnownLocation = null,
             clusterItems = listOf(
-                ZoneClusterItem(
-                    id = "zone-1",
-                    title = "Zone 1",
-                    snippet = "This is Zone 1.",
+                /*ZoneClusterItem(
+                    id = "id",
+                    title = "title",
+                    snippet = "snippet",
                     polygonOptions = polygonOptions {
                         add(LatLng(60.2178, 24.7809))
                         add(LatLng(60.2175, 24.7806))
@@ -49,26 +49,30 @@ class MapViewModel @Inject constructor() : ViewModel() {
                         add(LatLng(60.2180, 24.7811))
                         fillColor(POLYGON_FILL_COLOR)
                     }
-                )
-                //,
-                //ZoneClusterItem(
-                //    id = "zone-2",
-                //    title = "Zone 2",
-                //    snippet = "This is Zone 2.",
-                //    polygonOptions = polygonOptions {
-                //        add(LatLng(49.110, -122.554))
-                //        add(LatLng(49.107, -122.559))
-                //        add(LatLng(49.103, -122.551))
-                //        add(LatLng(49.112, -122.549))
-                //        fillColor(POLYGON_FILL_COLOR)
-                //    }
-                //)
+                )*/
+                /*,
+                ZoneClusterItem(
+                    id = "zone-2",
+                    title = "Zone 2",
+                    snippet = "This is Zone 2.",
+                    polygonOptions = polygonOptions {
+                        add(LatLng(49.110, -122.554))
+                        add(LatLng(49.107, -122.559))
+                        add(LatLng(49.103, -122.551))
+                        add(LatLng(49.112, -122.549))
+                        fillColor(POLYGON_FILL_COLOR)
+                    }
+                )*/
             )
         )
     )
-    val userLocation: MutableState<LatLng> = mutableStateOf(
-        LatLng(60.2178, 24.7809)
-    )
+
+    fun addClusterItem(clusterItem: ZoneClusterItem) {
+        state.value = state.value.copy(
+            clusterItems = state.value.clusterItems + clusterItem
+        )
+    }
+
 
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
@@ -128,7 +132,6 @@ class MapViewModel @Inject constructor() : ViewModel() {
     }
 
 
-
     fun setupClusterManager(
         context: Context,
         map: GoogleMap,
@@ -147,6 +150,6 @@ class MapViewModel @Inject constructor() : ViewModel() {
 
 
     companion object {
-        private val POLYGON_FILL_COLOR = Color.parseColor("#ABF44336")
+        val POLYGON_FILL_COLOR = Color.parseColor("#ABF44336")
     }
 }

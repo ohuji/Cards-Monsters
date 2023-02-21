@@ -24,13 +24,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.maps.android.ktx.model.polygonOptions
+import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
 
-
-
-
+var i = 0
 @Composable
 fun MapScreen(
-    mapViewModel: MapViewModel,
+    mapViewModel: MapViewModel = viewModel(),
     navController: NavController,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
@@ -44,7 +46,22 @@ fun MapScreen(
         mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
     }
 
-    Log.i("MapScreen", "location: $location")
+    val cluster = ZoneClusterItem(
+        id = "id",
+        title = "title",
+        snippet = "snippet",
+        polygonOptions = polygonOptions {
+            add(LatLng(60.2180, 24.7811))
+            add(LatLng(60.2182, 24.7809))
+            add(LatLng(60.2175, 24.7815))
+            add(LatLng(60.2170, 24.7814))
+            fillColor(MapViewModel.POLYGON_FILL_COLOR)
+        }
+    )
+
+    Log.i("bugbug", "location: $location")
+        mapViewModel.addClusterItem(cluster)
+
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(
         // Only enable if user has accepted location permissions.
