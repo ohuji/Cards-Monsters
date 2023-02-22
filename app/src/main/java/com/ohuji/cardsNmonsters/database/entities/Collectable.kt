@@ -9,7 +9,7 @@ data class Collectable(
     val collectableId: Long,
     val collectableName: String,
     val collectableModel: String,
-    val currentProgress: Int,
+    var currentProgress: Int,
     val requirements: Int,
-    val unlocked: Boolean,
+    var unlocked: Boolean,
 )

@@ -18,10 +18,12 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     fun getAllCollectables(): LiveData<List<Collectable>> {
         return collectableRepo.allCollectables
     }
-
+/*
     fun getCollectableById(collectableId: Long): LiveData<Collectable> {
         return  collectableRepo.findCollectableById(collectableId)
     }
+
+ */
 
     fun updateCollectable(collectable: Collectable) {
         viewModelScope.launch {

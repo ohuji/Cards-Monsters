@@ -27,6 +27,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ARScreen
+import com.ohuji.cardsNmonsters.screens.augmented_reality.GameLogicViewModel
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesScreen
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckDetailScreen
@@ -42,6 +43,7 @@ import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 fun NavigationHost(
     deckViewModel: DeckViewModel,
     collectablesViewModel: CollectablesViewModel,
+    gameLogicViewModel: GameLogicViewModel,
     mapViewModel: MapViewModel,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
@@ -59,6 +61,8 @@ fun NavigationHost(
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
+                    monsterViewModel = collectablesViewModel,
+                    gameLogicViewModel = gameLogicViewModel,
                 )
             }
             composable("home_screen") {

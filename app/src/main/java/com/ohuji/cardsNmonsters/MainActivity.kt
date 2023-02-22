@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
+import com.ohuji.cardsNmonsters.screens.augmented_reality.GameLogicViewModel
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     private val deckViewModel: DeckViewModel by viewModels()
     private val collectablesViewModel: CollectablesViewModel by viewModels()
+    private val gameLogicViewModel: GameLogicViewModel by viewModels()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val mapViewModel: MapViewModel by viewModels()
     private val database by lazy { CardsNMonstersDatabase.getInstance(this)}
@@ -68,7 +70,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost(deckViewModel, collectablesViewModel,
+                    NavigationHost(deckViewModel, collectablesViewModel, gameLogicViewModel,
                     mapViewModel = mapViewModel,
                     setupClusterManager = mapViewModel::setupClusterManager,
                     calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,

@@ -19,8 +19,9 @@ interface CollectableDao{
         @Update
         fun updateCollectable(collectable: Collectable)
 
+      //  @Query("SELECT * FROM Collectable WHERE collectableId = :collectableId")
+     //   fun findCollectableById(collectableId: Long): LiveData<Collectable>
         @Query("SELECT * FROM Collectable WHERE collectableId = :collectableId")
-        fun findCollectableById(collectableId: Long): LiveData<Collectable>
-
+           fun findCollectableById(collectableId: Long): Collectable
     }
 
