@@ -32,7 +32,8 @@ fun CollectablesScreen(navController: NavController, viewModel: CollectablesView
                 val resId = context.resources.getIdentifier(image, "drawable", context.packageName)
                 Image(
                     painter = painterResource(resId),
-                    contentDescription = it.collectableName
+                    contentDescription = it.collectableName,
+                    alpha = (if (it.unlocked) 1f else 0.5f)
                 )
                 Text("Collectable: ${it.collectableName}")
                 Text("Progress: ${it.currentProgress} / Requirements: ${it.requirements}")

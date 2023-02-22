@@ -2,15 +2,18 @@ package com.ohuji.cardsNmonsters.screens.deck_building
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,22 +31,31 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
 
 Column {
     if (selectedDeck != null && cardsInDeck != null) {
-    Text("Name: ${selectedDeck.deckName}")
+    Text("Deck: ${selectedDeck.deckName}")
         Log.d("DBG", "deckoo ${selectedDeck.deckId} korttii ${cardsInDeck.cards}")
         LazyColumn(
-            contentPadding = PaddingValues(top = 8.dp, bottom = 56.dp)
+            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-            }
-            items(cardsInDeck.cards) { card ->
-                Text(text = card.cardName)
-                val image = card.cardModel
-                val context = LocalContext.current
-                val resId = context.resources.getIdentifier(image, "drawable", context.packageName)
-                Image(
-                    painter = painterResource(resId),
-                    contentDescription = card.cardName,
-                )
+
+            items(
+                cardsInDeck.cards,
+            ) { card ->
+                Row {
+                    val image = card.cardModel
+                    val context = LocalContext.current
+                    val resId = context.resources.getIdentifier(image, "drawable", context.packageName)
+                    Image(
+                        painter = painterResource(resId),
+                        contentDescription = card.cardName,
+                        Modifier.padding(8.dp)
+                    )
+                    Column(modifier = Modifier .padding(8.dp)) {
+                        Text(text = card.cardName)
+                        Text(text = "Element: ${card.cardElement}")
+                        Text(text = "Damage: ${card.cardDamage}")
+                    }
+                    }
             }
         }
     } else {

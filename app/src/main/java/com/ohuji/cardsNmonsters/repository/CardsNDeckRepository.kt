@@ -47,28 +47,3 @@ class CardsNDeckRepository( application: Application) {
         return cardsNDeckDao.getDeckWithCard(deckId)
     }
 }
-
-
-/*
-//TESTING
-suspend fun getCardCountsInDeck(deckId: Long): Map<Long, Int> {
-        val cardsInDeck = cardsNDeckDao.getDeckWithCard(deckId)
-        return cardsInDeck. groupBy { it.cardId }.mapValues { it.value.size }
-    }
-    suspend fun getCardsInDeck(deckId: Long): List<Card> {
-        val cardNDeckCrossRefs = cardsNDeckDao.getCardNDeckCrossRefsForDeck(deckId)
-        val cardIds = cardNDeckCrossRefs.map { it.cardId }
-        return cardsNDeckDao.getCardsByIds(cardIds)
-    }
-
-    suspend fun updateCardNDeckCrossRefs(vararg cardNDeckCrossRefs: CardNDeckCrossRef) {
-        withContext(Dispatchers.IO) {
-            cardNDeckCrossRefs.forEach { cardNDeckCrossRef ->
-                val existingRef = cardsNDeckDao.getCardNDeckCrossRef(cardNDeckCrossRef.deckId, cardNDeckCrossRef.cardId)
-                // Update the existing reference with the new count
-                existingRef.count += cardNDeckCrossRef.count
-                cardsNDeckDao.updateCardNDeckCrossRef(existingRef)
-            }
-        }
-    }
- */
