@@ -1,14 +1,19 @@
 package com.ohuji.cardsNmonsters.screens.collectables
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.ohuji.cardsNmonsters.database.entities.Collectable
 import com.ohuji.cardsNmonsters.repository.CollectableRepository
 import com.ohuji.cardsNmonsters.database.entities.Monster
 import com.ohuji.cardsNmonsters.repository.MonsterRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class CollectablesViewModel(application: Application) : AndroidViewModel(application) {
@@ -38,8 +43,22 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun findMonsterById(monsterId: Long): LiveData<Monster> {
-        return monsterRepo.findMonsterById(monsterId)
+
+            val monster = Transformations.map(monsterRepo.findMonsterById(monsterId)) {
+                it
+            }
+        return monster
     }
+
+
+/*
+    fun findMonsterById(monsterId: Long): LiveData<Monster> {
+
+          return monsterRepo.findMonsterById(monsterId)
+
+    }
+
+ */
 
 }
 

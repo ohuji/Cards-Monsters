@@ -20,6 +20,21 @@ class CollectableRepository( application: Application) {
     fun updateCollectable(collectable: Collectable) {
         db.databaseWriteExecutor.execute { collectableDao.updateCollectable(collectable) }
     }
+
+    suspend fun findCollectableType(type: String): List<Collectable> {
+        return withContext(Dispatchers.IO) {
+            collectableDao.findCollectableType(type)
+        }
+    }
+
+suspend fun findCollectableById(collectableId: Long): Collectable {
+    return withContext(Dispatchers.IO) {
+        collectableDao.findCollectableById(collectableId)
+    }
+}
+
+}
+
 /*
     fun findCollectableById(collectableId: Long): LiveData<Collectable> {
         return collectableDao.findCollectableById(collectableId )
@@ -31,10 +46,3 @@ fun findCollectableById(collectableId: Long): Collectable {
 }
 
  */
-suspend fun findCollectableById(collectableId: Long): Collectable {
-    return withContext(Dispatchers.IO) {
-        collectableDao.findCollectableById(collectableId)
-    }
-}
-
-}

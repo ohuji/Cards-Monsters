@@ -20,7 +20,7 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         if(status) {
             damage *= 2
             Log.d("DBG", "Monsteri on dazed $damage")
-
+            updateCollectableTypeDamage("Damage", damage)
             return damage
         }
 
@@ -28,7 +28,45 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         return damage
     }
 
-    private fun updateCollectableProgress(collectableId: Long) {
+    private fun updateCollectableTypeDamage(type: String, damage: Int) {
+        viewModelScope.launch {
+            val collectable = collectableRepo.findCollectableType(type)
+            for (i in collectable.indices) {
+                collectable.let {
+                    if (!it[i].unlocked) {
+                        it[i].currentProgress += damage
+                        collectableRepo.updateCollectable(it[i])
+                        if (it[i].currentProgress >= it[i].requirements) {
+                            it[i].unlocked = true
+                            collectableRepo.updateCollectable(it[i])
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateCollectableTypeKill(type: String) {
+        viewModelScope.launch {
+            val collectable = collectableRepo.findCollectableType(type)
+            for (i in collectable.indices) {
+                collectable.let {
+                    if (!it[i].unlocked) {
+                        it[i].currentProgress += 1
+                        collectableRepo.updateCollectable(it[i])
+                        if (it[i].currentProgress >= it[i].requirements) {
+                            it[i].unlocked = true
+                            collectableRepo.updateCollectable(it[i])
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
+  private fun updateCollectableProgress(collectableId: Long) {
         viewModelScope.launch {
             val collectable = collectableRepo.findCollectableById(collectableId)
             collectable.let {
@@ -47,9 +85,6 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
             updateCollectableProgress(1L)
         }
     }
-}
-
-/*
   fun doDamage2(cardId: Long): Int {
 
              val card = cardsNDeckRepo.findCardById(cardId).value

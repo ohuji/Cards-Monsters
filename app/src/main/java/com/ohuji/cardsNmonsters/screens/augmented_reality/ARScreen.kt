@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.augmented_reality
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -44,12 +43,12 @@ import io.github.sceneview.ar.node.ArNode
 import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel) {
     val nodes = remember { mutableStateListOf<ArNode>() }
+
     val context = LocalContext.current
-    val monster = monsterViewModel.findMonsterById(1L).observeAsState().value
+    val monster = monsterViewModel.findMonsterById(5L).observeAsState().value
 
     val cardsState = viewModel.getDeckWithCards(1L).observeAsState()
     val cards: FullDeck? = cardsState.value
@@ -57,11 +56,10 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
-    var turn by remember { mutableStateOf(0) }
-
     var health by remember { mutableStateOf(monster?.monsterHealth ?: 800) }
 
     var stateDazed by remember { mutableStateOf(false) }
+    var turn by remember { mutableStateOf(0) }
 
     fun victoryDialogDismiss() {
         showVictoryDialog = false
@@ -80,7 +78,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     ).apply {
         loadModelGlbAsync(
             context = context,
-            glbFileLocation = "models/viking_animated.glb", //monster.monsterModel
+            glbFileLocation = "models/${monster?.monsterModel}",
             autoAnimate = true,
             centerOrigin = Position(x = 0.0f, y = -1.0f, z = 0.0f),
         )
@@ -92,8 +90,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     )
 
     if (cards != null) {
-        Column() {
-           // healthBar.text = health.toString()
+        Column {
             Box(modifier = Modifier
                 .fillMaxHeight(0.70f)
                 .fillMaxWidth()) {
@@ -128,14 +125,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                     contentScale = ContentScale.Crop
                 )
                 Column {
-                    Text(
-                        text = "Turns $turn/4",
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
-
+                    TurnComposable(turn = turn, stateDazed = stateDazed, monsterName = monster?.monsterName)
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically
@@ -148,203 +138,110 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                 "drawable",
                                 context.packageName
                             )
-                                Image(
-                                    painter = painterResource(resId),
-                                    contentDescription = cards.cards[i].cardName,
-                                    modifier = Modifier
-                                        .size(100.dp)
-                                        .clickable {
-                                            Log.d("TAPDBG", "tap fire")
+                            Image(
+                                painter = painterResource(resId),
+                                contentDescription = cards.cards[i].cardName,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clickable {
+                                        Log.d("TAPDBG", "tap fire")
 
+                                        if (!stateDazed && cards.cards[i].cardElement == "Phys") {
+                                            health -= gameLogicViewModel.doDamage(
+                                                cards.cards[i].cardDamage,
+                                                stateDazed,
+                                                cards.cards[i].cardElement
+                                            )
+                                            stateDazed = true
+                                        } else {
+                                            health -= gameLogicViewModel.doDamage(
+                                                cards.cards[i].cardDamage,
+                                                stateDazed,
+                                                cards.cards[i].cardElement
+                                            )
+                                            stateDazed = false
+                                        }
 
-                                            if(!stateDazed && cards.cards[i].cardElement == "Phys") {
-                                                health -= gameLogicViewModel.doDamage(cards.cards[i].cardDamage, stateDazed, cards.cards[i].cardElement)
-                                                stateDazed = true
-                                            } else {
-                                                health -= gameLogicViewModel.doDamage(cards.cards[i].cardDamage, stateDazed, cards.cards[i].cardElement)
-                                                stateDazed = false
-                                            }
+                                        turn += 1
 
-                                            turn += 1
+                                        Log.d(
+                                            "DBG",
+                                            "Mones vuoro menos $turn paljos helttii jälel $health"
+                                        )
 
+                                        if (health <= 0) {
+                                            gameLogicViewModel.updateCollectableTypeKill("Kill")
+                                            showVictoryDialog = true
+                                        } else if (turn >= 4) {
+                                            showDefeatDialog = true
+                                        } else {
+                                            healthBar.text = health.toString()
                                             Log.d(
                                                 "DBG",
-                                                "Mones vuoro menos $turn paljos helttii jälel $health"
+                                                "Muuttuko ne elkut ${healthBar.text}, no mitäs se elkku si on $health"
                                             )
-                                            // health = health?.minus(gameLogicViewModel.doDamage(cards.cards[i].cardId).value ?: 100)
-
-                                            if (health <= 0) {
-                                                gameLogicViewModel.updateCollectable()
-                                                showVictoryDialog = true
-                                            } else if (turn >= 4) {
-                                                showDefeatDialog = true
-                                            } else {
-                                                healthBar.text = health.toString()
-                                                Log.d(
-                                                    "DBG",
-                                                    "Muuttuko ne elkut ${healthBar.text}, no mitäs se elkku si on $health"
-                                                )
-                                            }
                                         }
-                                )
-                            }
+                                    }
+                            )
+                        }
+
                     }
                 }
             }
-            if (showVictoryDialog) {
-                ShowVictoryDialog(
-                    title = "Monster Slain",
-                    message = "You have defeated ${monster?.monsterName} in battle",
-                    onDismiss = { victoryDialogDismiss()}
-                )
-            }
-            if (showDefeatDialog) {
-                ShowVictoryDialog(
-                    title = "Monster fled",
-                    message = "You failed to defeat ${monster?.monsterName} in battle",
-                    onDismiss = { defeatDialogDismiss()}
-                )
-            }
+
         }
     }
-}
-
-
-@Composable
-fun ShowVictoryDialog(
-    title: String,
-    message: String,
-    onDismiss: () -> Unit
-) {
-    Log.d("DBG", "Tultiin alert")
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { androidx.compose.material3.Text(title) },
-        text = { androidx.compose.material3.Text(message) },
-        confirmButton = {
-            Button(onClick = onDismiss) {
-                androidx.compose.material3.Text("OK")
-            }
-        }
-    )
-}
-
-@Composable
-fun ShowDefeatDialog(
-    title: String,
-    message: String,
-    onDismiss: () -> Unit
-) {
-    Log.d("DBG", "Tultiin alert")
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { androidx.compose.material3.Text(title) },
-        text = { androidx.compose.material3.Text(message) },
-        confirmButton = {
-            Button(onClick = onDismiss) {
-                androidx.compose.material3.Text("OK")
-            }
-        }
-    )
-}
-
-/*
-// OG AR SCREEN
-fun ARScreen(navController: NavController, viewModel: DeckViewModel) {
-    val nodes = remember { mutableStateListOf<ArNode>() }
-    val context = LocalContext.current
-
-    val cardsState = viewModel.getDeckWithCards(1L).observeAsState()
-    val cards: FullDeck? = cardsState.value
-
-    var health = 1000
-
-    val model = ArModelNode (
-        placementMode = PlacementMode.BEST_AVAILABLE,
-        instantAnchor = false,
-        hitPosition = Position(0.0f, 0.0f, -2.0f),
-        followHitPosition = true,
-    ).apply {
-        loadModelGlbAsync(
-            context = context,
-            glbFileLocation = "models/viking_animated.glb",
-            autoAnimate = true,
-            centerOrigin = Position(x = 0.0f, y = -1.0f, z = 0.0f),
+    if (showVictoryDialog) {
+        ShowBattleDialog(
+            title = "Monster Slain",
+            message = "You have defeated ${monster?.monsterName} in battle",
+            onDismiss = { victoryDialogDismiss()}
         )
     }
+    if (showDefeatDialog) {
+        ShowBattleDialog(
+            title = "Monster fled",
+            message = "You failed to defeat ${monster?.monsterName} in battle",
+            onDismiss = { defeatDialogDismiss()}
+        )
+    }
+}
 
-    val healthBar = HealthBarNode (
-        context = context,
-        lifecycle = null,
+@Composable
+fun ShowBattleDialog(
+    title: String,
+    message: String,
+    onDismiss: () -> Unit
+) {
+    Log.d("DBG", "Tultiin alert")
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { androidx.compose.material3.Text(title) },
+        text = { androidx.compose.material3.Text(message) },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                androidx.compose.material3.Text("OK")
+            }
+        }
     )
+}
 
-    if (cards != null) {
-        Column() {
-            Box(modifier = Modifier.fillMaxHeight(0.75f).fillMaxWidth()) {
-                ARScene(
-                    nodes = nodes,
-                    planeRenderer = true,
-                    onCreate = { arSceneView ->
-                        // Apply your configuration
-                        arSceneView.addChild(model)
-
-                        arSceneView.cameraNode.addChild(healthBar)
-                    },
-                    onSessionCreate = { session ->
-                        // Configure the ARCore session
-                    },
-                    onFrame = { arFrame ->
-                        // Retrieve ARCore frame update
-                    },
-                    onTap = { hitResult ->
-                        // User tapped in the AR view
-                    }
-                )
-            }
-
-            Box(modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(20.dp))) {
-                Image(
-                    painter = painterResource(R.drawable.wood_background),
-                    contentDescription = "Contact profile picture",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    for (i in cards.cards.indices) {
-                        when (cards.cards[i].cardElement) {
-                            "Fire" ->
-                                Image(
-                                    painter = painterResource(R.drawable.fire_card),
-                                    contentDescription = "Fire card",
-                                    modifier = Modifier.size(100.dp)
-                                        .clickable {
-                                            Log.d("TAPDBG", "tap fire")
-                                            health -= 100
-
-                                            if (health <= 0) {
-                                                navController.navigate("map_screen")
-                                            } else {
-                                                healthBar.text = health.toString()
-                                            }
-                                        }
-                                )
-                            else ->
-                                Image(
-                                    painter = painterResource(R.drawable.civilian_card_back),
-                                    contentDescription = "Default card",
-                                    modifier = Modifier.size(100.dp)
-                                        .clickable {
-                                            Log.d("TAPDBG", "tap test")
-                                        }
-                                )
-                        }
-                    }
-                }
-            }
+@Composable
+fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?) {
+    Row() {
+        Text(text = "Turn $turn/4",
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            color = Color.White,
+            modifier = Modifier.padding(horizontal = 8.dp))
+        if (stateDazed) {
+            Text(
+                text = "$monsterName is dazed",
+                textAlign = TextAlign.Right,
+                fontSize = 16.sp,
+                color = Color.White,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
         }
     }
 }
- */

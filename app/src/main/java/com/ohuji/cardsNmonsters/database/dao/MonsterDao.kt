@@ -18,8 +18,11 @@ interface MonsterDao{
 
     @Update
     fun updateMonster(monster: Monster)
-
+/*
     @Query("SELECT * FROM Monster WHERE monsterId = :monsterId")
     fun findMonsterById(monsterId: Long): LiveData<Monster>
 
+ */
+@Query("SELECT * FROM Monster WHERE monsterId = :monsterId")
+fun findMonsterById(monsterId: Long): LiveData<Monster>
 }

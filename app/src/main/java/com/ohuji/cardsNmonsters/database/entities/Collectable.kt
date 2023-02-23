@@ -12,4 +12,5 @@ data class Collectable(
     var currentProgress: Int,
     val requirements: Int,
     var unlocked: Boolean,
+    val type: String
 )
