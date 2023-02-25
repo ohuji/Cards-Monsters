@@ -5,8 +5,6 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -15,6 +13,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,7 +53,7 @@ fun NavigationHost(
 
     Scaffold(
         bottomBar = {
-            NavigationBar(navController = navController)
+            Navbar(navController = navController)
         }
     ) {
         NavHost(navController, startDestination = "ar_screen") {
@@ -99,13 +99,13 @@ fun NavigationHost(
 }
 
 @Composable
-fun NavigationBar(navController: NavController) {
+fun Navbar(navController: NavController) {
     val items = listOf("ar", "home", "map", "deck_building", "collectables")
 
     Box(modifier = Modifier.fillMaxSize()) {
-        BottomNavigation(modifier = Modifier.align(Alignment.BottomCenter)) {
+        NavigationBar(modifier = Modifier.align(Alignment.BottomCenter)) {
             items.forEachIndexed { index, item ->
-                BottomNavigationItem(
+                NavigationBarItem(
                     selected = navController.currentBackStackEntry?.destination?.route == "${items[index]}_screen",
                     onClick = {
                         navController.navigate("${items[index]}_screen") {

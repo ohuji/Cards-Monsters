@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 
-@Database(entities = [Deck::class, Card::class, CardNDeckCrossRef::class, Monster::class, Collectable::class], version = 3, exportSchema = false)
+@Database(entities = [Deck::class, Card::class, CardNDeckCrossRef::class, Monster::class, Collectable::class], version = 4, exportSchema = false)
 abstract class CardsNMonstersDatabase: RoomDatabase() {
     abstract val cardsNDecksDao: CardsNDeckDao
     abstract val monstersDao: MonsterDao
