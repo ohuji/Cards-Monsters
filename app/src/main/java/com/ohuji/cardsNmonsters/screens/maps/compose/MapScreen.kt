@@ -60,7 +60,7 @@ fun MapScreen(
     )
 
     Log.i("bugbug", "location: $location")
-        mapViewModel.addClusterItem(cluster)
+        //mapViewModel.addClusterItem(cluster)
 
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(
