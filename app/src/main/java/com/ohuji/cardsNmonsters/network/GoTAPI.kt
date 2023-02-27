@@ -32,7 +32,7 @@ object GoTAPI {
     }
 
 
-    private val retrofit = Retrofit.Builder()
+    val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(base_url)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
