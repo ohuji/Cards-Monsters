@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +37,7 @@ import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.database.FullDeck
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
+import com.ohuji.cardsNmonsters.screens.collectables.ExpProgressBar
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import io.github.sceneview.ar.ARScene
 import io.github.sceneview.ar.node.ArModelNode
@@ -53,6 +55,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     val cardsState = viewModel.getDeckWithCards(1L).observeAsState()
     val cards: FullDeck? = cardsState.value
 
+    val playerStats = monsterViewModel.getPlayerStats().observeAsState().value
+
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
@@ -60,6 +64,12 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
     var stateDazed by remember { mutableStateOf(false) }
     var turn by remember { mutableStateOf(0) }
+
+    fun expRequired(): Int {
+        val expReq = playerStats?.expRequirement ?: 1
+        val currentExp = playerStats?.currentLvlExp ?: 2
+        return expReq - currentExp
+    }
 
     fun victoryDialogDismiss() {
         showVictoryDialog = false
@@ -171,6 +181,9 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
                                         if (health <= 0) {
                                             gameLogicViewModel.updateCollectableTypeKill("Kill")
+                                            gameLogicViewModel.updatePlayerStats(
+                                                monster?.monsterHealth ?: 800
+                                            )
                                             showVictoryDialog = true
                                         } else if (turn >= 4) {
                                             showDefeatDialog = true
@@ -194,18 +207,24 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     if (showVictoryDialog) {
         ShowBattleDialog(
             title = "Monster Slain",
-            message = "You have defeated ${monster?.monsterName} in battle",
+            message = "You have defeated ${monster?.monsterName} in battle. Current level: ${playerStats?.playerLevel}. Exp required to next level: ${expRequired()}",
             onDismiss = { victoryDialogDismiss()}
         )
     }
     if (showDefeatDialog) {
         ShowBattleDialog(
             title = "Monster fled",
-            message = "You failed to defeat ${monster?.monsterName} in battle",
+            message =  "You failed to defeat ${monster?.monsterName} in battle",
             onDismiss = { defeatDialogDismiss()}
         )
     }
 }
+
+@Composable
+fun VictoryReport(viewModel: CollectablesViewModel) {
+    ExpProgressBar(viewModel)
+}
+
 
 @Composable
 fun ShowBattleDialog(

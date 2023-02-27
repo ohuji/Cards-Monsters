@@ -22,100 +22,119 @@ import androidx.lifecycle.LiveData
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.maps.android.ktx.model.polygonOptions
+import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
+import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowBattleDialog
+import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
+import kotlinx.coroutines.delay
 
 var i = 0
 @Composable
 fun MapScreen(
+
     mapViewModel: MapViewModel = viewModel(),
     navController: NavController,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
     fusedLocationProviderClient: FusedLocationProviderClient,
+    deckViewModel: DeckViewModel,
 ) {
-    val state by remember {
-        mapViewModel.state
+    // TEE CHECKI
+    val  deckCheck = deckViewModel.getAllDecks().observeAsState().value?.size
+    var showNoDeckAlert by remember { mutableStateOf(false) }
+
+    fun noDeckDialogDismiss() {
+        showNoDeckAlert = false
+        navController.navigate("deck_building_screen")
     }
 
-    val location by remember {
-        mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
-    }
-
-    val cluster = ZoneClusterItem(
-        id = "id",
-        title = "title",
-        snippet = "snippet",
-        polygonOptions = polygonOptions {
-            add(LatLng(60.2180, 24.7811))
-            add(LatLng(60.2182, 24.7809))
-            add(LatLng(60.2175, 24.7815))
-            add(LatLng(60.2170, 24.7814))
-            fillColor(MapViewModel.POLYGON_FILL_COLOR)
+    if (deckCheck == null) {
+        showNoDeckAlert = true
+    } else {
+        val state by remember {
+            mapViewModel.state
         }
-    )
 
-    Log.i("bugbug", "location: $location")
+        val location by remember {
+            mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
+        }
+
+        val cluster = ZoneClusterItem(
+            id = "id",
+            title = "title",
+            snippet = "snippet",
+            polygonOptions = polygonOptions {
+                add(LatLng(60.2180, 24.7811))
+                add(LatLng(60.2182, 24.7809))
+                add(LatLng(60.2175, 24.7815))
+                add(LatLng(60.2170, 24.7814))
+                fillColor(MapViewModel.POLYGON_FILL_COLOR)
+            }
+        )
+
+        Log.i("bugbug", "location: $location")
         //mapViewModel.addClusterItem(cluster)
 
-    // Set properties using MapProperties which you can use to recompose the map
-    val mapProperties = MapProperties(
-        // Only enable if user has accepted location permissions.
-        isMyLocationEnabled = state.lastKnownLocation != null,
-    )
-    val cameraPositionState = rememberCameraPositionState()
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            properties = mapProperties,
-            cameraPositionState = cameraPositionState
+        // Set properties using MapProperties which you can use to recompose the map
+        val mapProperties = MapProperties(
+            // Only enable if user has accepted location permissions.
+            isMyLocationEnabled = state.lastKnownLocation != null,
+        )
+        val cameraPositionState = rememberCameraPositionState()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            MapEffect(state.clusterItems) { map ->
-                if (state.clusterItems.isNotEmpty()) {
-                    val clusterManager = setupClusterManager(context, map)
-                    map.setOnCameraIdleListener(clusterManager)
-                    map.setOnMarkerClickListener(clusterManager)
-                    state.clusterItems.forEach { clusterItem ->
-                        map.addPolygon(clusterItem.polygonOptions)
-                    }
-                    map.setOnMapLoadedCallback {
-                        if (state.clusterItems.isNotEmpty()) {
-                            scope.launch {
-                                cameraPositionState.animate(
-                                    update = CameraUpdateFactory.newLatLngBounds(
-                                        calculateZoneViewCenter(),
-                                        0
-                                    ),
-                                )
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                properties = mapProperties,
+                cameraPositionState = cameraPositionState
+            ) {
+                val context = LocalContext.current
+                val scope = rememberCoroutineScope()
+                MapEffect(state.clusterItems) { map ->
+                    if (state.clusterItems.isNotEmpty()) {
+                        val clusterManager = setupClusterManager(context, map)
+                        map.setOnCameraIdleListener(clusterManager)
+                        map.setOnMarkerClickListener(clusterManager)
+                        state.clusterItems.forEach { clusterItem ->
+                            map.addPolygon(clusterItem.polygonOptions)
+                        }
+                        map.setOnMapLoadedCallback {
+                            if (state.clusterItems.isNotEmpty()) {
+                                scope.launch {
+                                    cameraPositionState.animate(
+                                        update = CameraUpdateFactory.newLatLngBounds(
+                                            calculateZoneViewCenter(),
+                                            0
+                                        ),
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // NOTE: Some features of the MarkerInfoWindow don't work currently. See docs:
-            // https://github.com/googlemaps/android-maps-compose#obtaining-access-to-the-raw-googlemap-experimental
-            // So you can use clusters as an alternative to markers.
-            //MarkerInfoWindow(
-            //    state = rememberMarkerState(position = LatLng(49.1, -122.5)),
-            //    snippet = "Some stuff",
-            //    onClick = {
-            //        // This won't work :(
-            //        System.out.println("Mitchs_: Cannot be clicked")
-            //        true
-            //    },
-            //    draggable = true
-            //)
+                // NOTE: Some features of the MarkerInfoWindow don't work currently. See docs:
+                // https://github.com/googlemaps/android-maps-compose#obtaining-access-to-the-raw-googlemap-experimental
+                // So you can use clusters as an alternative to markers.
+                //MarkerInfoWindow(
+                //    state = rememberMarkerState(position = LatLng(49.1, -122.5)),
+                //    snippet = "Some stuff",
+                //    onClick = {
+                //        // This won't work :(
+                //        System.out.println("Mitchs_: Cannot be clicked")
+                //        true
+                //    },
+                //    draggable = true
+                //)
+            }
         }
-    }
 //    // Center camera to include all the Zones.
 //    LaunchedEffect(state.clusterItems) {
 //        if (state.clusterItems.isNotEmpty()) {
@@ -127,6 +146,14 @@ fun MapScreen(
 //            )
 //        }
 //    }
+    }
+    if (showNoDeckAlert) {
+        ShowBattleDialog(
+            title = "No deck created",
+            message = "You must create a deck before you can fight monster",
+            onDismiss = { noDeckDialogDismiss() }
+        )
+    }
 }
 
 /**

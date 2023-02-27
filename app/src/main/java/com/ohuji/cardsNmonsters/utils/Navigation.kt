@@ -75,6 +75,7 @@ fun NavigationHost(
                     setupClusterManager = setupClusterManager,
                     calculateZoneViewCenter = calculateZoneViewCenter,
                     fusedLocationProviderClient = fusedLocationProviderClient,
+                    deckViewModel = deckViewModel
                 )
             }
             composable("deck_building_screen") {

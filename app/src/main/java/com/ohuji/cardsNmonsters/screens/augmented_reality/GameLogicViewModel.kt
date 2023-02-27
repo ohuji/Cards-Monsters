@@ -63,6 +63,24 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
             }
         }
     }
+
+    fun updatePlayerStats(exp: Int) {
+        Log.d("DBG", "updatePlayer $exp")
+        viewModelScope.launch {
+            val player = collectableRepo.findPlayer()
+                player.currentLvlExp += exp
+                collectableRepo.updatePlayerStats(player)
+            Log.d("DBG", "Playerii päivitetään ${player.currentLvlExp}")
+            if (player.currentLvlExp >= player.expRequirement) {
+                    val excessExp = player.currentLvlExp - player.expRequirement
+                    player.playerLevel += 1
+                    player.expRequirement += 500
+                    player.currentLvlExp = excessExp
+                Log.d("DBG", "Nyt tuli leveli, lvl: ${player.playerLevel}, ja exp ${player.currentLvlExp} ja exp tarttee nyt ${player.expRequirement}")
+                    collectableRepo.updatePlayerStats(player)
+                }
+        }
+    }
 }
 
 /*
