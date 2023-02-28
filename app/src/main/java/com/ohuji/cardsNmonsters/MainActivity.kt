@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
     private val mapViewModel: MapViewModel by viewModels()
     private val database by lazy { CardsNMonstersDatabase.getInstance(this)}
 
+
     override fun onDestroy() {
         super.onDestroy()
         database.databaseWriteExecutor.shutdown()

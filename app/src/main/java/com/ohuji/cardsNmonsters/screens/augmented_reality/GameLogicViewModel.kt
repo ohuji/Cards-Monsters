@@ -14,18 +14,47 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     private val monsterRepo = MonsterRepository(application)
     private val cardsNDeckRepo = CardsNDeckRepository(application)
 
-    fun doDamage(cardDamage: Int, status: Boolean, element: String): Int {
+    fun doDamage(cardDamage: Int, status: Boolean, element: String, monsterElement: String?): Int {
         var damage = cardDamage
+        var elementDamage = false
+
+        if (elementCheck(element, monsterElement)) {
+            elementDamage = true
+        }
 
         if(status) {
-            damage *= 2
+            damage *= if (elementDamage){
+                Log.d("DBG", "Triple damage $damage")
+                3
+            } else {
+                2
+            }
             Log.d("DBG", "Monsteri on dazed $damage")
             updateCollectableTypeDamage("Damage", damage)
             return damage
         }
-
+        if (elementDamage) {
+            updateCollectableTypeDamage("Element Damage", damage)
+            Log.d("DBG", "Element damagea tehtii")
+            return damage*2
+        }
+        updateCollectableTypeDamage("Damage", damage)
         Log.d("DBG", "Paljos damagee tehtii $damage")
         return damage
+    }
+
+  private fun elementCheck(cardElement: String, monsterElement: String?): Boolean {
+      val fire = "Fire"
+      val light = "Light"
+      val wind = "Wind"
+      val earth = "Earth"
+      val electricity = "Electricity"
+      val water = "Water"
+      val phys = "Phys"
+      val dark = "Dark"
+
+
+return true
     }
 
     private fun updateCollectableTypeDamage(type: String, damage: Int) {
@@ -78,6 +107,7 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
                     player.currentLvlExp = excessExp
                 Log.d("DBG", "Nyt tuli leveli, lvl: ${player.playerLevel}, ja exp ${player.currentLvlExp} ja exp tarttee nyt ${player.expRequirement}")
                     collectableRepo.updatePlayerStats(player)
+
                 }
         }
     }

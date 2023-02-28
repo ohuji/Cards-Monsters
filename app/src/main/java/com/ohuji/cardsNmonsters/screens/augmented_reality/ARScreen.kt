@@ -56,7 +56,6 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     val cards: FullDeck? = cardsState.value
 
     val playerStats = monsterViewModel.getPlayerStats().observeAsState().value
-
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
@@ -160,14 +159,14 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                             health -= gameLogicViewModel.doDamage(
                                                 cards.cards[i].cardDamage,
                                                 stateDazed,
-                                                cards.cards[i].cardElement
+                                                cards.cards[i].cardElement, monster?.monsterElement
                                             )
                                             stateDazed = true
                                         } else {
                                             health -= gameLogicViewModel.doDamage(
                                                 cards.cards[i].cardDamage,
                                                 stateDazed,
-                                                cards.cards[i].cardElement
+                                                cards.cards[i].cardElement, monster?.monsterElement
                                             )
                                             stateDazed = false
                                         }
@@ -182,8 +181,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                         if (health <= 0) {
                                             gameLogicViewModel.updateCollectableTypeKill("Kill")
                                             gameLogicViewModel.updatePlayerStats(
-                                                monster?.monsterHealth ?: 800
-                                            )
+                                                    monster?.monsterHealth ?: 800)
+
                                             showVictoryDialog = true
                                         } else if (turn >= 4) {
                                             showDefeatDialog = true

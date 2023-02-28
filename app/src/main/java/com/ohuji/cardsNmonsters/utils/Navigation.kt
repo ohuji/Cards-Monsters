@@ -36,6 +36,7 @@ import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
+import java.lang.reflect.Array.get
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,6 +51,7 @@ fun NavigationHost(
     fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     val navController = rememberNavController()
+
 
     Scaffold(
         bottomBar = {
