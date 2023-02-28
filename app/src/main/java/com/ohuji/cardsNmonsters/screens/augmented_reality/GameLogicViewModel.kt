@@ -50,11 +50,32 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
       val earth = "Earth"
       val electricity = "Electricity"
       val water = "Water"
-      val phys = "Phys"
       val dark = "Dark"
 
-
-return true
+      return if (cardElement == "Fire" && monsterElement == "Wind") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Light" && monsterElement == "Dark") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Wind" && monsterElement == "Earth") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Earth" && monsterElement == "Electricity") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Electricity" && monsterElement == "Water") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Water" && monsterElement == "Fire") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else if (cardElement == "Dark" && monsterElement == "Light") {
+          Log.d("DBG", "Elemental damage true $cardElement")
+          true
+      } else {
+          false
+      }
     }
 
     private fun updateCollectableTypeDamage(type: String, damage: Int) {
