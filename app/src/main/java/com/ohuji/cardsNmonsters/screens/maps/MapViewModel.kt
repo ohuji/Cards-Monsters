@@ -5,19 +5,10 @@ import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
-import com.ohuji.cardsNmonsters.screens.maps.clusters.calculateCameraViewPoints
-import com.ohuji.cardsNmonsters.screens.maps.clusters.getCenterOfPolygon
-import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -25,11 +16,16 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
-import com.google.maps.android.ktx.model.polygonOptions
+import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
+import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
+import com.ohuji.cardsNmonsters.screens.maps.clusters.calculateCameraViewPoints
+import com.ohuji.cardsNmonsters.screens.maps.clusters.getCenterOfPolygon
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
+import kotlin.math.asin
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 
 @HiltViewModel
 class MapViewModel @Inject constructor() : ViewModel() {
@@ -67,10 +63,47 @@ class MapViewModel @Inject constructor() : ViewModel() {
         )
     )
 
-    fun addClusterItem(clusterItem: ZoneClusterItem) {
+    /*suspend*/ fun addClusterItem(clusterItem: ZoneClusterItem) {
         state.value = state.value.copy(
             clusterItems = state.value.clusterItems + clusterItem
         )
+    }
+
+    /**
+     * move latlng point by rang and bearing
+     *
+     * @param latLng  pair of doubles, represents a point in dd coordinates
+     * @param range   range in meters
+     * @param bearing bearing in degrees
+     * @return new pair of doubles, represents a point in dd coordinates
+     */
+    fun generateLatLng(
+        latLng: LatLng,
+        range: Double,
+        bearing: Double
+    ): LatLng {
+
+        val earthRadius = 6378137.0
+        val degreesToRadians = Math.PI / 180.0
+        val radiansToDegrees = 180.0 / Math.PI
+
+        val latA = latLng.latitude * degreesToRadians
+        val lonA = latLng.longitude * degreesToRadians
+        val angularDistance = range / earthRadius
+        val trueCourse = bearing * degreesToRadians
+
+        val lat = asin(
+            sin(latA) * cos(angularDistance) +
+                    cos(latA) * sin(angularDistance) * cos(trueCourse)
+        )
+
+        val dLon = atan2(
+            sin(trueCourse) * sin(angularDistance) * cos(latA),
+            cos(angularDistance) - sin(latA) * sin(lat)
+        )
+
+        val lon = (lonA + dLon + Math.PI) % (Math.PI * 2) - Math.PI
+        return LatLng(lat * radiansToDegrees, lon * radiansToDegrees)
     }
 
 
@@ -99,12 +132,12 @@ class MapViewModel @Inject constructor() : ViewModel() {
 
     fun getDevicePreciseLocation(
         fusedLocationProviderClient: FusedLocationProviderClient
-    ): MutableState<Pair<Double, Double>> {
+    ): MutableState<LatLng> {
         /*
          * Get a fresher and more accurate location, which may be null in rare
          * cases when a location is not available.
          */
-        val locationData = mutableStateOf(Pair(0.0, 0.0))
+        val locationData = mutableStateOf(LatLng(0.0, 0.0))
         try {
             fusedLocationProviderClient.getCurrentLocation(
                 Priority.PRIORITY_HIGH_ACCURACY,
@@ -119,7 +152,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
                     //Toast.makeText(context,"Cannot get location.", Toast.LENGTH_SHORT).show()
                         Log.i("MapViewModel", "Cannot get location.")
                     else {
-                        locationData.value = Pair(location.latitude, location.longitude)
+                        locationData.value = LatLng(location.latitude, location.longitude)
                     }
 
                 }

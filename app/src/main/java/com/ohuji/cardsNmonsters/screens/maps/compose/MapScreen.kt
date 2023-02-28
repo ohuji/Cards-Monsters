@@ -32,9 +32,12 @@ import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowBattleDialog
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 var i = 0
+
 @Composable
 fun MapScreen(
 
@@ -46,7 +49,8 @@ fun MapScreen(
     deckViewModel: DeckViewModel,
 ) {
 
-    val  deckCheck = deckViewModel.getAllDecks().observeAsState().value?.size //.observeAsState().value?.size
+    val deckCheck =
+        deckViewModel.getAllDecks().observeAsState().value?.size //.observeAsState().value?.size
     var showNoDeckAlert by remember { mutableStateOf(false) }
 
     fun noDeckDialogDismiss() {
@@ -54,87 +58,93 @@ fun MapScreen(
         navController.navigate("deck_building_screen")
     }
 
-    if (deckCheck != null) {
-        if (deckCheck >= 1) {
+    if (deckCheck?.let { it < 1 } == true) {
+        showNoDeckAlert = true
+    }
 
-            val state by remember {
-                mapViewModel.state
+    val state by remember {
+        mapViewModel.state
+    }
+
+    val location by remember {
+        mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
+    }
+
+    LaunchedEffect(location) {
+        if (location == LatLng(0.0, 0.0)) {
+            return@LaunchedEffect
+        }
+        val test = mapViewModel.generateLatLng(location, Random.nextDouble(0.1,1000.0), Random.nextDouble(0.1,365.0))
+        val cluster = ZoneClusterItem(
+            id = "id",
+            title = "title",
+            snippet = "snippet",
+            polygonOptions = polygonOptions {
+                add(test)
+                //add(LatLng(60.2182, 24.7809))
+                //add(LatLng(60.2175, 24.7815))
+                //add(LatLng(60.2170, 24.7814))
+                //fillColor(MapViewModel.POLYGON_FILL_COLOR)
             }
+        )
+        mapViewModel.addClusterItem(cluster)
+    }
 
-            val location by remember {
-                mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
-            }
 
-            val cluster = ZoneClusterItem(
-                id = "id",
-                title = "title",
-                snippet = "snippet",
-                polygonOptions = polygonOptions {
-                    add(LatLng(60.2180, 24.7811))
-                    add(LatLng(60.2182, 24.7809))
-                    add(LatLng(60.2175, 24.7815))
-                    add(LatLng(60.2170, 24.7814))
-                    fillColor(MapViewModel.POLYGON_FILL_COLOR)
-                }
-            )
-
-            Log.i("bugbug", "location: $location")
-            //mapViewModel.addClusterItem(cluster)
-
-            // Set properties using MapProperties which you can use to recompose the map
-            val mapProperties = MapProperties(
-                // Only enable if user has accepted location permissions.
-                isMyLocationEnabled = state.lastKnownLocation != null,
-            )
-            val cameraPositionState = rememberCameraPositionState()
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                GoogleMap(
-                    modifier = Modifier.fillMaxSize(),
-                    properties = mapProperties,
-                    cameraPositionState = cameraPositionState
-                ) {
-                    val context = LocalContext.current
-                    val scope = rememberCoroutineScope()
-                    MapEffect(state.clusterItems) { map ->
+    // Set properties using MapProperties which you can use to recompose the map
+    val mapProperties = MapProperties(
+        // Only enable if user has accepted location permissions.
+        isMyLocationEnabled = state.lastKnownLocation != null,
+    )
+    val cameraPositionState = rememberCameraPositionState()
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            properties = mapProperties,
+            cameraPositionState = cameraPositionState
+        ) {
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            MapEffect(state.clusterItems) { map ->
+                if (state.clusterItems.isNotEmpty()) {
+                    val clusterManager = setupClusterManager(context, map)
+                    map.setOnCameraIdleListener(clusterManager)
+                    map.setOnMarkerClickListener(clusterManager)
+                    state.clusterItems.forEach { clusterItem ->
+                        map.addPolygon(clusterItem.polygonOptions)
+                    }
+                    map.setOnMapLoadedCallback {
                         if (state.clusterItems.isNotEmpty()) {
-                            val clusterManager = setupClusterManager(context, map)
-                            map.setOnCameraIdleListener(clusterManager)
-                            map.setOnMarkerClickListener(clusterManager)
-                            state.clusterItems.forEach { clusterItem ->
-                                map.addPolygon(clusterItem.polygonOptions)
-                            }
-                            map.setOnMapLoadedCallback {
-                                if (state.clusterItems.isNotEmpty()) {
-                                    scope.launch {
-                                        cameraPositionState.animate(
-                                            update = CameraUpdateFactory.newLatLngBounds(
-                                                calculateZoneViewCenter(),
-                                                0
-                                            ),
-                                        )
-                                    }
-                                }
+                            scope.launch {
+                                cameraPositionState.animate(
+                                    update = CameraUpdateFactory.newLatLngBounds(
+                                        calculateZoneViewCenter(),
+                                        0
+                                    ),
+                                )
                             }
                         }
                     }
-
-                    // NOTE: Some features of the MarkerInfoWindow don't work currently. See docs:
-                    // https://github.com/googlemaps/android-maps-compose#obtaining-access-to-the-raw-googlemap-experimental
-                    // So you can use clusters as an alternative to markers.
-                    //MarkerInfoWindow(
-                    //    state = rememberMarkerState(position = LatLng(49.1, -122.5)),
-                    //    snippet = "Some stuff",
-                    //    onClick = {
-                    //        // This won't work :(
-                    //        System.out.println("Mitchs_: Cannot be clicked")
-                    //        true
-                    //    },
-                    //    draggable = true
-                    //)
                 }
             }
+
+            // NOTE: Some features of the MarkerInfoWindow don't work currently. See docs:
+            // https://github.com/googlemaps/android-maps-compose#obtaining-access-to-the-raw-googlemap-experimental
+            // So you can use clusters as an alternative to markers.
+            //MarkerInfoWindow(
+            //    state = rememberMarkerState(position = LatLng(49.1, -122.5)),
+            //    snippet = "Some stuff",
+            //    onClick = {
+            //        // This won't work :(
+            //        System.out.println("Mitchs_: Cannot be clicked")
+            //        true
+            //    },
+            //    draggable = true
+            //)
+        }
+    }
 //    // Center camera to include all the Zones.
 //    LaunchedEffect(state.clusterItems) {
 //        if (state.clusterItems.isNotEmpty()) {
@@ -146,10 +156,8 @@ fun MapScreen(
 //            )
 //        }
 //    }
-        } else {
-            showNoDeckAlert = true
-        }
-    }
+
+
     if (showNoDeckAlert) {
         ShowBattleDialog(
             title = "No deck created",
@@ -158,6 +166,7 @@ fun MapScreen(
         )
     }
 }
+
 
 /**
  * If you want to center on a specific location.
