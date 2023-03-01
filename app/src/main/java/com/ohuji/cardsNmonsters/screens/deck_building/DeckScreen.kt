@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -107,11 +106,16 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
             Text("Create deck")
         }
 
-        DeckCreationError(showErrorDialog)
-
         DeckList(viewModel, navController)
 
         CardList(viewModel, selectedCardIds)
+    }
+    if (showErrorDialog) {
+        ShowDialog(
+            title = "Deck creation error",
+            message = "Deck must have 4 cards selected and a name with at least 3 and a maximum of 15 characters.",
+            onDismiss = { showErrorDialog = false }
+        )
     }
 }
 
@@ -163,6 +167,7 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
                 }
             })
     }
+
 }
 
 @Composable
@@ -177,19 +182,6 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
                 navController.navigate("deck_detail_screen/${it.deckId}")
             })
         }
-    }
-}
-
-@Composable
-fun DeckCreationError(showErrorDialog: Boolean) {
-    var showDialog by remember { mutableStateOf(showErrorDialog) }
-    //var showErrorDialog2 = showErrorDialog
-    if (showDialog) {
-        ShowDialog(
-            title = "Deck creation error",
-            message = "Deck must have 4 cards selected and a name with at least 3 and a maximum of 15 characters.",
-            onDismiss = { showDialog = false }
-        )
     }
 }
 
