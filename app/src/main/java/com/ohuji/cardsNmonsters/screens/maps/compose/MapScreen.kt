@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.maps.android.ktx.model.polygonOptions
 import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
-import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowBattleDialog
+import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
 import kotlinx.coroutines.GlobalScope
@@ -159,7 +159,7 @@ fun MapScreen(
 
 
     if (showNoDeckAlert) {
-        ShowBattleDialog(
+        ShowDialog(
             title = "No deck created",
             message = "You must create a deck before you can fight monster",
             onDismiss = { noDeckDialogDismiss() }

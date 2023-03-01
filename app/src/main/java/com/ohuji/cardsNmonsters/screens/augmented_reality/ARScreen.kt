@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +36,6 @@ import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.database.FullDeck
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
-import com.ohuji.cardsNmonsters.screens.collectables.ExpProgressBar
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import io.github.sceneview.ar.ARScene
 import io.github.sceneview.ar.node.ArModelNode
@@ -70,13 +68,25 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
         return expReq - currentExp
     }
 
-    fun victoryDialogDismiss() {
-        showVictoryDialog = false
-        navController.navigate("map_screen")
+    fun stateAndDamage(i: Int){
+                val card = cards!!.cards[i]
+                health -= gameLogicViewModel.doDamage(card.cardDamage, stateDazed, card.cardElement, monster?.monsterElement)
+                val isPhysicalCard = card.cardElement == "Phys"
+                stateDazed = isPhysicalCard
     }
-    fun defeatDialogDismiss() {
-        showDefeatDialog= false
-        navController.navigate("map_screen")
+
+    fun battleConclusion(): String{
+        if (health <= 0) {
+            gameLogicViewModel.updateCollectableTypeKill("Kill")
+            gameLogicViewModel.updatePlayerStats(
+                monster?.monsterHealth ?: 800
+            )
+
+            showVictoryDialog = true
+        } else if (turn >= 4) {
+            showDefeatDialog = true
+        }
+           return health.toString()
     }
 
     val model = ArModelNode (
@@ -100,29 +110,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
     if (cards != null) {
         Column {
-            Box(modifier = Modifier
-                .fillMaxHeight(0.70f)
-                .fillMaxWidth()) {
-                ARScene(
-                    nodes = nodes,
-                    planeRenderer = true,
-                    onCreate = { arSceneView ->
-                        // Apply your configuration
-                        arSceneView.addChild(model)
-
-                        arSceneView.cameraNode.addChild(healthBar)
-                    },
-                    onSessionCreate = { session ->
-                        // Configure the ARCore session
-                    },
-                    onFrame = { arFrame ->
-                        // Retrieve ARCore frame update
-                    },
-                    onTap = { hitResult ->
-                        // User tapped in the AR view
-                    }
-                )
-            }
+            AR(model, nodes, healthBar )
 
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -155,21 +143,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                     .clickable {
                                         Log.d("TAPDBG", "tap fire")
 
-                                        if (!stateDazed && cards.cards[i].cardElement == "Phys") {
-                                            health -= gameLogicViewModel.doDamage(
-                                                cards.cards[i].cardDamage,
-                                                stateDazed,
-                                                cards.cards[i].cardElement, monster?.monsterElement
-                                            )
-                                            stateDazed = true
-                                        } else {
-                                            health -= gameLogicViewModel.doDamage(
-                                                cards.cards[i].cardDamage,
-                                                stateDazed,
-                                                cards.cards[i].cardElement, monster?.monsterElement
-                                            )
-                                            stateDazed = false
-                                        }
+                                       stateAndDamage(i)
 
                                         turn += 1
 
@@ -177,22 +151,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                             "DBG",
                                             "Mones vuoro menos $turn paljos helttii jälel $health"
                                         )
-
-                                        if (health <= 0) {
-                                            gameLogicViewModel.updateCollectableTypeKill("Kill")
-                                            gameLogicViewModel.updatePlayerStats(
-                                                    monster?.monsterHealth ?: 800)
-
-                                            showVictoryDialog = true
-                                        } else if (turn >= 4) {
-                                            showDefeatDialog = true
-                                        } else {
-                                            healthBar.text = health.toString()
-                                            Log.d(
-                                                "DBG",
-                                                "Muuttuko ne elkut ${healthBar.text}, no mitäs se elkku si on $health"
-                                            )
-                                        }
+                                        healthBar.text = battleConclusion()
                                     }
                             )
                         }
@@ -203,30 +162,69 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
         }
     }
+    BattleReport(showVictoryDialog, showDefeatDialog, navController, monster?.monsterName, playerStats?.playerLevel, expRequired())
+}
+
+@Composable
+fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.node.Node>, healthBar: io.github.sceneview.node.Node) {
+    Box(modifier = Modifier
+        .fillMaxHeight(0.70f)
+        .fillMaxWidth()) {
+        ARScene(
+            nodes = nodes,
+            planeRenderer = true,
+            onCreate = { arSceneView ->
+                // Apply your configuration
+                arSceneView.addChild(model)
+
+                arSceneView.cameraNode.addChild(healthBar)
+            },
+            onSessionCreate = { session ->
+                // Configure the ARCore session
+            },
+            onFrame = { arFrame ->
+                // Retrieve ARCore frame update
+            },
+            onTap = { hitResult ->
+                // User tapped in the AR view
+            }
+        )
+    }
+}
+
+@Composable
+fun BattleReport(showVictoryDialog: Boolean, showDefeatDialog: Boolean, navController: NavController, monsterName: String?, playerLevel: Int?, expRequired: Int) {
+
+    var showVictoryDialog = showVictoryDialog
+    var showDefeatDialog = showDefeatDialog
+
+    fun victoryDialogDismiss() {
+        showVictoryDialog = false
+        navController.navigate("map_screen")
+    }
+    fun defeatDialogDismiss() {
+        showDefeatDialog= false
+        navController.navigate("map_screen")
+    }
+
     if (showVictoryDialog) {
-        ShowBattleDialog(
+        ShowDialog(
             title = "Monster Slain",
-            message = "You have defeated ${monster?.monsterName} in battle. Current level: ${playerStats?.playerLevel}. Exp required to next level: ${expRequired()}",
+            message = "You have defeated $monsterName in battle. Current level: $playerLevel. Exp required to next level: $expRequired",
             onDismiss = { victoryDialogDismiss()}
         )
     }
     if (showDefeatDialog) {
-        ShowBattleDialog(
+        ShowDialog(
             title = "Monster fled",
-            message =  "You failed to defeat ${monster?.monsterName} in battle",
+            message =  "You failed to defeat $monsterName in battle",
             onDismiss = { defeatDialogDismiss()}
         )
     }
 }
 
 @Composable
-fun VictoryReport(viewModel: CollectablesViewModel) {
-    ExpProgressBar(viewModel)
-}
-
-
-@Composable
-fun ShowBattleDialog(
+fun ShowDialog(
     title: String,
     message: String,
     onDismiss: () -> Unit

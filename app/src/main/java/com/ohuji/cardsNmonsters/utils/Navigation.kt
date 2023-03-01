@@ -36,7 +36,6 @@ import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
-import java.lang.reflect.Array.get
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,8 +82,7 @@ fun NavigationHost(
             composable("deck_building_screen") {
                 DeckScreen(
                     viewModel = deckViewModel,
-                    navController = navController,
-                    application = Application()
+                    navController = navController
                 )
             }
             composable("deck_detail_screen/{deckId}") {
@@ -92,7 +90,7 @@ fun NavigationHost(
                 DeckDetailScreen(deckViewModel = deckViewModel, deckId = deckId, navController = navController)
             }
             composable("collectables_screen") {
-                CollectablesScreen(navController = navController, viewModel = collectablesViewModel, application = Application())
+                CollectablesScreen(viewModel = collectablesViewModel)
             }
             composable("collectable_screen") {
 

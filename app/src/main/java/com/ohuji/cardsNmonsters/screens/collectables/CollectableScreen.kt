@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.collectables
 
-import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,10 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 
 @Composable
-fun CollectablesScreen(navController: NavController, viewModel: CollectablesViewModel, application: Application) {
+fun CollectablesScreen(viewModel: CollectablesViewModel) {
     val collectableList = viewModel.getAllCollectables().observeAsState(listOf())
     val monsterList = viewModel.getAllMonsters().observeAsState(listOf())
     val playerStats = viewModel.getPlayerStats().observeAsState().value

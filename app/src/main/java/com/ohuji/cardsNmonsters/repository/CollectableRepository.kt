@@ -50,14 +50,3 @@ suspend fun findCollectableById(collectableId: Long): Collectable {
     }
 }
 
-/*
-    fun findCollectableById(collectableId: Long): LiveData<Collectable> {
-        return collectableDao.findCollectableById(collectableId )
-    }
-
-
-fun findCollectableById(collectableId: Long): Collectable {
-    return collectableDao.findCollectableById(collectableId )
-}
-
- */

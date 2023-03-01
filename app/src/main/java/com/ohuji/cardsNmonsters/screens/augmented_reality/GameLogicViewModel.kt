@@ -11,8 +11,6 @@ import kotlinx.coroutines.launch
 
 class GameLogicViewModel(application: Application) : AndroidViewModel(application) {
     private val collectableRepo = CollectableRepository(application)
-    private val monsterRepo = MonsterRepository(application)
-    private val cardsNDeckRepo = CardsNDeckRepository(application)
 
     fun doDamage(cardDamage: Int, status: Boolean, element: String, monsterElement: String?): Int {
         var damage = cardDamage
@@ -52,29 +50,29 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
       val water = "Water"
       val dark = "Dark"
 
-      return if (cardElement == "Fire" && monsterElement == "Wind") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Light" && monsterElement == "Dark") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Wind" && monsterElement == "Earth") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Earth" && monsterElement == "Electricity") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Electricity" && monsterElement == "Water") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Water" && monsterElement == "Fire") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else if (cardElement == "Dark" && monsterElement == "Light") {
-          Log.d("DBG", "Elemental damage true $cardElement")
-          true
-      } else {
-          false
+      return when {
+          cardElement == fire && monsterElement == wind -> {
+              true
+          }
+          cardElement == light && monsterElement == dark -> {
+              true
+          }
+          cardElement == wind && monsterElement == earth -> {
+              true
+          }
+          cardElement == earth && monsterElement == electricity -> {
+              true
+          }
+          cardElement == electricity && monsterElement == water -> {
+              true
+          }
+          cardElement == water && monsterElement == fire -> {
+              true
+          }
+          cardElement == dark && monsterElement == light -> {
+              true
+          }
+          else -> false
       }
     }
 
@@ -133,48 +131,3 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 }
-
-/*
-  private fun updateCollectableProgress(collectableId: Long) {
-        viewModelScope.launch {
-            val collectable = collectableRepo.findCollectableById(collectableId)
-            collectable.let {
-                it.currentProgress += 1
-                collectableRepo.updateCollectable(it)
-                if(it.currentProgress >= it.requirements) {
-                    it.unlocked = true
-                    collectableRepo.updateCollectable(it)
-                }
-            }
-        }
-    }
-
-    fun updateCollectable() {
-        viewModelScope.launch {
-            updateCollectableProgress(1L)
-        }
-    }
-  fun doDamage2(cardId: Long): Int {
-
-             val card = cardsNDeckRepo.findCardById(cardId).value
-             val damage = card?.cardDamage ?: 100
-             Log.d("DBG", "Paljos damagee tehtii $damage, kortin oikea damage ${card?.cardDamage}, id $cardId")
-             return damage
-
-
-    }
-
-    fun doDamage(cardId: Long): LiveData<Int> {
-       // val damageLiveData = MutableLiveData<Int>()
-        var damageLiveData = MutableLiveData<Int>()
-        cardsNDeckRepo.findCardById(cardId).observeForever { card ->
-            if (card != null) {
-                val damage = card.cardDamage ?: 100
-                Log.d("DBG", "Paljos damagee tehtii $damage, kortin oikea damage ${card.cardDamage}, id $cardId")
-                damageLiveData.value = damage
-            }
-        }
-
-        return damageLiveData
-    }
- */

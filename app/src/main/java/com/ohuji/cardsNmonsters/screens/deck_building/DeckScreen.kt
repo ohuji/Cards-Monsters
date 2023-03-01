@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.deck_building
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +22,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,21 +36,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.database.entities.Card
+import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeckScreen(viewModel: DeckViewModel, navController: NavController, application: Application) {
+fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
     val deckList = viewModel.getAllDecks().observeAsState(listOf())
-    val cardList = viewModel.getAllCards().observeAsState(listOf())
-    var selectedCardIds by remember { mutableStateOf(emptyList<Card>()) }
+    val selectedCardIds = remember { mutableStateListOf<Card>() }
     var deckName by remember { mutableStateOf("") }
     val newestDeck = deckList.value.lastOrNull()
     var showErrorDialog by remember { mutableStateOf(false) }
-    val cardList1 = viewModel.getAllCards().observeAsState(mutableListOf<Card>())
-    val selectedCards = mutableSetOf<Card>()
 
     Column {
         Text(text = "Create your deck", modifier = Modifier.padding(8.dp))
@@ -90,19 +88,16 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController, applicati
                     delay(500)
                 }
                 viewModel.viewModelScope.launch(Dispatchers.IO) {
+                    viewModel.viewModelScope.launch(Dispatchers.IO) {
+                        val newDeckId = newestDeck?.deckId?.toInt()?.plus(1)?.toLong() ?: 1L
+                        Log.d("DBG", "Uusi pakka $newDeckId kortit $selectedCardIds")
 
-                    val newDeckId = newestDeck?.deckId?.toInt()?.plus(1)?.toLong()
-                    Log.d("DBG", "Uusi pakka $newDeckId kortit $selectedCardIds")
-
-                    delay(500)
-
-                    if (newDeckId != null) {
-                        viewModel.addCardsToDeck(newDeckId, selectedCardIds)
-                    } else {
-                        viewModel.addCardsToDeck(1L, selectedCardIds)
+                        selectedCardIds.toMutableList().also {
+                            viewModel.addCardsToDeck(newDeckId, it)
+                            selectedCardIds.clear()
+                        }
+                        deckName = ""
                     }
-                    selectedCardIds = emptyList()
-                    deckName = ""
                 }
             } else {
                 showErrorDialog = true
@@ -111,90 +106,90 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController, applicati
         }) {
             Text("Create deck")
         }
-        if (showErrorDialog) {
-            ShowAlertDialog(
-                title = "Deck creation error",
-                message = "Deck must have 4 cards selected and a name with at least 3 characters and a maximum of 15.",
-                onDismiss = { showErrorDialog = false }
-            )
-        }
-        Text(text = "Your decks")
-        LazyColumn {
-            item {
-            }
-            items(deckList.value) {
-                Text("Deck: ${it.deckName}", Modifier.clickable {
-                    navController.navigate("deck_detail_screen/${it.deckId}")
-                })
-            }
-        }
-        Text(text = "Cards")
-        LazyColumn(
-            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = cardList1.value.chunked(3),
-                itemContent = { cardRow ->
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        cardRow.forEach { card ->
-                            Column {
-                                Text("${card.cardName}")
-                                Log.d("DBG", "valitut kortit, $selectedCardIds")
-                                val image = card.cardModel
-                                val context = LocalContext.current
-                                val resId = context.resources.getIdentifier(
-                                    image,
-                                    "drawable",
-                                    context.packageName
-                                )
-                                val isClickable = if (!selectedCardIds.contains(card) && selectedCardIds.size < 4) {
-                                    Log.d("DBG", "isclickabel, ${selectedCardIds.size}")
-                                    true
-                                } else {
-                                    false
-                                }
 
-                                Image(
-                                    painter = painterResource(resId),
-                                    contentDescription = card.cardName,
-                                    modifier = Modifier
-                                        .clickable(isClickable) {
-                                            if (isClickable) {
-                                                selectedCardIds += card
-                                                selectedCards.add(card)
-                                            }
+        DeckCreationError(showErrorDialog)
+
+        DeckList(viewModel, navController)
+
+        CardList(viewModel, selectedCardIds)
+    }
+}
+
+@Composable
+fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
+    val cardList1 = viewModel.getAllCards().observeAsState(mutableListOf<Card>())
+    val selectedCards = mutableSetOf<Card>()
+
+    Text(text = "Cards")
+    LazyColumn(
+        contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(
+            items = cardList1.value.chunked(3),
+            itemContent = { cardRow ->
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    cardRow.forEach { card ->
+                        Column {
+                            Text(card.cardName)
+                            Log.d("DBG", "valitut kortit, $selectedCardIds")
+                            val image = card.cardModel
+                            val context = LocalContext.current
+                            val resId = context.resources.getIdentifier(
+                                image,
+                                "drawable",
+                                context.packageName
+                            )
+                            val isClickable = !selectedCardIds.contains(card) && selectedCardIds.size < 4
+
+                            Image(
+                                painter = painterResource(resId),
+                                contentDescription = card.cardName,
+                                modifier = Modifier
+                                    .clickable(isClickable) {
+                                        if (isClickable) {
+                                            selectedCardIds += card
+                                            selectedCards.add(card)
                                         }
-                                        .alpha(if (isClickable) 1f else 0.5f)
-                                )
-                            }
+                                    }
+                                    .alpha(if (isClickable) 1f else 0.5f)
+                            )
                         }
                     }
+                }
+            })
+    }
+}
 
-                })
+@Composable
+fun DeckList(viewModel: DeckViewModel, navController: NavController) {
+    val deckList = viewModel.getAllDecks().observeAsState(listOf())
+    Text(text = "Your decks")
+    LazyColumn {
+        item {
+        }
+        items(deckList.value) {
+            Text("Deck: ${it.deckName}", Modifier.clickable {
+                navController.navigate("deck_detail_screen/${it.deckId}")
+            })
         }
     }
 }
 
 @Composable
-fun ShowAlertDialog(
-    title: String,
-    message: String,
-    onDismiss: () -> Unit
-) {
-    Log.d("DBG", "Tultiin alert")
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(title) },
-        text = { Text(message) },
-        confirmButton = {
-            Button(onClick = onDismiss) {
-                Text("OK")
-            }
-        }
-    )
+fun DeckCreationError(showErrorDialog: Boolean) {
+    var showDialog by remember { mutableStateOf(showErrorDialog) }
+    //var showErrorDialog2 = showErrorDialog
+    if (showDialog) {
+        ShowDialog(
+            title = "Deck creation error",
+            message = "Deck must have 4 cards selected and a name with at least 3 and a maximum of 15 characters.",
+            onDismiss = { showDialog = false }
+        )
+    }
 }
+

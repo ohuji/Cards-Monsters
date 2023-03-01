@@ -20,12 +20,6 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     fun getAllCollectables(): LiveData<List<Collectable>> {
         return collectableRepo.allCollectables
     }
-/*
-    fun getCollectableById(collectableId: Long): LiveData<Collectable> {
-        return  collectableRepo.findCollectableById(collectableId)
-    }
-
- */
 
     fun updateCollectable(collectable: Collectable) {
         viewModelScope.launch {
@@ -51,38 +45,5 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
             }
         return monster
     }
-
-
-/*
-    fun findMonsterById(monsterId: Long): LiveData<Monster> {
-
-          return monsterRepo.findMonsterById(monsterId)
-
-    }
-
- */
-
 }
 
-
-/*
-class CollectablesViewModel2(application: Application) : AndroidViewModel(application) {
-    private val db = CardsNMonstersDatabase.getInstance(application)
-
-    fun getAllCollectables(): LiveData<List<Collectable>> {
-        val collectables = Transformations.map(db.collectableDao.getAllCollectables()) {
-            it
-        }
-        return collectables
-    }
-
-    //Monsterien testausta varten
-    fun getAllMonsters(): LiveData<List<Monster>> {
-        val monsters = Transformations.map(db.monstersDao.getAllMonsters()) {
-            it
-        }
-        return monsters
-    }
-
-}
- */
