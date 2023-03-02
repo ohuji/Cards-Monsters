@@ -6,37 +6,25 @@ import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
-import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
-import kotlinx.coroutines.launch
-import androidx.lifecycle.LiveData
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.maps.android.ktx.model.polygonOptions
-import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
+import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
+import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
+import kotlinx.coroutines.launch
 import kotlin.random.Random
-
-var i = 0
 
 @Composable
 fun MapScreen(
@@ -70,24 +58,70 @@ fun MapScreen(
         mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
     }
 
+    var arrOfMonstersLatLng: List<List<LatLng>> =
+        state.clusterItems.map { it.polygonOptions.points }
+
+    //tallena arrofcoords, vikana, tee siitä koko composen variable (tai launchedeffectin, en tiiä jos tallentuu data)
+    //tee observable funktio lokaatioon, joka vertaa arrofcoordsiin
+    // jos käyttäjä liian kaukana, mennään line 89 looppiin
+
     LaunchedEffect(location) {
         if (location == LatLng(0.0, 0.0)) {
             return@LaunchedEffect
         }
-        val test = mapViewModel.generateLatLng(location, Random.nextDouble(0.1,1000.0), Random.nextDouble(0.1,365.0))
-        val cluster = ZoneClusterItem(
-            id = "id",
-            title = "title",
-            snippet = "snippet",
-            polygonOptions = polygonOptions {
-                add(test)
-                //add(LatLng(60.2182, 24.7809))
-                //add(LatLng(60.2175, 24.7815))
-                //add(LatLng(60.2170, 24.7814))
-                //fillColor(MapViewModel.POLYGON_FILL_COLOR)
+
+        //Distance checker is only false, if a user is minimum 3500 meters away from a monster
+        var distanceChecker = true
+        Log.i("distanceb", "numbero 1")
+        for (list in arrOfMonstersLatLng) {
+            Log.i("distanceb", "numbero 2")
+            for (latLng in list) {
+                Log.i("distanceb", "numbero 3")
+                val result = FloatArray(1)
+                Location.distanceBetween(
+                    location.latitude,
+                    location.longitude,
+                    latLng.latitude,
+                    latLng.longitude,
+                    result
+                )
+                Log.d("distanceb", result[0].toString())
+                if (result[0] > 3500) {
+                    Log.i("distanceb", "numbero 4")
+
+                    distanceChecker = false
+                }
             }
-        )
-        mapViewModel.addClusterItem(cluster)
+        }
+
+        if (distanceChecker) {
+            return@LaunchedEffect
+        }
+        if (arrOfMonstersLatLng.size > 5) {
+            return@LaunchedEffect
+        }
+
+        for (i in 1..10) {
+            val newMonster = mapViewModel.generateLatLng(
+                location,
+                Random.nextDouble(0.0, 1500.0),
+                Random.nextDouble(0.0, 365.0)
+            )
+            val cluster = ZoneClusterItem(
+                id = "id",
+                title = "title",
+                snippet = "snippet",
+                polygonOptions = polygonOptions {
+                    add(newMonster)
+                    //add(LatLng(60.2182, 24.7809))
+                    //add(LatLng(60.2175, 24.7815))
+                    //add(LatLng(60.2170, 24.7814))
+                    //fillColor(MapViewModel.POLYGON_FILL_COLOR)
+                }
+            )
+            mapViewModel.addClusterItem(cluster)
+        }
+        arrOfMonstersLatLng = state.clusterItems.map { it.polygonOptions.points }
     }
 
 

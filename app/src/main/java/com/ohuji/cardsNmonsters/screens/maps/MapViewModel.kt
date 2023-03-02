@@ -33,35 +33,10 @@ class MapViewModel @Inject constructor() : ViewModel() {
     var state: MutableState<MapState> = mutableStateOf(
         MapState(
             lastKnownLocation = null,
-            clusterItems = listOf(
-                /*ZoneClusterItem(
-                    id = "id",
-                    title = "title",
-                    snippet = "snippet",
-                    polygonOptions = polygonOptions {
-                        add(LatLng(60.2178, 24.7809))
-                        add(LatLng(60.2175, 24.7806))
-                        add(LatLng(60.2181, 24.7812))
-                        add(LatLng(60.2180, 24.7811))
-                        fillColor(POLYGON_FILL_COLOR)
-                    }
-                )*/
-                /*,
-                ZoneClusterItem(
-                    id = "zone-2",
-                    title = "Zone 2",
-                    snippet = "This is Zone 2.",
-                    polygonOptions = polygonOptions {
-                        add(LatLng(49.110, -122.554))
-                        add(LatLng(49.107, -122.559))
-                        add(LatLng(49.103, -122.551))
-                        add(LatLng(49.112, -122.549))
-                        fillColor(POLYGON_FILL_COLOR)
-                    }
-                )*/
-            )
+            clusterItems = listOf()
         )
     )
+
 
     /*suspend*/ fun addClusterItem(clusterItem: ZoneClusterItem) {
         state.value = state.value.copy(
