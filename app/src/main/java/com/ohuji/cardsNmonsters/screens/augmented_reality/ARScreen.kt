@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -25,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -46,10 +47,8 @@ import io.github.sceneview.math.Position
 @Composable
 fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel) {
     val nodes = remember { mutableStateListOf<ArNode>() }
-
     val context = LocalContext.current
     val monster = monsterViewModel.findMonsterById(5L).observeAsState().value
-
     val cardsState = viewModel.getDeckWithCards(1L).observeAsState()
     val cards: FullDeck? = cardsState.value
 
@@ -57,7 +56,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
-    var health by remember { mutableStateOf(monster?.monsterHealth ?: 800) }
+    var health  by remember { mutableStateOf(monster?.monsterHealth ?: 800) }
+
 
     var stateDazed by remember { mutableStateOf(false) }
     var turn by remember { mutableStateOf(0) }
@@ -70,7 +70,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
     fun stateAndDamage(i: Int){
                 val card = cards!!.cards[i]
-                health -= gameLogicViewModel.doDamage(card.cardDamage, stateDazed, card.cardElement, monster?.monsterElement)
+        health -= gameLogicViewModel.doDamage(card.cardDamage, stateDazed, card.cardElement, monster?.monsterElement)
                 val isPhysicalCard = card.cardElement == "Phys"
                 stateDazed = isPhysicalCard
     }
@@ -110,7 +110,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
     if (cards != null) {
         Column {
-            AR(model, nodes, healthBar )
+
+            AR(model, nodes, turn, stateDazed, monster?.monsterName, health, monster?.monsterElement )
 
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -122,7 +123,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                     contentScale = ContentScale.Crop
                 )
                 Column {
-                    TurnComposable(turn = turn, stateDazed = stateDazed, monsterName = monster?.monsterName)
+
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically
@@ -143,7 +144,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                     .clickable {
                                         Log.d("TAPDBG", "tap fire")
 
-                                       stateAndDamage(i)
+                                        stateAndDamage(i)
 
                                         turn += 1
 
@@ -166,18 +167,18 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 }
 
 @Composable
-fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.node.Node>, healthBar: io.github.sceneview.node.Node) {
+fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.node.Node>, turn: Int, stateDazed: Boolean, monsterName: String?, health: Int?, monsterElement: String?) {
+
     Box(modifier = Modifier
-        .fillMaxHeight(0.70f)
+        .fillMaxHeight(0.75f)
         .fillMaxWidth()) {
+
         ARScene(
             nodes = nodes,
             planeRenderer = true,
             onCreate = { arSceneView ->
                 // Apply your configuration
                 arSceneView.addChild(model)
-
-                arSceneView.cameraNode.addChild(healthBar)
             },
             onSessionCreate = { session ->
                 // Configure the ARCore session
@@ -189,6 +190,24 @@ fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.nod
                 // User tapped in the AR view
             }
         )
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.05f)
+           /* .clip(RoundedCornerShape(20.dp))*/ ) {
+            Image(
+                painter = painterResource(R.drawable.wood_background),
+                contentDescription = "Contact profile picture",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            TurnComposable(
+                turn = turn,
+                stateDazed = stateDazed,
+                monsterName = monsterName, //monster?.monsterName,
+                health,
+                monsterElement
+            )
+        }
     }
 }
 
@@ -210,7 +229,7 @@ fun BattleReport(showVictoryDialog: Boolean, showDefeatDialog: Boolean, navContr
     if (showVictoryDialog) {
         ShowDialog(
             title = "Monster Slain",
-            message = "You have defeated $monsterName in battle. Current level: $playerLevel. Exp required to next level: $expRequired",
+            message = "You have defeated $monsterName in battle. \n Current level: $playerLevel. \n Exp required to next level: $expRequired",
             onDismiss = { victoryDialogDismiss()}
         )
     }
@@ -243,21 +262,47 @@ fun ShowDialog(
 }
 
 @Composable
-fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?) {
-    Row() {
-        Text(text = "Turn $turn/4",
-            textAlign = TextAlign.Center,
+fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health: Int?, monsterElement: String?) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Turn $turn/4",
+            textAlign = TextAlign.Left,
             fontSize = 16.sp,
-            color = Color.White,
-            modifier = Modifier.padding(horizontal = 8.dp))
+            color = White,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 0.dp, top = 0.dp, bottom = 0.dp)
+                .weight(1f)
+        )
         if (stateDazed) {
             Text(
                 text = "$monsterName is dazed",
-                textAlign = TextAlign.Right,
-                fontSize = 16.sp,
-                color = Color.White,
-                modifier = Modifier.padding(horizontal = 8.dp)
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                color = White,
+                modifier = Modifier
+                    .weight(1f)
             )
         }
+            Text(
+                text = "HP ${if (health != null && health < 0) { "0" } else { health }}",
+                color = White,
+                textAlign = TextAlign.Right,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .padding(start = 0.dp, end = 2.dp, top = 0.dp, bottom = 0.dp)
+                    .weight(1f)
+            )
+        val image = monsterElement?.lowercase() + "_icon"
+        val context = LocalContext.current
+        val resId = context.resources.getIdentifier(
+            image,
+            "drawable",
+            context.packageName
+        )
+       Icon(painter = painterResource(resId), contentDescription = "Element icon",
+           modifier = Modifier
+               .padding(start = 0.dp, end = 5.dp, top = 0.dp, bottom = 0.dp)
+               .size(20.dp))
     }
 }
+

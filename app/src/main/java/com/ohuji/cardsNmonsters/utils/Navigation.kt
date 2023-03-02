@@ -1,7 +1,6 @@
 package com.ohuji.cardsNmonsters.utils
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +32,7 @@ import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckDetailScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
+import com.ohuji.cardsNmonsters.screens.guide.GuideScreen
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
@@ -67,7 +67,7 @@ fun NavigationHost(
                 )
             }
             composable("home_screen") {
-
+GuideScreen(navController = navController)
             }
             composable("map_screen") {
                 MapScreen(
