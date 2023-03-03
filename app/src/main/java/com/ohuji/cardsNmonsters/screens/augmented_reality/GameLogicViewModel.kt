@@ -12,6 +12,42 @@ import kotlinx.coroutines.launch
 class GameLogicViewModel(application: Application) : AndroidViewModel(application) {
     private val collectableRepo = CollectableRepository(application)
 
+    fun getStartingHealth(monsterId: Long): Int {
+
+        val dragon = 1L
+        val griffin = 2L
+        val mammoth = 3L
+        val mountainLion = 4L
+        val skeleton = 5L
+        val seaViking = 6L
+        val youngDragon = 7L
+
+        return when (monsterId) {
+            dragon -> {
+                2000
+            }
+            griffin -> {
+                1200
+            }
+            mammoth -> {
+                1500
+            }
+            mountainLion -> {
+                800
+            }
+            skeleton -> {
+                700
+            }
+            seaViking -> {
+                750
+            }
+            youngDragon -> {
+                1000
+            }
+            else -> 50
+        }
+    }
+
     fun doDamage(cardDamage: Int, status: Boolean, element: String, monsterElement: String?): Int {
         var damage = cardDamage
         var elementDamage = false

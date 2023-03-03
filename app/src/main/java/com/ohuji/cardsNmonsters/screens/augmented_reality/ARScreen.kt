@@ -56,8 +56,9 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
-    var health  by remember { mutableStateOf(monster?.monsterHealth ?: 800) }
-
+    var health by remember {
+        mutableStateOf(gameLogicViewModel.getStartingHealth(5L))
+    }
 
     var stateDazed by remember { mutableStateOf(false) }
     var turn by remember { mutableStateOf(0) }
