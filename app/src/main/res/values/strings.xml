@@ -2,4 +2,11 @@
     <string name="app_name">Cards&amp;Monsters</string>
     <string name="health_string" translatable="false">2000</string>
     <string name="blood_drop_icon">Blood drop icon</string>
+    <string name="view_deck">View your decks</string>
+    <string name="your_decks">Your decks</string>
+    <string name="create_your_deck">Create your deck</string>
+    <string name="create_deck">Create deck</string>
+    <string name="unlock_decks">Unlock this by creating a deck</string>
+    <string name="inspect_deck">Inspect your deck</string>
+
 </resources>

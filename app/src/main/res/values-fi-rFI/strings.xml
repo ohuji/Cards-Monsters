@@ -2,4 +2,11 @@
 <resources>
     <string name="app_name">Kortit&amp;Hirviöt</string>
     <string name="blood_drop_icon">Veripisara ikoni</string>
+    <string name="view_deck">Selaile korttipakkojasi</string>
+    <string name="your_decks">Korttipakkasi</string>
+    <string name="create_your_deck">Luo korttipakkasi</string>
+    <string name="create_deck">Luo korttipakka</string>
+    <string name="unlock_decks">Luo korttipakka avataksesi tämä osio</string>
+    <string name="inspect_deck">Tutki korttipakkaasi</string>
+
 </resources>

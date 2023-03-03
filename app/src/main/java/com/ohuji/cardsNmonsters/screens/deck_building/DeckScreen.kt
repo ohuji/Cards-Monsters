@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
@@ -68,12 +69,22 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
     val newestDeck = deckList.value.lastOrNull()
     var showErrorDialog by remember { mutableStateOf(false) }
     var state by remember { mutableStateOf(0) }
-    val titles = listOf("Decks", "Create Deck")
+    val titles = listOf(stringResource(id = R.string.your_decks), stringResource(id = R.string.create_deck))
 
     Column {
-        Text(text = "Create your deck", modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(20.dp))
+        when(state) {
+            0 -> {
+                Text(text = stringResource(id = R.string.view_deck), modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(20.dp))
+            }
+
+            1 -> {
+                Text(text = stringResource(id = R.string.create_your_deck), modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(20.dp))
+            }
+        }
 
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -108,14 +119,10 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                 when(state) {
                     0 -> {
                         DeckList(viewModel, navController)
-
                     }
+
                     1 -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight(0.27f)
-                                .clip(RoundedCornerShape(20.dp))
-                        ) {
+                        Box(modifier = Modifier.fillMaxHeight(0.45f)) {
                             Image(
                                 painter = painterResource(R.drawable.rpg_paper_background),
                                 contentDescription = "another paper image:D",
@@ -123,14 +130,19 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                 contentScale = ContentScale.Crop
                             )
 
-                            Column() {
+                            Column(modifier = Modifier
+                                .padding(10.dp)
+                                .align(Alignment.Center)) {
 
                                 TextField(
                                     value = deckName,
                                     label = { Text("Deck name") },
+                                    modifier = Modifier
+                                        .padding(top = 20.dp, bottom = 20.dp)
+                                        .background(Color.LightGray),
                                     onValueChange = { deckName = it })
 
-                                Row() {
+                                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                                     selectedCardIds.forEach { card ->
                                         val image = card.cardModel
                                         val context = LocalContext.current
@@ -158,7 +170,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                     }
                                 }
 
-                                Button(onClick = {
+                                Button(modifier = Modifier
+                                    .padding(top = 20.dp, bottom = 20.dp)
+                                    .align(Alignment.CenterHorizontally), onClick = {
                                     if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
                                         viewModel.viewModelScope.launch(Dispatchers.IO) {
 
@@ -186,7 +200,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                         Log.d("DBG", "Pakassa väärä määrä kortteja tai liian lyhyt nimi")
                                     }
                                 }) {
-                                    Text("Create deck")
+                                    Text(stringResource(id = R.string.create_deck))
                                 }
 
 
@@ -217,9 +231,8 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
     val cardList1 = viewModel.getAllCards().observeAsState(mutableListOf<Card>())
     val selectedCards = mutableSetOf<Card>()
 
-    Text(text = "Cards")
     LazyColumn(
-        contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp),
+        contentPadding = PaddingValues(top = 10.dp, bottom = 100.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
@@ -277,11 +290,11 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
                     onClick = { navController.navigate("deck_detail_screen/${deckList.value[it].deckId}") },
                     modifier = Modifier
                         .size(width = 180.dp, height = 150.dp)
-                        .padding(20.dp)
+                        .padding(15.dp)
                 ) {
                     Box(Modifier.fillMaxSize()) {
                         Image(
-                            painter = painterResource(R.drawable.cards_image),
+                            painter = painterResource(R.drawable.deck1_img),
                             contentDescription = "Cards image",
                             modifier = Modifier
                                 .fillMaxSize()
@@ -300,11 +313,13 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
             .fillMaxSize()
             .alpha(0.7f)
             .background(Color.Black)) {
-            Box(modifier = Modifier.align(Alignment.Center).padding(bottom = 80.dp)) {
+            Box(modifier = Modifier
+                .align(Alignment.Center)
+                .padding(bottom = 80.dp)) {
                 Column() {
                     Image(
                         painter = painterResource(R.drawable.lock_icon),
-                        contentDescription = "Contact profile picture",
+                        contentDescription = "lock icon",
                         modifier = Modifier
                             .size(50.dp)
                             .align(Alignment.CenterHorizontally),
@@ -313,7 +328,7 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
 
                     Spacer(modifier = Modifier.size(20.dp))
 
-                    Text("Unlock this by creating a deck", color = Color.White)
+                    Text(text = stringResource(id = R.string.unlock_decks), color = Color.White)
                 }
             }
         }
