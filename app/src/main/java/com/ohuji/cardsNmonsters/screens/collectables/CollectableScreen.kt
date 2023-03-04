@@ -16,51 +16,55 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ohuji.cardsNmonsters.R
 
 @Composable
 fun CollectablesScreen(viewModel: CollectablesViewModel) {
-    val collectableList = viewModel.getAllCollectables().observeAsState(listOf())
-    val monsterList = viewModel.getAllMonsters().observeAsState(listOf())
-    val playerStats = viewModel.getPlayerStats().observeAsState().value
 
     Column {
-        Text(text = "Player Stats")
-        Text(text = "Current Lvl: ${playerStats?.playerLevel}")
+        PlayerStats(viewModel)
 
         ExpProgressBar(viewModel)
 
-        Text(text = "Collectables")
-        LazyColumn(
-            contentPadding = PaddingValues(top = 8.dp, bottom = 56.dp)
-        ) {
-            item {
-            }
-            items(collectableList.value) {
-                val image = it.collectableModel
-                val context = LocalContext.current
-                val resId = context.resources.getIdentifier(image, "drawable", context.packageName)
-                Image(
-                    painter = painterResource(resId),
-                    contentDescription = it.collectableName,
-                    alpha = (if (it.unlocked) 1f else 0.5f)
-                )
-                Text("Collectable: ${it.collectableName}")
-                Text("Progress: ${it.currentProgress} / Requirements: ${it.requirements}")
-            }
+        AchievementList(viewModel)
+
+    }
+}
+
+@Composable
+fun PlayerStats(viewModel: CollectablesViewModel) {
+    val playerStats = viewModel.getPlayerStats().observeAsState().value
+
+    Text(text = stringResource(R.string.player_stats))
+    Text(text = "${stringResource(R.string.player_level)} ${playerStats?.playerLevel}")
+
+}
+
+@Composable
+fun AchievementList(viewModel: CollectablesViewModel) {
+    val collectableList = viewModel.getAllCollectables().observeAsState(listOf())
+
+    Text(text = stringResource(R.string.achievements))
+    LazyColumn(
+        contentPadding = PaddingValues(top = 8.dp, bottom = 56.dp)
+    ) {
+        item {
         }
-
-        Text(text = "Monsters")
-
-        LazyColumn(
-            contentPadding = PaddingValues(top = 8.dp, bottom = 56.dp)
-        ) {
-            item {
-            }
-            items(monsterList.value) {
-                Text("Monster: ${it.monsterName}")
-                Text("Element: ${it.monsterElement} / HP: ${it.monsterHealth}")
-            }
+        items(collectableList.value) {
+            val image = it.collectableModel
+            val context = LocalContext.current
+            val resId = context.resources.getIdentifier(image, "drawable", context.packageName)
+            Image(
+                painter = painterResource(resId),
+                contentDescription = it.collectableName,
+                alpha = (if (it.unlocked) 1f else 0.5f)
+            )
+            Text("${stringResource(R.string.achievement)} ${it.collectableName}")
+            Text("${stringResource(R.string.progress)} ${it.currentProgress} / ${stringResource(
+                R.string.requirement
+            )} ${it.requirements}")
         }
     }
 }
@@ -84,7 +88,7 @@ fun ExpProgressBar(viewModel: CollectablesViewModel) {
 
     Column() {
 
-        Text(text = "Exp needed for next lvl: ${expRequired()}")
+        Text(text = "${stringResource(R.string.exp_needed)} ${expRequired()}")
 
         LinearProgressIndicator(
             progress = progress(),
