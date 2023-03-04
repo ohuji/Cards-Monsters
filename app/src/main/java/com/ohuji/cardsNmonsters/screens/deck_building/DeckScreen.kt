@@ -136,7 +136,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
 
                                 TextField(
                                     value = deckName,
-                                    label = { Text("Deck name") },
+                                    label = { Text(stringResource(id = R.string.deck_name)) },
                                     modifier = Modifier
                                         .padding(top = 20.dp, bottom = 20.dp)
                                         .background(Color.LightGray),
@@ -217,13 +217,12 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
         }
         if (showErrorDialog) {
             ShowDialog(
-                title = "Deck creation error",
-                message = "Deck must have 4 cards selected and a name with at least 3 and a maximum of 15 characters.",
+                title = stringResource(R.string.deck_creation_error),
+                message = stringResource(R.string.deck_creation_error_message),
                 onDismiss = { showErrorDialog = false }
             )
         }
     }
-
 }
 
 @Composable

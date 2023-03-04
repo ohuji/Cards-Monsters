@@ -3,6 +3,7 @@ package com.ohuji.cardsNmonsters.screens.augmented_reality
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -127,7 +128,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
                     Row(
                         modifier = Modifier.fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         for (i in cards.cards.indices) {
                             val image = cards.cards[i].cardModel
@@ -140,8 +142,9 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                             Image(
                                 painter = painterResource(resId),
                                 contentDescription = cards.cards[i].cardName,
+
                                 modifier = Modifier
-                                    .size(100.dp)
+                                    .padding(start = 8.dp, end = 8.dp)
                                     .clickable {
                                         Log.d("TAPDBG", "tap fire")
 
@@ -154,7 +157,8 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                             "Mones vuoro menos $turn paljos helttii jälel $health"
                                         )
                                         healthBar.text = battleConclusion()
-                                    }
+                                    },
+                                contentScale = ContentScale.Fit
                             )
                         }
 
@@ -193,8 +197,7 @@ fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.nod
         )
         Box(modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.05f)
-           /* .clip(RoundedCornerShape(20.dp))*/ ) {
+            .fillMaxHeight(0.05f)) {
             Image(
                 painter = painterResource(R.drawable.wood_background),
                 contentDescription = "Contact profile picture",
@@ -229,15 +232,17 @@ fun BattleReport(showVictoryDialog: Boolean, showDefeatDialog: Boolean, navContr
 
     if (showVictoryDialog) {
         ShowDialog(
-            title = "Monster Slain",
-            message = "You have defeated $monsterName in battle. \n Current level: $playerLevel. \n Exp required to next level: $expRequired",
+            title = stringResource(R.string.battle_victory),
+            message = "${stringResource(R.string.battle_victory_message1)} $monsterName ${stringResource(R.string.battle_victory_message2)}\n" +
+                        "${stringResource(R.string.battle_victory_message3)} $playerLevel\n" +
+                        "${stringResource(R.string.battle_victory_message4)} $expRequired",
             onDismiss = { victoryDialogDismiss()}
         )
     }
     if (showDefeatDialog) {
         ShowDialog(
-            title = "Monster fled",
-            message =  "You failed to defeat $monsterName in battle",
+            title = stringResource(R.string.battle_defeat),
+            message =  "${stringResource(R.string.battle_defeat_message1)} $monsterName ${stringResource(R.string.battle_defeat_message2)}",
             onDismiss = { defeatDialogDismiss()}
         )
     }
@@ -266,7 +271,7 @@ fun ShowDialog(
 fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health: Int?, monsterElement: String?) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
-            text = "Turn $turn/4",
+            text = "${stringResource(R.string.battle_turn)} $turn/4",
             textAlign = TextAlign.Left,
             fontSize = 16.sp,
             color = White,
@@ -276,7 +281,7 @@ fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health:
         )
         if (stateDazed) {
             Text(
-                text = "$monsterName is dazed",
+                text = "$monsterName ${stringResource(R.string.battle_status)}",
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 color = White,
@@ -285,7 +290,7 @@ fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health:
             )
         }
             Text(
-                text = "HP ${if (health != null && health < 0) { "0" } else { health }}",
+                text = "${stringResource(R.string.battle_hp)} ${if (health != null && health < 0) { "0" } else { health }}",
                 color = White,
                 textAlign = TextAlign.Right,
                 fontSize = 16.sp,
@@ -300,7 +305,7 @@ fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health:
             "drawable",
             context.packageName
         )
-       Icon(painter = painterResource(resId), contentDescription = "Element icon",
+       Image(painter = painterResource(resId), contentDescription = "Element icon",
            modifier = Modifier
                .padding(start = 0.dp, end = 5.dp, top = 0.dp, bottom = 0.dp)
                .size(20.dp))
