@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -127,7 +128,8 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     Image(
                         painter = painterResource(resId),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize()
+                            .shadow(elevation = 20.dp),
                         contentScale = ContentScale.Crop,
                     )
                 }
@@ -140,6 +142,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                         .padding(start = 75.dp, end = 75.dp, top = 20.dp, bottom = 10.dp)
                         .alpha(0.55f)
                         .background(Color.Black)
+                        .shadow(elevation = 20.dp)
                 )
             }
 
