@@ -38,9 +38,14 @@ class MapViewModel @Inject constructor() : ViewModel() {
     )
 
 
-    /*suspend*/ fun addClusterItem(clusterItem: ZoneClusterItem) {
+    fun addClusterItem(clusterItem: ZoneClusterItem) {
         state.value = state.value.copy(
             clusterItems = state.value.clusterItems + clusterItem
+        )
+    }
+    fun removeClusterItems() {
+        state.value = state.value.copy(
+            clusterItems = listOf()
         )
     }
 
