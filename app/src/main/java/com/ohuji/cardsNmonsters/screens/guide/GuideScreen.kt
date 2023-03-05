@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -49,8 +51,8 @@ fun GuideScreen(navController: NavController) {
                 contentScale = ContentScale.Crop
             )
             Column(modifier = Modifier
-                .padding(start = 5.dp, top = 5.dp, bottom = 10.dp, end = 0.dp)) {
-
+                .padding(start = 5.dp, top = 5.dp, bottom = 10.dp, end = 0.dp)
+                .verticalScroll(rememberScrollState())) {
                 Guide()
                 GuideDeckBuilding()
                 GuideMap()
@@ -74,6 +76,10 @@ fun GuideDeckBuilding() {
     Text(text = stringResource(R.string.deck_building), fontSize = 16.sp, textAlign = TextAlign.Center, modifier = Modifier
         .fillMaxWidth()
         .padding(5.dp))
+    Text(text = stringResource(R.string.deck_building_guide)
+        , textAlign = TextAlign.Center, modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp))
 }
 
 @Composable
@@ -81,11 +87,17 @@ fun GuideMap() {
     Text(text = stringResource(R.string.map), fontSize = 16.sp, textAlign = TextAlign.Center, modifier = Modifier
         .fillMaxWidth()
         .padding(5.dp))
+    Text(text = stringResource(R.string.map_guide), textAlign = TextAlign.Center, modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp))
 }
 
 @Composable
 fun GuideBattle() {
     Text(text = stringResource(R.string.battle), fontSize = 16.sp, textAlign = TextAlign.Center, modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp))
+    Text(text = stringResource(R.string.battle_guide), textAlign = TextAlign.Center, modifier = Modifier
         .fillMaxWidth()
         .padding(5.dp))
 }

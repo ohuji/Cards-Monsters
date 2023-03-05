@@ -31,8 +31,25 @@
     <string name="requirement">Requirement:</string>
     <string name="how_to_play">How to play Cards &amp; Monsters</string>
     <string name="deck_building">Deck building</string>
+    <string name="deck_building_guide">Navigate to Deck screen. Select \'Create Deck\' page. Give the deck a name.
+        The name must at least 3 characters long and a maximum of 15 characters. Then select 4 cards from the list of cards to be put in your deck.
+        Finally press the \'Create Deck\' button. You can view your created decks in the \'Your Decks\' view by selecting the deck you want to inspect.
+        You can also delete your deck by pressing the \'Trashcan\' icon.</string>
     <string name="map">Map</string>
+    <string name="map_guide">In the map screen you can start you hunt for monsters.
+        First you must have created at least one deck, if you haven\'t you are guided to make one.
+        Monsters are spawned around you location, you can see them as icons on the map.
+        When you near a monster that you want to fight press the button on the top left of your screen.
+        Before the battle begins you see the monsters name, element and health points.
+        Now you must a choose a deck you want to use in the battle, choose wisely and take into account the monsters element.</string>
     <string name="battle">Battle</string>
+    <string name="battle_guide">In the Augmented Reality battle screen you fight monsters with the deck of your choosing.
+        You have 4 turns to defeat the monster before it flees. The turn counter is in the top left corner of the screen.
+        To attack the monsters tap the card you want to play. Using a card uses a turn and damages the monster.
+        Tackle card can also daze the monster, if the monster is dazed it will be displayed in the center of the top screen.
+        Monsters health points are displayed in the top right corner of the screen.
+        When the monsters HP reaches 0 you have won the battle and are awarded with Experience points.
+        You level up when you have acquired enough Exp points.</string>
     <string name="elemental_strength_weakness">Elemental strength\'s and weaknesses</string>
     <string name="elemental_attack_explained">When using an elemental card that the monster weak to, you do 2x the cards damage. If the monster is also dazed you do 3x the cards damage.</string>
     <string name="elements">Elements</string>

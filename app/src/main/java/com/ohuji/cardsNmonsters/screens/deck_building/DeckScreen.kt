@@ -49,6 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
@@ -171,7 +172,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                 }
 
                                 Button(modifier = Modifier
-                                    .padding(top = 20.dp, bottom = 20.dp)
+                                    .padding(top = 15.dp, bottom = 15.dp)
                                     .align(Alignment.CenterHorizontally), onClick = {
                                     if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
                                         viewModel.viewModelScope.launch(Dispatchers.IO) {
@@ -200,7 +201,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                         Log.d("DBG", "Pakassa väärä määrä kortteja tai liian lyhyt nimi")
                                     }
                                 }) {
-                                    Text(stringResource(id = R.string.create_deck))
+                                    Text(stringResource(id = R.string.create_deck), fontSize = 16.sp)
                                 }
 
 

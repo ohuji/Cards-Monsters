@@ -31,8 +31,25 @@
     <string name="requirement">Vaatimus:</string>
     <string name="how_to_play">Kuinka pelata Kortit &amp; Hirviöt peliä</string>
     <string name="deck_building">Pakan rakentaminen</string>
+    <string name="deck_building_guide">Siirry Pakka näkymään. Valitse \'Luo Korttipakkasi\' -sivu. Anna pakalle nimi.
+        Nimen on oltava vähintään 3 merkkiä pitkä ja enintään 15 merkkiä pitkä. Valitse sitten 4 korttia kortti listasta, jotka laitetaan pakkaan.
+        Paina lopuksi \'Luo Korttipakka\' -painiketta. Voit tarkastella luotuja pakkojasi \'Korttipakkasi\'
+        -näkymässä valitsemalla haluamasi pakan. Voit myös poistaa pakan painamalla \'Roskakori\' -kuvaketta.</string>
     <string name="map">Kartta</string>
+    <string name="map_guide">Karttaruudussa voit aloittaa hirviöiden metsästyksen.
+        Ensin sinun on luotava vähintään yksi pakka, jos sinulla ei ole, sinut ohjataan tekemään sellainen.
+        Hirviöitä ilmestyy sijaintisi lähettyville, näet ne ikoneina kartalla.
+        Kun olet tarpeeksi lähellä hirviötä, jota vastaan haluat taistella, paina näytön vasemmassa yläkulmassa olevaa painiketta.
+        Ennen taistelun alkua näet hirviön nimen, elementin ja terveyspisteet.
+        Nyt sinun on valittava pakka, jota haluat käyttää taistelussa, valitse viisaasti ja ota huomioon hirviön elementti.</string>
     <string name="battle">Taistelu</string>
+    <string name="battle_guide">Lisätyn todellisuuden taisteluruudussa taistelet hirviöitä vastaan valitsemallasi pakalla.
+        Sinulla on 4 kierrosta aikaa voittaa hirviö ennen kuin se pakenee. Vuorolaskuri on näytön vasemmassa yläkulmassa.
+        Hyökätäksesi hirviöiden kimppuun napauta korttia, jonka haluat pelata. Kortin käyttäminen kuluttaa vuoron ja vahingoittaa hirviötä.
+        Tackle-kortti voi myös hämmentää hirviön, jos hirviö on hämmentynyt, se näkyy näytön yläosan keskellä.
+        Hirviöiden terveyspisteet näkyvät ruudun oikeassa yläkulmassa.
+        Kun hirviön HP on 0, olet voittanut taistelun ja saat kokemuspisteitä.
+        Kokemustasosi nousee, kun olet saanut tarpeeksi kokemuspisteitä.</string>
     <string name="elemental_strength_weakness">Elementtien heikkoudet ja vahvuudet</string>
     <string name="elemental_attack_explained">Kun hirviöön käyttää elementti korttia jolle tämä on heikko, teet 2x kortin normaalin vahingo määrän. Jos monsteri on myös häkeltynyt teet tähän 3x kortin normaalin vahinko määrän.</string>
     <string name="elements">Elementit</string>
