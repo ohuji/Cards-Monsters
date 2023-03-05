@@ -61,12 +61,14 @@ fun NavigationHost(
         }
     ) {
         NavHost(navController, startDestination = "ar_screen") {
-            composable("ar_screen") {
+            composable("ar_screen/{monsterId}") {
+                val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
                     monsterViewModel = collectablesViewModel,
                     gameLogicViewModel = gameLogicViewModel,
+                    monsterId = monsterId,
                 )
             }
             composable("home_screen") {
@@ -79,7 +81,8 @@ fun NavigationHost(
                     setupClusterManager = setupClusterManager,
                     calculateZoneViewCenter = calculateZoneViewCenter,
                     fusedLocationProviderClient = fusedLocationProviderClient,
-                    deckViewModel = deckViewModel
+                    deckViewModel = deckViewModel,
+                    monsterViewModel = collectablesViewModel,
                 )
             }
             composable("deck_building_screen") {

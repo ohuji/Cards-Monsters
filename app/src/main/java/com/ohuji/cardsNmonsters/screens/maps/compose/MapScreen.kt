@@ -2,11 +2,7 @@ package com.ohuji.cardsNmonsters.screens.maps.compose
 
 import android.content.Context
 import android.location.Location
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,8 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -29,14 +23,13 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
 import com.google.maps.android.ktx.model.polygonOptions
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
+import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterItem
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import kotlinx.coroutines.launch
 import kotlin.random.Random
-
-var boolCheckerFlag = false
 
 @Composable
 fun MapScreen(
@@ -47,6 +40,7 @@ fun MapScreen(
     calculateZoneViewCenter: () -> LatLngBounds,
     fusedLocationProviderClient: FusedLocationProviderClient,
     deckViewModel: DeckViewModel,
+    monsterViewModel: CollectablesViewModel,
 ) {
 
     val deckCheck =
@@ -58,9 +52,11 @@ fun MapScreen(
         navController.navigate("deck_building_screen")
     }
 
-    fun fightMonsterDismiss() {
-        showNoDeckAlert = false
-        navController.navigate("deck_building_screen")
+    fun fightMonsterDismiss(monsterId: Long) {
+        navController.navigate("ar_screen/${monsterId}")
+    }
+    fun noMonstersAlert() {
+        navController.navigate("map_screen")
     }
 
     if (deckCheck?.let { it < 1 } == true) {
@@ -82,26 +78,16 @@ fun MapScreen(
         mutableStateOf(true)
     }
 
+    val monsterMaxId = monsterViewModel.getAllMonsters().observeAsState().value?.size
+
 
     var arrOfMonstersLatLng: List<List<LatLng>> =
         state.clusterItems.map { it.polygonOptions.points }
 
     LaunchedEffect(location) {
-        Log.d("perkele", "launch effect")
         if (location == LatLng(0.0, 0.0)) {
             return@LaunchedEffect
         }
-
-        /*var distanceChecker = true
-        if (arrOfMonstersLatLng.isEmpty()) {
-            distanceChecker = false
-        }
-        if (distanceChecker) {
-            return@LaunchedEffect
-        }
-        if (arrOfMonstersLatLng.size > 5) {
-            return@LaunchedEffect
-        }*/
 
         mapViewModel.removeClusterItems()
 
@@ -124,6 +110,8 @@ fun MapScreen(
         arrOfMonstersLatLng = state.clusterItems.map { it.polygonOptions.points }
     }
     if (fightMonster) {
+        val randomId = if (monsterMaxId != null) (0..monsterMaxId).random() else 1
+        val monster = monsterViewModel.findMonsterById(randomId.toLong()).observeAsState().value
         for (list in arrOfMonstersLatLng) {
             for (latLng in list) {
                 val result = FloatArray(1)
@@ -137,10 +125,11 @@ fun MapScreen(
                 if (result[0] < 100.0) {
                     if (location != LatLng(0.0, 0.0)) {
                         fightMonsterNoNearby = false
+                        val message = " You found a ${monster?.monsterName}! \n With a ${monster?.monsterElement} type!"
                         ShowDialog(
-                            title = "tappelu",
-                            message = "FIGHT",
-                            onDismiss = { fightMonsterDismiss() }
+                            title = "Monster found",
+                            message = message,
+                            onDismiss = { fightMonsterDismiss(monster?.monsterId ?: 5) }
                         )
                     }
                 }
@@ -148,9 +137,9 @@ fun MapScreen(
         }
         if (fightMonsterNoNearby) {
             ShowDialog(
-                title = "no monsters",
-                message = " nearby",
-                onDismiss = { fightMonsterDismiss() }
+                title = "No monsters found",
+                message = "Try moving closer to a monster",
+                onDismiss = { noMonstersAlert() }
             )
         }
 
@@ -211,8 +200,6 @@ fun MapScreen(
 
 
     }
-
-
 
     if (showNoDeckAlert) {
         ShowDialog(

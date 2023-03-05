@@ -46,7 +46,7 @@ import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 
 @Composable
-fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel) {
+fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel, monsterId: Long) {
     val nodes = remember { mutableStateListOf<ArNode>() }
     val context = LocalContext.current
     val monster = monsterViewModel.findMonsterById(5L).observeAsState().value
