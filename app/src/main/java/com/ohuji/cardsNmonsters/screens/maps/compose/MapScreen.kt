@@ -146,7 +146,7 @@ fun MapScreen(
 
     /**
      * Checks if [fightMonster] is true, and if so, looks for a monster within a 100m radius of the user's location.
-     * If a monster is found, displays an alert dialog with a message indicating the monster's name and type, and a "Fight" button.
+     * After scan button is clicked, displays an alert dialog with a message indicating the monster's name and type, and a "Fight" button.
      * If the "Fight" button is clicked, calls the [fightMonsterDismiss] function with the ID of the found monster and the ID of the selected deck.
      * If no monster is found, displays an alert dialog with a message indicating that no monsters were found and instructing the user to move closer to a monster.
      *
