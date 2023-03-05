@@ -3,7 +3,6 @@ package com.ohuji.cardsNmonsters.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -61,14 +60,13 @@ fun NavigationHost(
         }
     ) {
         NavHost(navController, startDestination = "ar_screen") {
-            composable("ar_screen/{monsterId}") {
+            composable("ar_screen") {
                 val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
                     monsterViewModel = collectablesViewModel,
                     gameLogicViewModel = gameLogicViewModel,
-                    monsterId = monsterId,
                 )
             }
             composable("home_screen") {
