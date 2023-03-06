@@ -38,8 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
-import com.ohuji.cardsNmonsters.ui.theme.grey1
-import com.ohuji.cardsNmonsters.ui.theme.grey2
 import com.ohuji.cardsNmonsters.utils.BorderDecor
 import com.ohuji.cardsNmonsters.utils.FAB
 
@@ -87,12 +85,10 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                         Column() {
                             Text(
                                 text = stringResource(id = R.string.inspect_deck),
-                                color = grey1,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
                             Text(
                                 "- ${selectedDeck.deckName} -",
-                                color = grey2,
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             )
 

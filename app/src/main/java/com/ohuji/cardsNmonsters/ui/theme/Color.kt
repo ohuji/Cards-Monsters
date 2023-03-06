@@ -66,14 +66,3 @@ val md_theme_dark_scrim = Color(0xFF000000)
 
 
 val seed = Color(0xFF142035)
-
-
-val grey1 = Color(0xFF464544)
-val grey2 = Color(0xFF4f4e4d)
-val green1 = Color(0xFF3d4b41)
-val green2 = Color(0xFF44564a)
-val groundgreen = Color(0xFF829676)
-val skyblue = Color(0xFF82999f)
-val cloudgrey = Color(0xFF898b93)
-val light1 = Color(0xFFdbe2db)
-val light2 = Color(0xFFf6f7fc)
