@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         askPermissions()
+        goTViewModel.getQuote()
         setContent {
             CardsMonstersTheme {
                 // A surface container using the 'background' color from the theme
@@ -75,10 +76,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavigationHost(deckViewModel, collectablesViewModel, gameLogicViewModel,
                     mapViewModel = mapViewModel,
+                    goTViewModel = goTViewModel,
                     setupClusterManager = mapViewModel::setupClusterManager,
                     calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,
                     fusedLocationProviderClient = fusedLocationProviderClient,
-                        goTViewModel = goTViewModel
                     )
                 }
             }

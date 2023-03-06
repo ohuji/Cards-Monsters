@@ -2,11 +2,16 @@ package com.ohuji.cardsNmonsters.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -21,22 +26,12 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
-import java.util.Timer
-import kotlin.concurrent.schedule
+import com.ohuji.cardsNmonsters.utils.BorderDecor
 
 @Composable
 fun HomeScreen(navController: NavController, gotVM: GoTViewModel) {
-    var name by remember { mutableStateOf("?") }
-    var quote by remember { mutableStateOf("?") }
-    gotVM.getQuote()
-    name = gotVM.name
-    quote = gotVM.quote
-    println("$name: $quote")
-    Timer().schedule(30000){
-        gotVM.getQuote()
-        name = gotVM.name
-        quote = gotVM.quote
-    }
+    val name: String = gotVM.name
+    val quote: String = gotVM.quote
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
         Image(painter = painterResource(id = R.drawable.cm_splash), contentDescription = "background image",
@@ -91,24 +86,6 @@ fun CustomButtonContent(txt: String){
             modifier = Modifier.size(220.dp, 60.dp)
         )
         Text(txt, textAlign = TextAlign.Center, fontSize = TextUnit(28F, TextUnitType.Sp))
-    }
-}
-
-@Composable
-fun BorderDecor(){
-    Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Image(painter = painterResource(id = R.drawable.cm_deco_tl), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-            Image(painter = painterResource(id = R.drawable.cm_deco_tr), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-        }
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Image(painter = painterResource(id = R.drawable.cm_deco_bl), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-            Image(painter = painterResource(id = R.drawable.cm_deco_br), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-        }
     }
 }
 

@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
+import com.ohuji.cardsNmonsters.utils.BorderDecor
 import com.ohuji.cardsNmonsters.utils.FAB
 
 @Composable
@@ -52,104 +53,79 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
     }
 
     Column {
-        if (selectedDeck != null) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 20.dp)
-            ) {
-                Box(modifier = Modifier.padding(top = 10.dp)) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.clickable {
-                            navController.navigate("deck_building_screen")
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(R.drawable.cm_splash),
+                contentDescription = "Paper image",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            BorderDecor()
+
+            if (selectedDeck != null) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 10.dp)
+                ) {
+                    Box(modifier = Modifier.padding(top = 10.dp)) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier.clickable {
+                                navController.navigate("deck_building_screen")
+                            }
+                        )
+                    }
+
+                    Box(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
+
+                        Column() {
+                            Text(
+                                text = stringResource(id = R.string.inspect_deck),
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+                            Text(
+                                "- ${selectedDeck.deckName} -",
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
+
                         }
-                    )
-                }
+                    }
 
-                Box(modifier = Modifier.padding(start = 60.dp, end = 60.dp)) {
-
-                    Column() {
-                        Text(
-                            text = stringResource(id = R.string.inspect_deck),
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                    Box(modifier = Modifier.padding(top = 10.dp)) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier.clickable {
+                                deleteDeck(deckId)
+                            }
                         )
-                        Text(
-                            "- ${selectedDeck.deckName} -",
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-
                     }
                 }
-
-                Box(modifier = Modifier.padding(top = 10.dp)) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.clickable {
-                            deleteDeck(deckId)
-                        }
-                    )
-                }
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.95f)
-                .padding(top = 20.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .background(Color.Gray)
-        ) {
-
-            if (cardModelState.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.6f)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(start = 75.dp, end = 75.dp, top = 20.dp, bottom = 10.dp)
-                ) {
-                    val image = cardModelState
-                    val context = LocalContext.current
-                    val resId = context.resources.getIdentifier(
-                        image,
-                        "drawable",
-                        context.packageName
-                    )
-
-                    Image(
-                        painter = painterResource(resId),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                            .shadow(elevation = 20.dp),
-                        contentScale = ContentScale.Crop,
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.6f)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(start = 75.dp, end = 75.dp, top = 20.dp, bottom = 10.dp)
-                        .alpha(0.55f)
-                        .background(Color.Black)
-                        .shadow(elevation = 20.dp)
-                )
             }
 
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.95f)
+                    .padding(top = 70.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color.Gray)
+            ) {
 
-            if (selectedDeck != null && cardsInDeck != null) {
-                Log.d("DBG", "deckoo ${selectedDeck.deckId} korttii ${cardsInDeck.cards}")
-                
-                LazyRow(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    items(items = cardsInDeck.cards, itemContent = {
-                        val image = it.cardModel
+                if (cardModelState.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.6f)
+                            .align(Alignment.CenterHorizontally)
+                            .padding(start = 75.dp, end = 75.dp, top = 20.dp, bottom = 10.dp)
+                    ) {
+                        val image = cardModelState
                         val context = LocalContext.current
                         val resId = context.resources.getIdentifier(
                             image,
@@ -159,14 +135,51 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
 
                         Image(
                             painter = painterResource(resId),
-                            contentDescription = it.cardName,
+                            contentDescription = null,
                             modifier = Modifier
-                                .padding(8.dp)
-                                .clickable {
-                                    cardModelState = it.cardModel
-                                }
+                                .fillMaxSize()
+                                .shadow(elevation = 20.dp),
+                            contentScale = ContentScale.Crop,
                         )
-                    })
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.6f)
+                            .align(Alignment.CenterHorizontally)
+                            .padding(start = 75.dp, end = 75.dp, top = 20.dp, bottom = 10.dp)
+                            .alpha(0.55f)
+                            .background(Color.Black)
+                            .shadow(elevation = 20.dp)
+                    )
+                }
+
+
+                if (selectedDeck != null && cardsInDeck != null) {
+                    Log.d("DBG", "deckoo ${selectedDeck.deckId} korttii ${cardsInDeck.cards}")
+
+                    LazyRow(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        items(items = cardsInDeck.cards, itemContent = {
+                            val image = it.cardModel
+                            val context = LocalContext.current
+                            val resId = context.resources.getIdentifier(
+                                image,
+                                "drawable",
+                                context.packageName
+                            )
+
+                            Image(
+                                painter = painterResource(resId),
+                                contentDescription = it.cardName,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clickable {
+                                        cardModelState = it.cardModel
+                                    }
+                            )
+                        })
+                    }
                 }
             }
         }

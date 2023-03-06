@@ -59,13 +59,10 @@ fun NavigationHost(
         }
     ) {
         NavHost(navController, startDestination = "home_screen") {
-            composable("home_screen") {
-                HomeScreen(navController = navController, gotVM = goTViewModel)
-            }
             composable("ar_screen/{monsterId}/{deckId}") {
-
                 val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
                 val deckId = it.arguments?.getString("deckId")?.toLong() ?: 1
+
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
@@ -75,6 +72,11 @@ fun NavigationHost(
                     deckId = deckId
                 )
             }
+
+            composable("home_screen") {
+                HomeScreen(navController = navController, gotVM = goTViewModel)
+            }
+
             composable("map_screen") {
                 MapScreen(
                     mapViewModel = mapViewModel,
@@ -86,16 +88,20 @@ fun NavigationHost(
                     monsterViewModel = collectablesViewModel,
                 )
             }
+
             composable("deck_building_screen") {
                 DeckScreen(
                     viewModel = deckViewModel,
                     navController = navController
                 )
             }
+
             composable("deck_detail_screen/{deckId}") {
                 val deckId = it.arguments?.getString("deckId")?.toLong() ?: 0
+
                 DeckDetailScreen(deckViewModel = deckViewModel, deckId = deckId, navController = navController)
             }
+
             composable("collectables_screen") {
                 CollectablesScreen(viewModel = collectablesViewModel)
             }
