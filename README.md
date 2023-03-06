@@ -53,7 +53,7 @@ Clone the project
 ```
 Download & open Android Studio editor
 
-Augmented reality features can only be used on physical android phone and not on emulator.
+Augmented reality features can only be used on a physical android phone and not on emulator.
 Configure your android mobile phone for dev usage. 
 More info on: [Run apps on a hardware device](https://developer.android.com/studio/run/device)
 Choose your device instead of emulator.
