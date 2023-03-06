@@ -65,6 +65,7 @@ fun NavigationHost(
         }
     ) {
         NavHost(navController, startDestination = "home_screen") {
+
             composable("home_screen") {
                 inNoBarScreen.value = true
                 HomeScreen(navController = navController, gotVM = goTViewModel)

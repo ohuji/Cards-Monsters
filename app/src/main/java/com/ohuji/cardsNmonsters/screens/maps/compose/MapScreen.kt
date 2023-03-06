@@ -263,6 +263,7 @@ fun MapScreen(
                 border = BorderStroke(1.dp, Color(0xFF546D5B)),
                 modifier = Modifier
                     .align(Alignment.Center)
+                    .padding(bottom = 30.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,
