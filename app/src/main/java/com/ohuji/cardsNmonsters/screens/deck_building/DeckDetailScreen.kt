@@ -58,8 +58,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 20.dp)
             ) {
-
-
                 Box(modifier = Modifier.padding(top = 10.dp)) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -93,7 +91,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                         tint = Color.White,
                         modifier = Modifier.clickable {
                             deleteDeck(deckId)
-                            navController.navigate("deck_building_screen")
                         }
                     )
                 }
