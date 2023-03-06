@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -87,7 +88,7 @@ fun AchievementList(viewModel: CollectablesViewModel) {
         }
         items(collectableList.value) {
             Box( modifier = Modifier
-                .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(8.dp))
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
                 .fillMaxWidth())
                  {

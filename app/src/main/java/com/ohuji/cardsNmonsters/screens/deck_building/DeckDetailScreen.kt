@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -73,7 +74,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null,
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.clickable {
                                 navController.navigate("deck_building_screen")
                             }
@@ -99,7 +100,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = null,
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.clickable {
                                 deleteDeck(deckId)
                             }
@@ -114,7 +115,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     .fillMaxHeight(0.95f)
                     .padding(top = 70.dp)
                     .clip(RoundedCornerShape(20.dp))
-                    .background(Color.Gray)
+                    .background(MaterialTheme.colorScheme.secondary)
             ) {
 
                 if (cardModelState.isNotEmpty()) {

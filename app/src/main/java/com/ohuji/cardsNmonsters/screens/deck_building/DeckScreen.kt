@@ -3,6 +3,7 @@ package com.ohuji.cardsNmonsters.screens.deck_building
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,6 +32,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -118,7 +120,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                 )
 
                 Column() {
-                    TabRow(selectedTabIndex = state, containerColor = MaterialTheme.colorScheme.error) {
+                    TabRow(selectedTabIndex = state, containerColor = MaterialTheme.colorScheme.onSurfaceVariant) {
                         titles.forEachIndexed { index, title ->
                             Tab(
                                 selected = state == index,
@@ -146,7 +148,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                         }
 
                         1 -> {
-                            Box(modifier = Modifier.fillMaxHeight(0.45f)) {
+                            Box(modifier = Modifier
+                                .fillMaxHeight(0.42f)
+                                .border(5.dp, MaterialTheme.colorScheme.primary)) {
                                 Image(
                                     painter = painterResource(R.drawable.cm_splash),
                                     contentDescription = "another paper image:D",
@@ -163,6 +167,12 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                     TextField(
                                         value = deckName,
                                         label = { Text(stringResource(id = R.string.deck_name)) },
+                                        colors = TextFieldDefaults.textFieldColors(
+                                            cursorColor = MaterialTheme.colorScheme.primary,
+                                            textColor = MaterialTheme.colorScheme.primary,
+                                            unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                            unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        ),
                                         modifier = Modifier
                                             .padding(top = 20.dp, bottom = 20.dp)
                                             .background(Color.LightGray),

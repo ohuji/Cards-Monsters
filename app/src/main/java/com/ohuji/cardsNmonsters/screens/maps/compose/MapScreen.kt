@@ -259,11 +259,14 @@ fun MapScreen(
         ) {
             OutlinedButton(
                 onClick = { fightMonster = true },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFC8CAD5)),
-                border = BorderStroke(1.dp, Color(0xFF546D5B)),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+                border = BorderStroke(2.dp, androidx.compose.material3.MaterialTheme.colorScheme.background),
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(bottom = 30.dp)
+                    .padding(bottom = 35.dp),
             ) {
                 Icon(
                     imageVector = Icons.Default.Search,

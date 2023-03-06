@@ -7,6 +7,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +20,8 @@ fun FAB(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize().padding(bottom = 80.dp)) {
         FloatingActionButton(
             onClick = { navController.navigate("guide_screen") },
-            modifier = Modifier.padding(16.dp).align(Alignment.BottomEnd)
+            modifier = Modifier.padding(16.dp).align(Alignment.BottomEnd),
+            containerColor = MaterialTheme.colorScheme.primary
         ) {
             Icon(Icons.Default.Info, "Localized description", tint = Color.White)
         }
