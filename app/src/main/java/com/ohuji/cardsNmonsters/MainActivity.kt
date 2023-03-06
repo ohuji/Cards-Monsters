@@ -18,6 +18,7 @@ import com.ohuji.cardsNmonsters.database.CardsNMonstersDatabase
 import com.ohuji.cardsNmonsters.screens.augmented_reality.GameLogicViewModel
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
+import com.ohuji.cardsNmonsters.screens.home.GoTViewModel
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.ui.theme.CardsMonstersTheme
 import com.ohuji.cardsNmonsters.utils.NavigationHost
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
     private val gameLogicViewModel: GameLogicViewModel by viewModels()
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val mapViewModel: MapViewModel by viewModels()
+    private val goTViewModel: GoTViewModel by viewModels()
     private val database by lazy { CardsNMonstersDatabase.getInstance(this)}
 
 
@@ -75,7 +77,8 @@ class MainActivity : ComponentActivity() {
                     mapViewModel = mapViewModel,
                     setupClusterManager = mapViewModel::setupClusterManager,
                     calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,
-                    fusedLocationProviderClient = fusedLocationProviderClient
+                    fusedLocationProviderClient = fusedLocationProviderClient,
+                        goTViewModel = goTViewModel
                     )
                 }
             }

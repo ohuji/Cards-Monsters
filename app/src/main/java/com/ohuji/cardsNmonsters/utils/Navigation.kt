@@ -35,6 +35,8 @@ import com.ohuji.cardsNmonsters.screens.deck_building.DeckDetailScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckScreen
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
 import com.ohuji.cardsNmonsters.screens.guide.GuideScreen
+import com.ohuji.cardsNmonsters.screens.home.GoTViewModel
+import com.ohuji.cardsNmonsters.screens.home.HomeScreen
 import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
@@ -47,19 +49,22 @@ fun NavigationHost(
     collectablesViewModel: CollectablesViewModel,
     gameLogicViewModel: GameLogicViewModel,
     mapViewModel: MapViewModel,
+    goTViewModel: GoTViewModel,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
     calculateZoneViewCenter: () -> LatLngBounds,
     fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     val navController = rememberNavController()
 
-
     Scaffold(
         bottomBar = {
             Navbar(navController = navController)
         }
     ) {
-        NavHost(navController, startDestination = "ar_screen") {
+        NavHost(navController, startDestination = "home_screen") {
+            composable("home_screen") {
+                HomeScreen(navController = navController, gotVM = goTViewModel)
+            }
             composable("ar_screen") {
                 val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
                 ARScreen(
@@ -68,9 +73,6 @@ fun NavigationHost(
                     monsterViewModel = collectablesViewModel,
                     gameLogicViewModel = gameLogicViewModel,
                 )
-            }
-            composable("home_screen") {
-
             }
             composable("map_screen") {
                 MapScreen(
