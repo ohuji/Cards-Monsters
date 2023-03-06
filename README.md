@@ -27,7 +27,8 @@ As you battle against more monsters, you'll be able to track your progress and a
 This app uses MVVM (Model View View-Model) architecture.
 
 ![MVVM architecture image](https://miro.medium.com/v2/resize:fit:640/0*EBMAxD0WE23_tZBb)
-Source: https://miro.medium.com/v2/resize:fit:640/0*EBMAxD0WE23_tZBb
+
+- Source: https://miro.medium.com/v2/resize:fit:640/0*EBMAxD0WE23_tZBb
 ## Environment Variables & GitHub Secrets
 
 To run this project, you will need to add the following environment variables to your local.properties file and for our GitHub Actions automated testing to work, also add it to your GitHub secrets
