@@ -4,33 +4,17 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -42,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -55,6 +40,7 @@ import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.database.entities.Card
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
+import com.ohuji.cardsNmonsters.ui.theme.*
 import com.ohuji.cardsNmonsters.utils.BorderDecor
 import com.ohuji.cardsNmonsters.utils.FAB
 import kotlinx.coroutines.Dispatchers
@@ -87,7 +73,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
             when (state) {
                 0 -> {
                     Text(
-                        text = stringResource(id = R.string.view_deck), modifier = Modifier
+                        text = stringResource(id = R.string.view_deck),
+                        color = grey1,
+                        modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(20.dp)
                     )
@@ -95,7 +83,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
 
                 1 -> {
                     Text(
-                        text = stringResource(id = R.string.create_your_deck), modifier = Modifier
+                        text = stringResource(id = R.string.create_your_deck),
+                        color = grey1,
+                        modifier = Modifier
                             .align(Alignment.TopCenter)
                             .padding(20.dp)
                     )
@@ -118,7 +108,10 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                 )
 
                 Column() {
-                    TabRow(selectedTabIndex = state, containerColor = MaterialTheme.colorScheme.error) {
+                    TabRow(selectedTabIndex = state, containerColor = light1,
+                    divider = { TabRowDefaults.Indicator(color = light2) },
+                    indicator = { tabs: List<TabPosition> ->
+                        TabRowDefaults.Indicator(color = groundgreen, modifier = Modifier.tabIndicatorOffset(tabs[state])) }) {
                         titles.forEachIndexed { index, title ->
                             Tab(
                                 selected = state == index,
@@ -126,14 +119,15 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                 text = {
                                     Text(
                                         text = title,
+                                        color = grey1,
                                         maxLines = 2,
                                         overflow = TextOverflow.Ellipsis
                                     )
                                 },
                                 icon = {
                                     when (index) {
-                                        0 -> Icon(Icons.Default.Email, contentDescription = null)
-                                        1 -> Icon(Icons.Default.Home, contentDescription = null)
+                                        0 -> Icon(Icons.Default.List, contentDescription = null, tint = grey2)
+                                        1 -> Icon(Icons.Default.Edit, contentDescription = null, tint = grey2)
                                     }
                                 }
                             )
@@ -162,7 +156,8 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
 
                                     TextField(
                                         value = deckName,
-                                        label = { Text(stringResource(id = R.string.deck_name)) },
+                                        colors = TextFieldDefaults.textFieldColors(placeholderColor = green1, focusedIndicatorColor = green1),
+                                        label = { Text(stringResource(id = R.string.deck_name), color = green2) },
                                         modifier = Modifier
                                             .padding(top = 20.dp, bottom = 20.dp)
                                             .background(Color.LightGray),
@@ -196,9 +191,9 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                         }
                                     }
 
-                                    Button(modifier = Modifier
-                                        .padding(top = 15.dp, bottom = 15.dp)
-                                        .align(Alignment.CenterHorizontally), onClick = {
+                                    Button(colors = ButtonDefaults.buttonColors(containerColor = green1),
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally), onClick = {
                                         if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
                                             viewModel.viewModelScope.launch(Dispatchers.IO) {
 
@@ -232,6 +227,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                     }) {
                                         Text(
                                             stringResource(id = R.string.create_deck),
+                                            color = light1,
                                             fontSize = 16.sp
                                         )
                                     }
@@ -266,7 +262,7 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
 
     LazyColumn(
         contentPadding = PaddingValues(top = 10.dp, bottom = 100.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(
             items = cardList1.value.chunked(3),
@@ -278,7 +274,7 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
                 ) {
                     cardRow.forEach { card ->
                         Column {
-                            Text(card.cardName)
+                            Text(card.cardName, color = cloudgrey)
                             Log.d("DBG", "valitut kortit, $selectedCardIds")
                             val image = card.cardModel
                             val context = LocalContext.current
@@ -316,7 +312,7 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
 
     if (deckList.value.isNotEmpty()) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp)
+            columns = GridCells.Adaptive(minSize = 150.dp),
         ) {
             items(deckList.value.size) {
                 materialCard(
@@ -336,7 +332,8 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
                             contentScale = ContentScale.Crop,
                         )
 
-                        Text(deckList.value[it].deckName, Modifier.align(Alignment.Center))
+                        Text(deckList.value[it].deckName, Modifier.align(Alignment.Center)
+                            .background(brush = Brush.linearGradient(listOf(Color.Transparent, grey1, Color.Transparent))))
                     }
                 }
             }
