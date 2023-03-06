@@ -61,4 +61,17 @@
     <string name="earth_elemental">Earth is strong against electricity and weak against wind.</string>
     <string name="electricity_elemental">Electricity is strong against water and weak against earth.</string>
     <string name="physical_attack">Physical attack card dazes the monster. Making it vulnerable to follow up attacks.</string>
+    <string name="home_start">Start</string>
+    <string name="home_guide">Guide</string>
+    <string name="map_alert_title">Monster in range</string>
+    <string name="map_alert1">You found</string>
+    <string name="map_alert2">It\'s element is</string>
+    <string name="map_no_alert_title">No monsters found</string>
+    <string name="map_no_alert_message">Try moving closer to a monster</string>
+    <string name="map_scan_button">Scan for monsters</string>
+    <string name="map_no_deck_title">No deck created</string>
+    <string name="map_no_deck_message">You must create a deck before you can fight monster</string>
+    <string name="map_deck_dropdown">Your decks:</string>
+    <string name="map_fight">Fight</string>
+    <string name="map_run">Run</string>
 </resources>

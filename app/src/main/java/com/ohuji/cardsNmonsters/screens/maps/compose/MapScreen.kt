@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
 import com.google.maps.android.ktx.model.polygonOptions
+import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
 import com.ohuji.cardsNmonsters.screens.collectables.CollectablesViewModel
 import com.ohuji.cardsNmonsters.screens.deck_building.DeckViewModel
@@ -175,10 +177,10 @@ fun MapScreen(
                     if (location != LatLng(0.0, 0.0)) {
                         fightMonsterNoNearby = false
                         val message =
-                            " You found a ${monster?.monsterName ?: "Skeleton"}! \n With a(n) ${monster?.monsterElement ?: "Dark"} type!"
+                            "${stringResource(R.string.map_alert1)} ${monster?.monsterName ?: "Skeleton"}! \n${stringResource(R.string.map_alert2)} ${monster?.monsterElement ?: "Dark"}!"
                         ShowAlertFound(
                             deckViewModel = deckViewModel,
-                            title = "Monster found",
+                            title = stringResource(R.string.map_alert_title),
                             message = message,
                             buttons = listOf(
                                 "Fight" to {
@@ -195,14 +197,13 @@ fun MapScreen(
         }
         if (fightMonsterNoNearby) {
             ShowAlertNotFound(
-                title = "No monsters found",
-                message = "Try moving closer to a monster",
+                title = stringResource(R.string.map_no_alert_title),
+                message = stringResource(R.string.map_no_alert_message),
                 onDismiss = { fightMonsterNoNearby = false }
             )
         }
 
     }
-
 
     /**
      * This sets up the Google Map view and its properties. It adds the markers to the map
@@ -268,7 +269,7 @@ fun MapScreen(
                     contentDescription = null,
                     modifier = Modifier.padding(end = 10.dp)
                 )
-                Text(text = "Scan for monsters")
+                Text(text = stringResource(R.string.map_scan_button))
             }
 
         }
@@ -278,8 +279,8 @@ fun MapScreen(
 
     if (showNoDeckAlert) {
         ShowDialog(
-            title = "No deck created",
-            message = "You must create a deck before you can fight monster",
+            title = stringResource(R.string.map_no_deck_title),
+            message = stringResource(R.string.map_no_deck_message),
             onDismiss = { noDeckDialogDismiss() }
         )
     }
@@ -317,14 +318,14 @@ fun ShowAlertFound(
         },
         confirmButton = {
             androidx.compose.material3.Button(onClick = buttons[0].second) {
-                androidx.compose.material3.Text("Fight")
+                androidx.compose.material3.Text(stringResource(R.string.map_fight))
             }
         },
         dismissButton = {
             androidx.compose.material3.Button(
                 onClick = onDismiss
             ) {
-                androidx.compose.material3.Text("Run")
+                androidx.compose.material3.Text(stringResource(R.string.map_run))
             }
         },
     )
@@ -397,7 +398,7 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
                 readOnly = true,
                 label = {
                     Text(
-                        text = "Your decks:",
+                        text = stringResource(R.string.map_deck_dropdown),
                         style = TextStyle(color = Color(0xFFC8CAD5)),
                         fontWeight = FontWeight.Bold
                     )

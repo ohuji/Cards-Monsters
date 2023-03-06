@@ -34,7 +34,7 @@ import com.ohuji.cardsNmonsters.utils.BorderDecor
 fun CollectablesScreen(viewModel: CollectablesViewModel) {
 
     Column {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth() .padding(bottom = 50.dp)) {
             Image(
                 painter = painterResource(R.drawable.cm_splash),
                 contentDescription = "Paper image",
@@ -88,7 +88,7 @@ fun AchievementList(viewModel: CollectablesViewModel) {
         items(collectableList.value) {
             Box( modifier = Modifier
                 .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
-                .padding(start = 8.dp, end = 8.dp, bottom = 50.dp, top = 8.dp)
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
                 .fillMaxWidth())
                  {
                 Row() {

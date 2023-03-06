@@ -146,16 +146,10 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 8.dp)
                                     .clickable {
-                                        Log.d("TAPDBG", "tap fire")
-
                                         stateAndDamage(i)
 
                                         turn += 1
 
-                                        Log.d(
-                                            "DBG",
-                                            "Mones vuoro menos $turn paljos helttii jälel $health"
-                                        )
                                         healthBar.text = battleConclusion()
                                     },
                                 contentScale = ContentScale.Fit
@@ -254,7 +248,6 @@ fun ShowDialog(
     message: String,
     onDismiss: () -> Unit
 ) {
-    Log.d("DBG", "Tultiin alert")
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { androidx.compose.material3.Text(title) },

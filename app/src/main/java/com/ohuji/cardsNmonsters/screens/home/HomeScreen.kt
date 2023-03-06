@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -44,7 +45,12 @@ fun HomeScreen(navController: NavController, gotVM: GoTViewModel) {
             Button(onClick = { navController.navigate("map_screen") },
                 modifier = Modifier.height(160.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)) {
-                CustomButtonContent("Start")
+                CustomButtonContent(stringResource(R.string.home_start))
+            }
+            Button(onClick = { navController.navigate("guide_screen") },
+                modifier = Modifier.height(80.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)) {
+                CustomButtonContent(stringResource(R.string.home_guide))
             }
             Text(
                 "$name: $quote",

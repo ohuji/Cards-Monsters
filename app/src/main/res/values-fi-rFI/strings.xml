@@ -61,5 +61,18 @@
     <string name="earth_elemental">Maa on vahva sähköä vastaan ja heikko tuulta vastaan.</string>
     <string name="electricity_elemental">Sähkö on vahva vettä vastaan ja heikko maata vastaan.</string>
     <string name="physical_attack">Fyysiset iskut häkellyttävät hirviön. Jolloin tästä tulee altis seuraavalle hyökkäkselle.</string>
+    <string name="home_start">Aloita</string>
+    <string name="home_guide">Ohje</string>
+    <string name="map_alert_title">Monsteri lähistöllä</string>
+    <string name="map_alert1">Löysit</string>
+    <string name="map_alert2">Monsterin elementti on</string>
+    <string name="map_no_alert_title">Ei monstereita lähistöllä</string>
+    <string name="map_no_alert_message">Yritä liikkua lähemmäs monsteria</string>
+    <string name="map_scan_button">Skannaa monstereita</string>
+    <string name="map_no_deck_title">Et ole luonut korttipakkaa</string>
+    <string name="map_no_deck_message">Sinun täytyy luoda korttipakka ennen kuin voit taistella</string>
+    <string name="map_deck_dropdown">Sinun pakkasi:</string>
+    <string name="map_fight">Taistele</string>
+    <string name="map_run">Pakene</string>
 
 </resources>

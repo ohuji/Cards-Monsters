@@ -15,6 +15,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -52,17 +55,31 @@ fun NavigationHost(
     fusedLocationProviderClient: FusedLocationProviderClient,
 ) {
     val navController = rememberNavController()
+    val inNoBarScreen = remember { mutableStateOf(false) }
 
     Scaffold(
-        bottomBar = {
-            Navbar(navController = navController)
+            bottomBar = {
+                if (!inNoBarScreen.value) {
+                Navbar(navController = navController)
+            }
         }
     ) {
         NavHost(navController, startDestination = "home_screen") {
+            composable("home_screen") {
+                inNoBarScreen.value = true
+                HomeScreen(navController = navController, gotVM = goTViewModel)
+                DisposableEffect(Unit) {
+                    onDispose {
+                        inNoBarScreen.value = false
+                    }
+                }
+            }
+
             composable("ar_screen/{monsterId}/{deckId}") {
                 val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
                 val deckId = it.arguments?.getString("deckId")?.toLong() ?: 1
 
+                inNoBarScreen.value = true
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
@@ -71,10 +88,11 @@ fun NavigationHost(
                     monsterId = monsterId,
                     deckId = deckId
                 )
-            }
-
-            composable("home_screen") {
-                HomeScreen(navController = navController, gotVM = goTViewModel)
+                DisposableEffect(Unit) {
+                    onDispose {
+                        inNoBarScreen.value = false
+                    }
+                }
             }
 
             composable("map_screen") {
@@ -130,7 +148,6 @@ fun Navbar(navController: NavController) {
                     },
                     icon = {
                         when (item) {
-                         //   "ar" -> Icon(Icons.Filled.PlayArrow, contentDescription = "AR")
                             "home" -> Icon(Icons.Filled.Home, contentDescription = "Home")
                             "map" -> Icon(Icons.Filled.Place, contentDescription = "Map")
                             "deck_building" -> Icon(Icons.Filled.List, contentDescription = "Decks")

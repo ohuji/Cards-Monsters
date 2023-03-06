@@ -1,12 +1,9 @@
 package com.ohuji.cardsNmonsters.screens.augmented_reality
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.ohuji.cardsNmonsters.repository.CardsNDeckRepository
 import com.ohuji.cardsNmonsters.repository.CollectableRepository
-import com.ohuji.cardsNmonsters.repository.MonsterRepository
 import kotlinx.coroutines.launch
 
 class GameLogicViewModel(application: Application) : AndroidViewModel(application) {
@@ -58,26 +55,22 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
 
         if(status) {
             damage *= if (elementDamage){
-                Log.d("DBG", "Triple damage $damage")
                 3
             } else {
                 2
             }
-            Log.d("DBG", "Monsteri on dazed $damage")
             updateCollectableTypeDamage("Damage", damage)
             return damage
         }
         if (elementDamage) {
             updateCollectableTypeDamage("Element Damage", damage)
-            Log.d("DBG", "Element damagea tehtii")
             return damage*2
         }
         updateCollectableTypeDamage("Damage", damage)
-        Log.d("DBG", "Paljos damagee tehtii $damage")
         return damage
     }
 
-  private fun elementCheck(cardElement: String, monsterElement: String?): Boolean {
+   private fun elementCheck(cardElement: String, monsterElement: String?): Boolean {
       val fire = "Fire"
       val light = "Light"
       val wind = "Wind"
@@ -149,20 +142,16 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun updatePlayerStats(exp: Int) {
-        Log.d("DBG", "updatePlayer $exp")
         viewModelScope.launch {
             val player = collectableRepo.findPlayer()
                 player.currentLvlExp += exp
                 collectableRepo.updatePlayerStats(player)
-            Log.d("DBG", "Playerii päivitetään ${player.currentLvlExp}")
             if (player.currentLvlExp >= player.expRequirement) {
                     val excessExp = player.currentLvlExp - player.expRequirement
                     player.playerLevel += 1
                     player.expRequirement += 500
                     player.currentLvlExp = excessExp
-                Log.d("DBG", "Nyt tuli leveli, lvl: ${player.playerLevel}, ja exp ${player.currentLvlExp} ja exp tarttee nyt ${player.expRequirement}")
                     collectableRepo.updatePlayerStats(player)
-
                 }
         }
     }

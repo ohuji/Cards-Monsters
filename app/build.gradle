@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.test:core-ktx:1.5.0'
     final retrofit_version = '2.9.0'
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -128,6 +129,8 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
     // Optional -- Mockk framework
     testImplementation "io.mockk:mockk:1.13.4"
+    androidTestImplementation 'androidx.test:core:1.5.0'
+
 }
 
 String getApiKey() {
