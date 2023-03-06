@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.ohuji.cardsNmonsters.database.entities.Collectable
 
 @Dao
-interface CollectableDao{
+interface CollectableDao {
 
         @Insert
         fun addCollectable(vararg collectable: Collectable)
@@ -24,8 +24,5 @@ interface CollectableDao{
 
         @Query("SELECT * FROM Collectable WHERE collectableId = :collectableId")
            fun findCollectableById(collectableId: Long): Collectable
-    }
-
-//  @Query("SELECT * FROM Collectable WHERE collectableId = :collectableId")
-//   fun findCollectableById(collectableId: Long): LiveData<Collectable>
+}
 

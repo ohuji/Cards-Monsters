@@ -38,7 +38,6 @@ import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-
 var selectedDeckId: Long = 0
 
 /**
@@ -55,7 +54,6 @@ var selectedDeckId: Long = 0
 @SuppressLint("PotentialBehaviorOverride")
 @Composable
 fun MapScreen(
-
     mapViewModel: MapViewModel = viewModel(),
     navController: NavController,
     setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
@@ -71,7 +69,6 @@ fun MapScreen(
     val deckCheck = deckViewModel.getAllDecks().observeAsState().value?.size
     var showNoDeckAlert by remember { mutableStateOf(false) }
 
-
     /**
      * Dismisses the no deck warning dialog and navigates to the deck building screen.
      */
@@ -79,7 +76,6 @@ fun MapScreen(
         showNoDeckAlert = false
         navController.navigate("deck_building_screen")
     }
-
 
     /**
      * Starts the fight with the monster and navigates to the augmented reality screen.
@@ -94,15 +90,19 @@ fun MapScreen(
     if (deckCheck?.let { it < 1 } == true) {
         showNoDeckAlert = true
     }
+
     val state by remember {
         mapViewModel.state
     }
+
     val location by remember {
         mapViewModel.getDevicePreciseLocation(fusedLocationProviderClient)
     }
+
     var fightMonster by remember {
         mutableStateOf(false)
     }
+
     var fightMonsterNoNearby by remember {
         mutableStateOf(true)
     }
@@ -120,6 +120,7 @@ fun MapScreen(
         if (location == LatLng(0.0, 0.0)) {
             return@LaunchedEffect
         }
+
         if (!fightMonsterNoNearby) {
             fightMonsterNoNearby = true
         }
@@ -163,6 +164,7 @@ fun MapScreen(
     if (fightMonster) {
         val randomId = if (monsterMaxId != null) (0..monsterMaxId).random() else 5
         val monster = monsterViewModel.findMonsterById(randomId.toLong()).observeAsState().value
+
         for (list in arrOfMonstersLatLng) {
             for (latLng in list) {
                 val result = FloatArray(1)
@@ -195,6 +197,7 @@ fun MapScreen(
                 }
             }
         }
+
         if (fightMonsterNoNearby) {
             ShowAlertNotFound(
                 title = stringResource(R.string.map_no_alert_title),
@@ -217,6 +220,7 @@ fun MapScreen(
         isMyLocationEnabled = state.lastKnownLocation != null,
     )
     val cameraPositionState = rememberCameraPositionState()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -227,14 +231,18 @@ fun MapScreen(
         ) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
+
             MapEffect(state.clusterItems) { map ->
                 if (state.clusterItems.isNotEmpty()) {
                     val clusterManager = setupClusterManager(context, map)
+
                     map.setOnCameraIdleListener(clusterManager)
                     map.setOnMarkerClickListener(clusterManager)
+
                     state.clusterItems.forEach { clusterItem ->
                         map.addPolygon(clusterItem.polygonOptions)
                     }
+
                     map.setOnMapLoadedCallback {
                         if (state.clusterItems.isNotEmpty()) {
                             scope.launch {
@@ -250,6 +258,7 @@ fun MapScreen(
                 }
             }
         }
+
         Box(
             modifier = Modifier
                 .padding(10.dp)
@@ -273,12 +282,10 @@ fun MapScreen(
                     contentDescription = null,
                     modifier = Modifier.padding(end = 10.dp)
                 )
+
                 Text(text = stringResource(R.string.map_scan_button))
             }
-
         }
-
-
     }
 
     if (showNoDeckAlert) {
@@ -371,7 +378,6 @@ fun ShowAlertNotFound(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DropDownMenu(deckViewModel: DeckViewModel) {
-
     val deckList = deckViewModel.getAllDecks().observeAsState().value
     val deckOptions = deckList?.map { deck -> deck.deckName }?.toTypedArray()
 
@@ -390,7 +396,6 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
             expanded = !expanded
         }
     ) {
-
         // text field
         Box(
             modifier = Modifier.padding(30.dp)

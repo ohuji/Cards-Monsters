@@ -65,7 +65,6 @@ fun NavigationHost(
         }
     ) {
         NavHost(navController, startDestination = "home_screen") {
-
             composable("home_screen") {
                 inNoBarScreen.value = true
                 HomeScreen(navController = navController, gotVM = goTViewModel)
@@ -81,6 +80,7 @@ fun NavigationHost(
                 val deckId = it.arguments?.getString("deckId")?.toLong() ?: 1
 
                 inNoBarScreen.value = true
+
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
@@ -89,6 +89,7 @@ fun NavigationHost(
                     monsterId = monsterId,
                     deckId = deckId
                 )
+
                 DisposableEffect(Unit) {
                     onDispose {
                         inNoBarScreen.value = false

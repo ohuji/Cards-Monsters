@@ -34,24 +34,42 @@ fun HomeScreen(navController: NavController, gotVM: GoTViewModel) {
     val name: String = gotVM.name
     val quote: String = gotVM.quote
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        Image(painter = painterResource(id = R.drawable.cm_splash), contentDescription = "background image",
-            modifier = Modifier.matchParentSize(), contentScale = ContentScale.FillHeight)
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.cm_splash),
+            contentDescription = "background image",
+            modifier = Modifier.matchParentSize(),
+            contentScale = ContentScale.FillHeight,
+        )
+
         BorderDecor()
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.matchParentSize()) {
-            Image(painter = painterResource(id = R.drawable.cm_logo), contentDescription = "logo image",
-            modifier = Modifier.size(300.dp, 300.dp))
-            Button(onClick = { navController.navigate("map_screen") },
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.matchParentSize(),
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.cm_logo),
+                contentDescription = "logo image",
+                modifier = Modifier.size(300.dp, 300.dp),
+            )
+
+            Button(
+                onClick = { navController.navigate("map_screen") },
                 modifier = Modifier.height(160.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)) {
-                CustomButtonContent(stringResource(R.string.home_start))
+                    CustomButtonContent(stringResource(R.string.home_start))
             }
+
             Button(onClick = { navController.navigate("guide_screen") },
                 modifier = Modifier.height(80.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = Color.Black)) {
-                CustomButtonContent(stringResource(R.string.home_guide))
+                    CustomButtonContent(stringResource(R.string.home_guide))
             }
+
             Text(
                 "$name: $quote",
                 modifier = Modifier
@@ -88,10 +106,17 @@ fun CustomButtonContent(txt: String){
                 )
             )
         )
-        Image(painter = painterResource(id = R.drawable.cm_button), contentDescription = "button image",
-            modifier = Modifier.size(220.dp, 60.dp)
+        Image(
+            painter = painterResource(id = R.drawable.cm_button),
+            contentDescription = "button image",
+            modifier = Modifier.size(220.dp, 60.dp),
         )
-        Text(txt, textAlign = TextAlign.Center, fontSize = TextUnit(28F, TextUnitType.Sp))
+
+        Text(
+            txt,
+            textAlign = TextAlign.Center,
+            fontSize = TextUnit(28F, TextUnitType.Sp)
+        )
     }
 }
 

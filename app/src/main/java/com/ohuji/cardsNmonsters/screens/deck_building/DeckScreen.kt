@@ -69,11 +69,12 @@ import androidx.compose.material3.Card as materialCard
 fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
     val deckList = viewModel.getAllDecks().observeAsState(listOf())
     val selectedCardIds = remember { mutableStateListOf<Card>() }
-    var deckName by remember { mutableStateOf("") }
+    val titles = listOf(stringResource(id = R.string.your_decks), stringResource(id = R.string.create_deck))
     val newestDeck = deckList.value.lastOrNull()
+
+    var deckName by remember { mutableStateOf("") }
     var showErrorDialog by remember { mutableStateOf(false) }
     var state by remember { mutableStateOf(0) }
-    val titles = listOf(stringResource(id = R.string.your_decks), stringResource(id = R.string.create_deck))
 
     Column {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -89,29 +90,30 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
             when (state) {
                 0 -> {
                     Text(
-                        text = stringResource(id = R.string.view_deck), modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(20.dp)
+                        text = stringResource(
+                            id = R.string.view_deck),
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(20.dp)
                     )
                 }
-
                 1 -> {
                     Text(
-                        text = stringResource(id = R.string.create_your_deck), modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(20.dp)
+                        text = stringResource(
+                            id = R.string.create_your_deck),
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(20.dp)
                     )
                 }
             }
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
                     .padding(top = 70.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(Color.Gray)
             ) {
-
                 Image(
                     painter = painterResource(R.drawable.paper),
                     contentDescription = "Paper image",
@@ -120,7 +122,10 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                 )
 
                 Column() {
-                    TabRow(selectedTabIndex = state, containerColor = MaterialTheme.colorScheme.onSurfaceVariant) {
+                    TabRow(
+                        selectedTabIndex = state,
+                        containerColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ) {
                         titles.forEachIndexed { index, title ->
                             Tab(
                                 selected = state == index,
@@ -146,7 +151,6 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                         0 -> {
                             DeckList(viewModel, navController)
                         }
-
                         1 -> {
                             Box(modifier = Modifier
                                 .fillMaxHeight(0.42f)
@@ -206,58 +210,64 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                         }
                                     }
 
-                                    Button(modifier = Modifier
+                                    Button(
+                                        modifier = Modifier
                                         .padding(top = 15.dp, bottom = 15.dp)
-                                        .align(Alignment.CenterHorizontally), onClick = {
-                                        if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
-                                            viewModel.viewModelScope.launch(Dispatchers.IO) {
-
-                                                viewModel.addDeck(deckName)
-                                                delay(500)
-                                            }
-                                            viewModel.viewModelScope.launch(Dispatchers.IO) {
+                                        .align(Alignment.CenterHorizontally),
+                                        onClick = {
+                                            if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
                                                 viewModel.viewModelScope.launch(Dispatchers.IO) {
-                                                    val newDeckId =
-                                                        newestDeck?.deckId?.toInt()?.plus(1)
-                                                            ?.toLong() ?: 1L
-                                                    Log.d(
-                                                        "DBG",
-                                                        "Uusi pakka $newDeckId kortit $selectedCardIds"
-                                                    )
 
-                                                    selectedCardIds.toMutableList().also {
-                                                        viewModel.addCardsToDeck(newDeckId, it)
-                                                        selectedCardIds.clear()
-                                                    }
-                                                    deckName = ""
+                                                    viewModel.addDeck(deckName)
+                                                    delay(500)
                                                 }
+
+                                                viewModel.viewModelScope.launch(Dispatchers.IO) {
+                                                    viewModel.viewModelScope.launch(Dispatchers.IO) {
+                                                        val newDeckId =
+                                                            newestDeck?.deckId?.toInt()?.plus(1)
+                                                                ?.toLong() ?: 1L
+
+                                                        Log.d(
+                                                            "DBG",
+                                                            "Uusi pakka $newDeckId kortit $selectedCardIds"
+                                                        )
+
+                                                        selectedCardIds.toMutableList().also {
+                                                            viewModel.addCardsToDeck(newDeckId, it)
+                                                            selectedCardIds.clear()
+                                                        }
+
+                                                        deckName = ""
+                                                    }
+                                                }
+                                            } else {
+                                                showErrorDialog = true
+
+                                                Log.d(
+                                                    "DBG",
+                                                    "Pakassa väärä määrä kortteja tai liian lyhyt nimi"
+                                                )
                                             }
-                                        } else {
-                                            showErrorDialog = true
-                                            Log.d(
-                                                "DBG",
-                                                "Pakassa väärä määrä kortteja tai liian lyhyt nimi"
+                                        }) {
+                                            Text(
+                                                stringResource(id = R.string.create_deck),
+                                                fontSize = 16.sp
                                             )
                                         }
-                                    }) {
-                                        Text(
-                                            stringResource(id = R.string.create_deck),
-                                            fontSize = 16.sp
-                                        )
                                     }
-
-
                                 }
-                            }
-                            Box() {
-                                CardList(viewModel = viewModel, selectedCardIds = selectedCardIds)
+
+                                Box() {
+                                    CardList(viewModel = viewModel, selectedCardIds = selectedCardIds)
+                                }
                             }
                         }
                     }
+
+                    FAB(navController = navController)
                 }
 
-                FAB(navController = navController)
-            }
             if (showErrorDialog) {
                 ShowDialog(
                     title = stringResource(R.string.deck_creation_error),
@@ -282,13 +292,14 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
             items = cardList1.value.chunked(3),
             itemContent = { cardRow ->
                 Row(
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     cardRow.forEach { card ->
                         Column {
                             Text(card.cardName)
+
                             Log.d("DBG", "valitut kortit, $selectedCardIds")
                             val image = card.cardModel
                             val context = LocalContext.current
@@ -297,7 +308,8 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
                                 "drawable",
                                 context.packageName
                             )
-                            val isClickable = !selectedCardIds.contains(card) && selectedCardIds.size < 4
+                            val isClickable =
+                                !selectedCardIds.contains(card) && selectedCardIds.size < 4
 
                             Image(
                                 painter = painterResource(resId),
@@ -314,9 +326,9 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
                         }
                     }
                 }
-            })
+            }
+        )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -352,13 +364,17 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
             }
         }
     } else {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .alpha(0.7f)
-            .background(Color.Black)) {
-            Box(modifier = Modifier
-                .align(Alignment.Center)
-                .padding(bottom = 80.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(0.7f)
+                .background(Color.Black)
+        ) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(bottom = 80.dp)
+            ) {
                 Column() {
                     Image(
                         painter = painterResource(R.drawable.lock_icon),

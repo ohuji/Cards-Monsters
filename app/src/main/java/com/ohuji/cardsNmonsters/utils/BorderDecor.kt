@@ -16,18 +16,42 @@ import com.ohuji.cardsNmonsters.R
 
 @Composable
 fun BorderDecor(){
-    Column(verticalArrangement = Arrangement.SpaceBetween, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Image(painter = painterResource(id = R.drawable.cm_deco_tl), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-            Image(painter = painterResource(id = R.drawable.cm_deco_tr), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.cm_deco_tl),
+                contentDescription = "deco image",
+                modifier = Modifier.size(50.dp, 50.dp)
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.cm_deco_tr),
+                contentDescription = "deco image",
+                modifier = Modifier.size(50.dp, 50.dp)
+            )
         }
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Image(painter = painterResource(id = R.drawable.cm_deco_bl), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
-            Image(painter = painterResource(id = R.drawable.cm_deco_br), contentDescription = "deco image",
-                modifier = Modifier.size(50.dp, 50.dp))
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.cm_deco_bl),
+                contentDescription = "deco image",
+                modifier = Modifier.size(50.dp, 50.dp)
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.cm_deco_br),
+                contentDescription = "deco image",
+                modifier = Modifier.size(50.dp, 50.dp)
+            )
         }
     }
 }

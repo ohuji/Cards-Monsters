@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.augmented_reality
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,14 +45,21 @@ import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 
 @Composable
-fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel, monsterId: Long, deckId: Long) {
+fun ARScreen(
+    navController: NavController,
+    viewModel: DeckViewModel,
+    monsterViewModel: CollectablesViewModel,
+    gameLogicViewModel: GameLogicViewModel,
+    monsterId: Long,
+    deckId: Long
+) {
     val nodes = remember { mutableStateListOf<ArNode>() }
     val context = LocalContext.current
     val monster = monsterViewModel.findMonsterById(monsterId).observeAsState().value
     val cardsState = viewModel.getDeckWithCards(deckId).observeAsState()
     val cards: FullDeck? = cardsState.value
-
     val playerStats = monsterViewModel.getPlayerStats().observeAsState().value
+
     var showVictoryDialog by remember { mutableStateOf(false) }
     var showDefeatDialog by remember { mutableStateOf(false) }
 
@@ -70,14 +76,22 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
         return expReq - currentExp
     }
 
-    fun stateAndDamage(i: Int){
-                val card = cards!!.cards[i]
-        health -= gameLogicViewModel.doDamage(card.cardDamage, stateDazed, card.cardElement, monster?.monsterElement)
-                val isPhysicalCard = card.cardElement == "Phys"
-                stateDazed = isPhysicalCard
+    fun stateAndDamage(i: Int) {
+        val card = cards!!.cards[i]
+
+        health -= gameLogicViewModel.doDamage(
+            card.cardDamage,
+            stateDazed,
+            card.cardElement,
+            monster?.monsterElement
+        )
+
+        val isPhysicalCard = card.cardElement == "Phys"
+
+        stateDazed = isPhysicalCard
     }
 
-    fun battleConclusion(): String{
+    fun battleConclusion(): String {
         if (health <= 0) {
             gameLogicViewModel.updateCollectableTypeKill("Kill")
             gameLogicViewModel.updatePlayerStats(
@@ -88,10 +102,11 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
         } else if (turn >= 4) {
             showDefeatDialog = true
         }
-           return health.toString()
+
+        return health.toString()
     }
 
-    val model = ArModelNode (
+    val model = ArModelNode(
         placementMode = PlacementMode.BEST_AVAILABLE,
         instantAnchor = false,
         hitPosition = Position(0.0f, 0.0f, -2.0f),
@@ -112,12 +127,21 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
 
     if (cards != null) {
         Column {
+            AR(
+                model,
+                nodes,
+                turn,
+                stateDazed,
+                monster?.monsterName,
+                health,
+                monster?.monsterElement
+            )
 
-            AR(model, nodes, turn, stateDazed, monster?.monsterName, health, monster?.monsterElement )
-
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(20.dp))) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(20.dp))
+            ) {
                 Image(
                     painter = painterResource(R.drawable.wood_background),
                     contentDescription = "Contact profile picture",
@@ -125,7 +149,6 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                     contentScale = ContentScale.Crop
                 )
                 Column {
-
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -139,10 +162,10 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                 "drawable",
                                 context.packageName
                             )
+
                             Image(
                                 painter = painterResource(resId),
                                 contentDescription = cards.cards[i].cardName,
-
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 8.dp)
                                     .clickable {
@@ -155,23 +178,37 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
                                 contentScale = ContentScale.Fit
                             )
                         }
-
                     }
                 }
             }
-
         }
     }
-    BattleReport(showVictoryDialog, showDefeatDialog, navController, monster?.monsterName, playerStats?.playerLevel, expRequired())
+
+    BattleReport(
+        showVictoryDialog,
+        showDefeatDialog,
+        navController,
+        monster?.monsterName,
+        playerStats?.playerLevel,
+        expRequired()
+    )
 }
 
 @Composable
-fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.node.Node>, turn: Int, stateDazed: Boolean, monsterName: String?, health: Int?, monsterElement: String?) {
-
-    Box(modifier = Modifier
-        .fillMaxHeight(0.75f)
-        .fillMaxWidth()) {
-
+fun AR(
+    model: io.github.sceneview.node.Node,
+    nodes: List<io.github.sceneview.node.Node>,
+    turn: Int,
+    stateDazed: Boolean,
+    monsterName: String?,
+    health: Int?,
+    monsterElement: String?
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight(0.75f)
+            .fillMaxWidth()
+    ) {
         ARScene(
             nodes = nodes,
             planeRenderer = true,
@@ -189,15 +226,19 @@ fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.nod
                 // User tapped in the AR view
             }
         )
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.05f)) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.05f)
+        ) {
             Image(
                 painter = painterResource(R.drawable.wood_background),
                 contentDescription = "Contact profile picture",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+
             TurnComposable(
                 turn = turn,
                 stateDazed = stateDazed,
@@ -210,8 +251,14 @@ fun AR(model: io.github.sceneview.node.Node, nodes: List<io.github.sceneview.nod
 }
 
 @Composable
-fun BattleReport(showVictoryDialog: Boolean, showDefeatDialog: Boolean, navController: NavController, monsterName: String?, playerLevel: Int?, expRequired: Int) {
-
+fun BattleReport(
+    showVictoryDialog: Boolean,
+    showDefeatDialog: Boolean,
+    navController: NavController,
+    monsterName: String?,
+    playerLevel: Int?,
+    expRequired: Int
+) {
     var showVictoryDialog = showVictoryDialog
     var showDefeatDialog = showDefeatDialog
 
@@ -233,6 +280,7 @@ fun BattleReport(showVictoryDialog: Boolean, showDefeatDialog: Boolean, navContr
             onDismiss = { victoryDialogDismiss()}
         )
     }
+
     if (showDefeatDialog) {
         ShowDialog(
             title = stringResource(R.string.battle_defeat),
@@ -261,7 +309,13 @@ fun ShowDialog(
 }
 
 @Composable
-fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health: Int?, monsterElement: String?) {
+fun TurnComposable(
+    turn: Int,
+    stateDazed: Boolean,
+    monsterName: String?,
+    health: Int?,
+    monsterElement: String?
+) {
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "${stringResource(R.string.battle_turn)} $turn/4",
@@ -272,25 +326,27 @@ fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health:
                 .padding(start = 8.dp, end = 0.dp, top = 0.dp, bottom = 0.dp)
                 .weight(1f)
         )
+
         if (stateDazed) {
             Text(
                 text = "$monsterName ${stringResource(R.string.battle_status)}",
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 color = White,
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             )
         }
-            Text(
-                text = "${stringResource(R.string.battle_hp)} ${if (health != null && health < 0) { "0" } else { health }}",
-                color = White,
-                textAlign = TextAlign.Right,
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(start = 0.dp, end = 2.dp, top = 0.dp, bottom = 0.dp)
-                    .weight(1f)
-            )
+
+        Text(
+            text = "${stringResource(R.string.battle_hp)} ${if (health != null && health < 0) { "0" } else { health }}",
+            color = White,
+            textAlign = TextAlign.Right,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .padding(start = 0.dp, end = 2.dp, top = 0.dp, bottom = 0.dp)
+                .weight(1f)
+        )
+
         val image = monsterElement?.lowercase() + "_icon"
         val context = LocalContext.current
         val resId = context.resources.getIdentifier(
@@ -298,10 +354,14 @@ fun TurnComposable(turn: Int, stateDazed: Boolean, monsterName: String?, health:
             "drawable",
             context.packageName
         )
-       Image(painter = painterResource(resId), contentDescription = "Element icon",
+
+       Image(
+           painter = painterResource(resId),
+           contentDescription = "Element icon",
            modifier = Modifier
                .padding(start = 0.dp, end = 5.dp, top = 0.dp, bottom = 0.dp)
-               .size(20.dp))
+               .size(20.dp)
+       )
     }
 }
 

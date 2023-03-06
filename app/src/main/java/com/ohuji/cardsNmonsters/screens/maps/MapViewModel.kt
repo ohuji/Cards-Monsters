@@ -75,7 +75,6 @@ class MapViewModel @Inject constructor() : ViewModel() {
         range: Double,
         bearing: Double
     ): LatLng {
-
         val earthRadius = 6378137.0
         val degreesToRadians = Math.PI / 180.0
         val radiansToDegrees = 180.0 / Math.PI
@@ -108,7 +107,6 @@ class MapViewModel @Inject constructor() : ViewModel() {
     fun getDeviceLocation(
         fusedLocationProviderClient: FusedLocationProviderClient
     ) {
-
         try {
             val locationResult = fusedLocationProviderClient.lastLocation
             locationResult.addOnCompleteListener { task ->
@@ -138,6 +136,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
          * cases when a location is not available.
          */
         val locationData = mutableStateOf(LatLng(0.0, 0.0))
+
         try {
             fusedLocationProviderClient.getCurrentLocation(
                 Priority.PRIORITY_HIGH_ACCURACY,
@@ -159,10 +158,9 @@ class MapViewModel @Inject constructor() : ViewModel() {
         } catch (e: SecurityException) {
             Log.e("Exception: %s", e.message, e)
         }
+
         return locationData
-
     }
-
 
     /**
      * Sets up a cluster manager for the given map using the current state of the view model.
@@ -189,6 +187,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
         // Get all the points from all the polygons and calculate the camera view that will show them all.
         val latLngs = state.value.clusterItems.map { it.polygonOptions }
             .map { it -> it.points.map { LatLng(it.latitude, it.longitude) } }.flatten()
+
         return latLngs.calculateCameraViewPoints().getCenterOfPolygon()
     }
 

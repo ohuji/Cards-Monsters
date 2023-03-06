@@ -20,10 +20,16 @@ fun FAB(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize().padding(bottom = 80.dp)) {
         FloatingActionButton(
             onClick = { navController.navigate("guide_screen") },
-            modifier = Modifier.padding(16.dp).align(Alignment.BottomEnd),
-            containerColor = MaterialTheme.colorScheme.primary
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.BottomEnd),
+            containerColor = MaterialTheme.colorScheme.primary,
         ) {
-            Icon(Icons.Default.Info, "Localized description", tint = Color.White)
+            Icon(
+                Icons.Default.Info,
+                contentDescription = "Localized description",
+                tint = Color.White
+            )
         }
     }
 }

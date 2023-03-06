@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.ohuji.cardsNmonsters.database.entities.Player
 
 @Dao
-interface PlayerDao{
+interface PlayerDao {
 
     @Insert
     fun addPlayer(vararg player: Player)
@@ -21,5 +21,4 @@ interface PlayerDao{
 
     @Update
     fun updatePlayer(player: Player)
-
 }

@@ -11,4 +11,4 @@ data class Card(
     val cardModel: String,
     val cardElement: String,
     val cardDamage: Int,
-    )
+)

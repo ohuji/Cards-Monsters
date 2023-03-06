@@ -46,6 +46,7 @@ import com.ohuji.cardsNmonsters.utils.FAB
 fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: NavController) {
     val selectedDeck = deckViewModel.getDeckWithCards(deckId).observeAsState().value?.deck
     val cardsInDeck = deckViewModel.getDeckWithCards(deckId).observeAsState().value
+
     var cardModelState by remember { mutableStateOf("") }
 
     fun deleteDeck(deckId: Long) {
@@ -82,7 +83,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     }
 
                     Box(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
-
                         Column() {
                             Text(
                                 text = stringResource(id = R.string.inspect_deck),
@@ -117,7 +117,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     .clip(RoundedCornerShape(20.dp))
                     .background(MaterialTheme.colorScheme.secondary)
             ) {
-
                 if (cardModelState.isNotEmpty()) {
                     Box(
                         modifier = Modifier
@@ -155,7 +154,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                             .shadow(elevation = 20.dp)
                     )
                 }
-
 
                 if (selectedDeck != null && cardsInDeck != null) {
                     Log.d("DBG", "deckoo ${selectedDeck.deckId} korttii ${cardsInDeck.cards}")

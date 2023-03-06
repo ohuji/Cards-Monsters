@@ -12,7 +12,6 @@ import com.ohuji.cardsNmonsters.repository.CollectableRepository
 import com.ohuji.cardsNmonsters.repository.MonsterRepository
 import kotlinx.coroutines.launch
 
-
 class CollectablesViewModel(application: Application) : AndroidViewModel(application) {
     private val collectableRepo = CollectableRepository(application)
     private val monsterRepo = MonsterRepository(application)
@@ -33,7 +32,6 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     }
 
     //For Monster Testing
-
     fun getAllMonsters(): LiveData<List<Monster>> {
         return monsterRepo.allMonsters
     }

@@ -31,7 +31,6 @@ object GoTAPI {
         suspend fun quote() : Model.Base
     }
 
-
     val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(base_url)
         .addConverterFactory(GsonConverterFactory.create())
@@ -40,5 +39,4 @@ object GoTAPI {
     val service: Service by lazy {
         retrofit.create(Service::class.java)
     }
-
 }

@@ -30,11 +30,11 @@ class CollectableRepository( application: Application) {
         }
     }
 
-suspend fun findCollectableById(collectableId: Long): Collectable {
-    return withContext(Dispatchers.IO) {
-        collectableDao.findCollectableById(collectableId)
+    suspend fun findCollectableById(collectableId: Long): Collectable {
+        return withContext(Dispatchers.IO) {
+            collectableDao.findCollectableById(collectableId)
+        }
     }
-}
 
     //Player related
     val playerStats: LiveData<Player> = playerDao.getPlayer()

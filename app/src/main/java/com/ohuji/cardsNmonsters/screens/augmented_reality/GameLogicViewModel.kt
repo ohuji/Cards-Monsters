@@ -10,7 +10,6 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     private val collectableRepo = CollectableRepository(application)
 
     fun getStartingHealth(monsterId: Long): Int {
-
         val dragon = 1L
         val griffin = 2L
         val mammoth = 3L
@@ -59,14 +58,20 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
             } else {
                 2
             }
+
             updateCollectableTypeDamage("Damage", damage)
+
             return damage
         }
+
         if (elementDamage) {
             updateCollectableTypeDamage("Element Damage", damage)
+
             return damage*2
         }
+
         updateCollectableTypeDamage("Damage", damage)
+
         return damage
     }
 
@@ -108,6 +113,7 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     private fun updateCollectableTypeDamage(type: String, damage: Int) {
         viewModelScope.launch {
             val collectable = collectableRepo.findCollectableType(type)
+
             for (i in collectable.indices) {
                 collectable.let {
                     if (!it[i].unlocked) {
@@ -126,11 +132,14 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     fun updateCollectableTypeKill(type: String) {
         viewModelScope.launch {
             val collectable = collectableRepo.findCollectableType(type)
+
             for (i in collectable.indices) {
                 collectable.let {
                     if (!it[i].unlocked) {
                         it[i].currentProgress += 1
+
                         collectableRepo.updateCollectable(it[i])
+
                         if (it[i].currentProgress >= it[i].requirements) {
                             it[i].unlocked = true
                             collectableRepo.updateCollectable(it[i])
@@ -146,13 +155,14 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
             val player = collectableRepo.findPlayer()
                 player.currentLvlExp += exp
                 collectableRepo.updatePlayerStats(player)
+
             if (player.currentLvlExp >= player.expRequirement) {
                     val excessExp = player.currentLvlExp - player.expRequirement
                     player.playerLevel += 1
                     player.expRequirement += 500
                     player.currentLvlExp = excessExp
                     collectableRepo.updatePlayerStats(player)
-                }
+            }
         }
     }
 }

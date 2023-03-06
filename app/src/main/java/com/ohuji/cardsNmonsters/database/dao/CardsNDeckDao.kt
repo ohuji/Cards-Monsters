@@ -13,7 +13,6 @@ import com.ohuji.cardsNmonsters.database.CardNDeckCrossRef
 import com.ohuji.cardsNmonsters.database.Deck
 import com.ohuji.cardsNmonsters.database.FullDeck
 
-
 @Dao
 interface CardsNDeckDao {
 
@@ -63,5 +62,4 @@ interface CardsNDeckDao {
     @Transaction
     @Query("SELECT * FROM Deck WHERE deckId = :deckId")
     fun getDeckWithCard(deckId: Long): LiveData<FullDeck>
-
 }

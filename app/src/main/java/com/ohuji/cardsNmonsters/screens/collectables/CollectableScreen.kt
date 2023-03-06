@@ -33,9 +33,12 @@ import com.ohuji.cardsNmonsters.utils.BorderDecor
 
 @Composable
 fun CollectablesScreen(viewModel: CollectablesViewModel) {
-
     Column {
-        Box(modifier = Modifier.fillMaxWidth() .padding(bottom = 50.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 50.dp)
+        ) {
             Image(
                 painter = painterResource(R.drawable.cm_splash),
                 contentDescription = "Paper image",
@@ -60,44 +63,60 @@ fun CollectablesScreen(viewModel: CollectablesViewModel) {
 fun PlayerStats(viewModel: CollectablesViewModel) {
     val playerStats = viewModel.getPlayerStats().observeAsState().value
 
-    Text(text = stringResource(R.string.player_stats), textAlign = TextAlign.Center, fontSize = 16.sp, modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 10.dp))
-    Text(text = "${stringResource(R.string.player_level)} ${playerStats?.playerLevel}", fontSize = 16.sp, modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 8.dp, start = 20.dp))
+    Text(
+        text = stringResource(R.string.player_stats),
+        textAlign = TextAlign.Center,
+        fontSize = 16.sp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+    )
 
+    Text(
+        text = "${stringResource(R.string.player_level)} ${playerStats?.playerLevel}",
+        fontSize = 16.sp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 20.dp)
+    )
 }
 
 @Composable
 fun AchievementList(viewModel: CollectablesViewModel) {
     val collectableList = viewModel.getAllCollectables().observeAsState(listOf())
 
-    Divider(color = Color.White, thickness = 1.dp, modifier = Modifier .padding(top = 10.dp))
-        Text(
-            text = stringResource(R.string.achievements), modifier = Modifier
-                .padding(5.dp)
-                .fillMaxWidth(), fontSize = 16.sp, textAlign = TextAlign.Center
-        )
+    Divider(
+        color = Color.White,
+        thickness = 1.dp,
+        modifier = Modifier.padding(top = 10.dp)
+    )
+
+    Text(
+        text = stringResource(R.string.achievements),
+        modifier = Modifier
+            .padding(5.dp)
+            .fillMaxWidth(),
+        fontSize = 16.sp,
+        textAlign = TextAlign.Center
+    )
 
     LazyColumn(
         contentPadding = PaddingValues(top = 8.dp, bottom = 56.dp, end = 5.dp, start = 5.dp)
     ) {
-
         item {
         }
         items(collectableList.value) {
-            Box( modifier = Modifier
+            Box(modifier = Modifier
                 .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(8.dp))
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
-                .fillMaxWidth())
-                 {
+                .fillMaxWidth()
+            ) {
                 Row() {
-
                     val image = it.collectableModel
                     val context = LocalContext.current
                     val resId =
                         context.resources.getIdentifier(image, "drawable", context.packageName)
+
                     Image(
                         painter = painterResource(resId),
                         contentDescription = it.collectableName,
@@ -105,8 +124,8 @@ fun AchievementList(viewModel: CollectablesViewModel) {
                     )
 
                     Column() {
-
                         Text(it.collectableName)
+
                         Text(
                             "${stringResource(R.string.progress)} ${it.currentProgress} / ${it.requirements}"
                         )
@@ -121,24 +140,27 @@ fun AchievementList(viewModel: CollectablesViewModel) {
 fun ExpProgressBar(viewModel: CollectablesViewModel) {
     val playerStats = viewModel.getPlayerStats().observeAsState().value
 
-
     fun expRequired(): Int {
         val expReq = playerStats?.expRequirement ?: 1
         val currentExp = playerStats?.currentLvlExp ?: 2
+
         return expReq - currentExp
     }
 
     fun progress(): Float {
         val expReq = playerStats?.expRequirement ?: 1
         val currentExp = playerStats?.currentLvlExp ?: 2
+
         return currentExp.toFloat() / expReq
     }
 
     Column() {
-
-        Text(text = "${stringResource(R.string.exp_needed)} ${expRequired()}",  modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 5.dp))
+        Text(
+            text = "${stringResource(R.string.exp_needed)} ${expRequired()}",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 5.dp)
+        )
 
         LinearProgressIndicator(
             progress = progress(),
@@ -147,7 +169,6 @@ fun ExpProgressBar(viewModel: CollectablesViewModel) {
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .height(8.dp)
-
         )
     }
 }

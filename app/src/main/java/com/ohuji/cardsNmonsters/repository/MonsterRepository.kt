@@ -11,7 +11,7 @@ class MonsterRepository( application: Application) {
 
     val allMonsters: LiveData<List<Monster>> = monsterDao.getAllMonsters()
 
-     fun findMonsterById(monsterId: Long): LiveData<Monster> {
-        return  monsterDao.findMonsterById(monsterId)
+    fun findMonsterById(monsterId: Long): LiveData<Monster> {
+        return monsterDao.findMonsterById(monsterId)
     }
 }

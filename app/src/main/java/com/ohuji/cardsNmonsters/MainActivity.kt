@@ -26,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private val deckViewModel: DeckViewModel by viewModels()
     private val collectablesViewModel: CollectablesViewModel by viewModels()
     private val gameLogicViewModel: GameLogicViewModel by viewModels()
@@ -34,7 +33,6 @@ class MainActivity : ComponentActivity() {
     private val mapViewModel: MapViewModel by viewModels()
     private val goTViewModel: GoTViewModel by viewModels()
     private val database by lazy { CardsNMonstersDatabase.getInstance(this)}
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -64,9 +62,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
         askPermissions()
+
         goTViewModel.getQuote()
+
         setContent {
             CardsMonstersTheme {
                 // A surface container using the 'background' color from the theme
@@ -74,12 +76,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationHost(deckViewModel, collectablesViewModel, gameLogicViewModel,
-                    mapViewModel = mapViewModel,
-                    goTViewModel = goTViewModel,
-                    setupClusterManager = mapViewModel::setupClusterManager,
-                    calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,
-                    fusedLocationProviderClient = fusedLocationProviderClient,
+                    NavigationHost(
+                        deckViewModel = deckViewModel,
+                        collectablesViewModel = collectablesViewModel,
+                        gameLogicViewModel = gameLogicViewModel,
+                        mapViewModel = mapViewModel,
+                        goTViewModel = goTViewModel,
+                        setupClusterManager = mapViewModel::setupClusterManager,
+                        calculateZoneViewCenter = mapViewModel::calculateZoneLatLngBounds,
+                        fusedLocationProviderClient = fusedLocationProviderClient,
                     )
                 }
             }

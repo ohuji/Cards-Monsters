@@ -8,7 +8,7 @@ import androidx.room.Update
 import com.ohuji.cardsNmonsters.database.entities.Monster
 
 @Dao
-interface MonsterDao{
+interface MonsterDao {
 
     @Insert
     fun addMonster(vararg monster: Monster)
@@ -18,11 +18,7 @@ interface MonsterDao{
 
     @Update
     fun updateMonster(monster: Monster)
-/*
+
     @Query("SELECT * FROM Monster WHERE monsterId = :monsterId")
     fun findMonsterById(monsterId: Long): LiveData<Monster>
-
- */
-@Query("SELECT * FROM Monster WHERE monsterId = :monsterId")
-fun findMonsterById(monsterId: Long): LiveData<Monster>
 }
