@@ -69,7 +69,7 @@ fun AchievementList(viewModel: CollectablesViewModel) {
         items(collectableList.value) {
             Box( modifier = Modifier
                 .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
-                .padding(8.dp)
+                .padding(start = 8.dp, end = 8.dp, bottom = 50.dp, top = 8.dp)
                 .fillMaxWidth())
                  {
                 Row() {

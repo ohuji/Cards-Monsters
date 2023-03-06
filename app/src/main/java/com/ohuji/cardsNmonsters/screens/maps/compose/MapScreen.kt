@@ -86,7 +86,7 @@ fun MapScreen(
      * @param deckId the ID of the deck to use
      */
     fun fightMonsterDismiss(monsterId: Long, deckId: Long) {
-        navController.navigate("ar_screen")
+        navController.navigate("ar_screen/${monsterId}/${deckId}")
     }
 
     if (deckCheck?.let { it < 1 } == true) {

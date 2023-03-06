@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,7 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -65,13 +62,17 @@ fun NavigationHost(
             composable("home_screen") {
                 HomeScreen(navController = navController, gotVM = goTViewModel)
             }
-            composable("ar_screen") {
+            composable("ar_screen/{monsterId}/{deckId}") {
+
                 val monsterId = it.arguments?.getString("monsterId")?.toLong() ?: 5
+                val deckId = it.arguments?.getString("deckId")?.toLong() ?: 1
                 ARScreen(
                     navController = navController,
                     viewModel = deckViewModel,
                     monsterViewModel = collectablesViewModel,
                     gameLogicViewModel = gameLogicViewModel,
+                    monsterId = monsterId,
+                    deckId = deckId
                 )
             }
             composable("map_screen") {
@@ -98,9 +99,7 @@ fun NavigationHost(
             composable("collectables_screen") {
                 CollectablesScreen(viewModel = collectablesViewModel)
             }
-            composable("collectable_screen") {
 
-            }
             composable("guide_screen") {
                 GuideScreen(navController = navController)
             }
@@ -110,9 +109,9 @@ fun NavigationHost(
 
 @Composable
 fun Navbar(navController: NavController) {
-    val items = listOf("ar", "home", "map", "deck_building", "collectables")
+    val items = listOf("home", "map", "deck_building", "collectables")
 
-    Box(modifier = Modifier.fillMaxWidth() .size(40.dp)) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         NavigationBar(modifier = Modifier.align(Alignment.BottomCenter)) {
             items.forEachIndexed { index, item ->
                 NavigationBarItem(
@@ -125,7 +124,7 @@ fun Navbar(navController: NavController) {
                     },
                     icon = {
                         when (item) {
-                            "ar" -> Icon(Icons.Filled.PlayArrow, contentDescription = "AR")
+                         //   "ar" -> Icon(Icons.Filled.PlayArrow, contentDescription = "AR")
                             "home" -> Icon(Icons.Filled.Home, contentDescription = "Home")
                             "map" -> Icon(Icons.Filled.Place, contentDescription = "Map")
                             "deck_building" -> Icon(Icons.Filled.List, contentDescription = "Decks")

@@ -46,11 +46,11 @@ import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 
 @Composable
-fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel) {
+fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterViewModel: CollectablesViewModel, gameLogicViewModel: GameLogicViewModel, monsterId: Long, deckId: Long) {
     val nodes = remember { mutableStateListOf<ArNode>() }
     val context = LocalContext.current
-    val monster = monsterViewModel.findMonsterById(5L).observeAsState().value
-    val cardsState = viewModel.getDeckWithCards(1L).observeAsState()
+    val monster = monsterViewModel.findMonsterById(monsterId).observeAsState().value
+    val cardsState = viewModel.getDeckWithCards(deckId).observeAsState()
     val cards: FullDeck? = cardsState.value
 
     val playerStats = monsterViewModel.getPlayerStats().observeAsState().value
@@ -58,7 +58,7 @@ fun ARScreen(navController: NavController, viewModel: DeckViewModel, monsterView
     var showDefeatDialog by remember { mutableStateOf(false) }
 
     var health by remember {
-        mutableStateOf(gameLogicViewModel.getStartingHealth(5L))
+        mutableStateOf(gameLogicViewModel.getStartingHealth(monsterId))
     }
 
     var stateDazed by remember { mutableStateOf(false) }
