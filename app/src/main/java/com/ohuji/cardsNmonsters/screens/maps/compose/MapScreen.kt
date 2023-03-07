@@ -393,7 +393,6 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
     var expanded by remember {
         mutableStateOf(false)
     }
-    selectedDeckId = 1
 
     // the box
     ExposedDropdownMenuBox(
