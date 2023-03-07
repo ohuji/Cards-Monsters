@@ -175,25 +175,27 @@ fun MapScreen(
                     latLng.longitude,
                     result
                 )
-                if (result[0] < 100.0) {
-                    if (location != LatLng(0.0, 0.0)) {
-                        fightMonsterNoNearby = false
-                        val message =
-                            "${stringResource(R.string.map_alert1)} ${monster?.monsterName ?: "Skeleton"}! \n${stringResource(R.string.map_alert2)} ${monster?.monsterElement ?: "Dark"}!"
-                        ShowAlertFound(
-                            deckViewModel = deckViewModel,
-                            title = stringResource(R.string.map_alert_title),
-                            message = message,
-                            buttons = listOf(
-                                "Fight" to {
-                                    fightMonsterDismiss(
-                                        monster?.monsterId ?: 5,
-                                        deckId = selectedDeckId
-                                    )
-                                },
+                if (result[0] < 100.0 && location != LatLng(0.0, 0.0)) {
+                    fightMonsterNoNearby = false
+                    val message =
+                        "${stringResource(R.string.map_alert1)} ${monster?.monsterName ?: "Skeleton"}! \n${
+                            stringResource(
+                                R.string.map_alert2
                             )
-                        ) { fightMonster = false }
-                    }
+                        } ${monster?.monsterElement ?: "Dark"}!"
+                    ShowAlertFound(
+                        deckViewModel = deckViewModel,
+                        title = stringResource(R.string.map_alert_title),
+                        message = message,
+                        buttons = listOf(
+                            "Fight" to {
+                                fightMonsterDismiss(
+                                    monster?.monsterId ?: 5,
+                                    deckId = selectedDeckId
+                                )
+                            },
+                        )
+                    ) { fightMonster = false }
                 }
             }
         }
@@ -272,7 +274,10 @@ fun MapScreen(
                     backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                     contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
                 ),
-                border = BorderStroke(2.dp, androidx.compose.material3.MaterialTheme.colorScheme.background),
+                border = BorderStroke(
+                    2.dp,
+                    androidx.compose.material3.MaterialTheme.colorScheme.background
+                ),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .padding(bottom = 35.dp),
@@ -388,6 +393,7 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
     var expanded by remember {
         mutableStateOf(false)
     }
+    selectedDeckId = 1
 
     // the box
     ExposedDropdownMenuBox(
