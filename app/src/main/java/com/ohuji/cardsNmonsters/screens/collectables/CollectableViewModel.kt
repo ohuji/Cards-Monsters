@@ -20,6 +20,9 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
      * Collectable related
      */
 
+    /**
+     * Returns all collectables in LiveData list
+     */
     fun getAllCollectables(): LiveData<List<Collectable>> {
         return collectableRepo.allCollectables
     }
@@ -34,6 +37,10 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
      * Player related
      */
 
+    /**
+     * Returns  player as LiveData
+     */
+
     fun getPlayerStats(): LiveData<Player> {
         return collectableRepo.playerStats
     }
@@ -41,10 +48,17 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     /**
      * Monster related
      */
+
+    /**
+     * Returns all monsters in a LiveData list
+     */
     fun getAllMonsters(): LiveData<List<Monster>> {
         return monsterRepo.allMonsters
     }
 
+    /**
+     * Returns a monster based on its id
+     */
     fun findMonsterById(monsterId: Long): LiveData<Monster> {
 
             val monster = Transformations.map(monsterRepo.findMonsterById(monsterId)) {

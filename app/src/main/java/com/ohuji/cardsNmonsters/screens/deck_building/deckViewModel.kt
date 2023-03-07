@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 class DeckViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CardsNDeckRepository(application)
 
+    /**
+     * Returns all decks in a LiveData list
+     */
     fun getAllDecks(): LiveData<List<Deck>> {
         return repository.allDecks
     }
@@ -24,34 +27,42 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         return repository.findDeckById(deckId)
     }
 
+    /**
+     * Returns all cards in a LiveData list
+     */
     fun getAllCards(): LiveData<List<Card>> {
         return repository.allCards
     }
 
+    /**
+     * Adds a new deck
+     */
     fun addDeck(deckName: String) {
         val deck = Deck(0, deckName)
         viewModelScope.launch { repository.addDeck(deck) }
     }
 
+    /**
+     * Adds cards to deck that are on the selectedCards list
+     */
     fun addCardsToDeck(deckId: Long, selectedCards: List<Card>) {
-        Log.d("DBG", "Tultiin addcardstodec3")
         viewModelScope.launch {
-            // Get a reference to the deck
-            val deck = repository.findDeckById(deckId).value?.deckId   //?: return@launch
+
+            val deck = repository.findDeckById(deckId).value?.deckId
             Log.d("DBG","tollanen deck $deck")
-            // Create CardNDeckCrossRef objects to associate the selected cards with the deck
+
             val cardNDeckCrossRefs = selectedCards.map { CardNDeckCrossRef(deckId, it.cardId) }
-            Log.d("DBG", "tollanen refse $cardNDeckCrossRefs")
-            // Print out the selected cards and card IDs
-            Log.d("DBG", "Selected Cards:")
+
             selectedCards.forEach { Log.d("DBG", "${it.cardName} - ${it.cardId}") }
             Log.d("DBG", "Card IDs:")
             cardNDeckCrossRefs.forEach { Log.d("DBG", "${it.cardId}") }
-
            repository.addCardNDeckCrossRefs(*cardNDeckCrossRefs.toTypedArray())
         }
     }
 
+    /**
+     * Returns deck based on id
+     */
     fun getDeckWithCards(deckId: Long): LiveData<FullDeck> {
         val deck = Transformations.map(repository.getDeckWithCard(deckId)) {
             it
@@ -59,6 +70,9 @@ class DeckViewModel(application: Application) : AndroidViewModel(application) {
         return deck
     }
 
+    /**
+     * Deletes a deck based on id
+     */
     fun deleteFullDeck(deckId: Long) {
         repository.deleteFullDeck(deckId)
     }

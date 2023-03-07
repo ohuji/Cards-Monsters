@@ -47,6 +47,11 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Takes the cards damage value, monsters current status, elements. Does the elementCheck and based on the result applies the damage.
+     * Also executes collectables where type is "damage" based on the damage value
+     */
+
     fun doDamage(cardDamage: Int, status: Boolean, element: String, monsterElement: String?): Int {
         var damage = cardDamage
         var elementDamage = false
@@ -78,6 +83,9 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         return damage
     }
 
+    /**
+     * Checks if the card used is of element type the monster has a weakness to. Returns true if card used is strong against the monsters element type.
+     */
    private fun elementCheck(cardElement: String, monsterElement: String?): Boolean {
       val fire = "Fire"
       val light = "Light"
@@ -113,6 +121,11 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
       }
     }
 
+    /**
+     * Is called in doDamage function. Updates collectables of type damage.
+     * Checks if collectable progress meets the requirement value and the unlocks it.
+     * Won't update collectables where "unlocked" is true
+     */
     private fun updateCollectableTypeDamage(type: String, damage: Int) {
         viewModelScope.launch {
             val collectable = collectableRepo.findCollectableType(type)
@@ -132,6 +145,11 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Is called from AR screen when monsters health reaches 0. Updates collectables of type kill.
+     * Check if progress meets the requirement value and then unlocks it.
+     * Won't update if unlocked is true
+     */
     fun updateCollectableTypeKill(type: String) {
         viewModelScope.launch {
             val collectable = collectableRepo.findCollectableType(type)
@@ -153,6 +171,10 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    /**
+     * Is called when a monster is killed. Updates players current exp and level if level requirement is met.
+     * Also increases expRequirement after each level up.
+     */
     fun updatePlayerStats(exp: Int) {
         viewModelScope.launch {
             val player = collectableRepo.findPlayer()
