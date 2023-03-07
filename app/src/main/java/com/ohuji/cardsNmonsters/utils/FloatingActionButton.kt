@@ -17,6 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
 
+/**
+ * Floating Action Button for screens
+ * Navigates to GuideScreen when tapped
+ *
+ * @param navController the NavController that handles navigation
+ */
 @Composable
 fun FAB(navController: NavController) {
     Box(modifier = Modifier
