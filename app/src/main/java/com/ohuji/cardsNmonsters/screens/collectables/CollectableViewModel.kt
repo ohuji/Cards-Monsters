@@ -17,16 +17,19 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     private val monsterRepo = MonsterRepository(application)
 
     /**
-     * Collectable related
-     */
-
-    /**
-     * Returns all collectables in LiveData list
+     * Returns a LiveData object containing a list of all collectables.
+     *
+     * @return A LiveData object containing a list of all collectables.
      */
     fun getAllCollectables(): LiveData<List<Collectable>> {
         return collectableRepo.allCollectables
     }
 
+    /**
+     * Updates the specified collectable asynchronously.
+     *
+     * @param collectable The collectable to update.
+     */
     fun updateCollectable(collectable: Collectable) {
         viewModelScope.launch {
             collectableRepo.updateCollectable(collectable)
@@ -34,30 +37,23 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     }
 
     /**
-     * Player related
+     * @return [LiveData] object containing [Player] stats.
      */
-
-    /**
-     * Returns  player as LiveData
-     */
-
     fun getPlayerStats(): LiveData<Player> {
         return collectableRepo.playerStats
     }
 
     /**
-     * Monster related
-     */
-
-    /**
-     * Returns all monsters in a LiveData list
+     * @return [LiveData] object containing a list of all [Monster]s.
      */
     fun getAllMonsters(): LiveData<List<Monster>> {
         return monsterRepo.allMonsters
     }
 
     /**
-     * Returns a monster based on its id
+     * Returns a [LiveData] object containing the [Monster] with the given [monsterId].
+     * @param monsterId ID of the [Monster] to find.
+     * @return [LiveData] object containing the [Monster] with the given [monsterId].
      */
     fun findMonsterById(monsterId: Long): LiveData<Monster> {
 

@@ -44,6 +44,17 @@ import io.github.sceneview.ar.node.ArNode
 import io.github.sceneview.ar.node.PlacementMode
 import io.github.sceneview.math.Position
 
+/**
+ * Main play screen. Features an AR screen with other elements.
+ * Top bar that displays turn counter, monster status, monster health points and element icon.
+ *
+ * @param navController The navigation controller for the screen.
+ * @param viewModel ViewModel that is used to get deck and cards
+ * @param monsterViewModel ViewModel that used to get monster
+ * @param gameLogicViewModel ViewModel that handles the game logic
+ * @param monsterId monster that we get from map screen. Used to fetch monster that the player fights
+ * @param deckId used to fetch the deck that the player is using in the fight
+ */
 @Composable
 fun ARScreen(
     navController: NavController,
@@ -258,6 +269,16 @@ fun AR(
     }
 }
 
+/**
+ * Handles the alert that pops up when battle ends. Displays message depending on the battle result.
+ *
+ * @param showVictoryDialog if true displays victory dialog
+ * @param showDefeatDialog if true displays defeat dialog
+ * @param navController the NavController that handles navigation
+ * @param monsterName used to display correct monster name
+ * @param playerLevel used to display player level
+ * @param expRequired used to display the exp player needs to level up
+ */
 @Composable
 fun BattleReport(
     showVictoryDialog: Boolean,
@@ -316,6 +337,15 @@ fun ShowDialog(
     )
 }
 
+/**
+ * In the top of the screen. Displays data the player needs in battle
+ *
+ * @param turn show what turn is
+ * @param stateDazed when true displays to user that the monster is dazed
+ * @param monsterName used to display correct monster name
+ * @param health shows monsters health points
+ * @param monsterElement used to get correct element icon
+ */
 @Composable
 fun TurnComposable(
     turn: Int,

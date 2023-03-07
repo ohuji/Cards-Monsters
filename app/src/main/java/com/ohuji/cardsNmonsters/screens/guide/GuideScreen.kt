@@ -28,6 +28,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ohuji.cardsNmonsters.R
 
+/**
+* A composable function that displays a guide screen.
+* @param navController The NavController used for navigating to different screens.
+ */
 @Composable
 fun GuideScreen(navController: NavController) {
     Column {
@@ -62,6 +66,7 @@ fun GuideScreen(navController: NavController) {
         }
     }
 }
+
 
 @Composable
 fun Guide() {

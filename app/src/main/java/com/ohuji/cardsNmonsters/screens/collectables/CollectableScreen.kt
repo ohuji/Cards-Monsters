@@ -32,6 +32,12 @@ import androidx.compose.ui.unit.sp
 import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.utils.BorderDecor
 
+/**
+ * Composable function that displays the collectables screen.
+ * Different composables for Achievement list, Player stats and exp progress bar.
+ *
+ * @param viewModel The [CollectablesViewModel] instance used to supply data to the composable
+ */
 @Composable
 fun CollectablesScreen(viewModel: CollectablesViewModel) {
     Column {

@@ -41,6 +41,13 @@ import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.utils.BorderDecor
 import com.ohuji.cardsNmonsters.utils.FAB
 
+/**
+ * A composable function for displaying the details of a deck and its cards.
+ *
+ * @param deckViewModel The view model for the deck.
+ * @param deckId The ID of the deck to display.
+ * @param navController The navigation controller for the screen.
+ */
 @Composable
 fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: NavController) {
     val selectedDeck = deckViewModel.getDeckWithCards(deckId).observeAsState().value?.deck
@@ -48,6 +55,11 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
 
     var cardModelState by remember { mutableStateOf("") }
 
+    /**
+     * Deletes the current deck and navigates back to the deck building screen.
+     *
+     * @param deckId The ID of the deck to delete.
+     */
     fun deleteDeck(deckId: Long) {
         deckViewModel.deleteFullDeck(deckId)
         navController.navigate("deck_building_screen")

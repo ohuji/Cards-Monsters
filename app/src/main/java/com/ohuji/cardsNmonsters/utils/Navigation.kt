@@ -42,6 +42,18 @@ import com.ohuji.cardsNmonsters.screens.maps.MapViewModel
 import com.ohuji.cardsNmonsters.screens.maps.clusters.ZoneClusterManager
 import com.ohuji.cardsNmonsters.screens.maps.compose.MapScreen
 
+/**
+ * Handles the applications navigation routes
+ *
+ * @param deckViewModel used to handle deck and card related functions
+ * @param collectablesViewModel used to handle collectable, monster and player related functions
+ * @param gameLogicViewModel used to handle game logic
+ * @param mapViewModel the ViewModel for the map screen
+ * @param goTViewModel to get Got api call
+ * @param setupClusterManager a function that sets up a [ZoneClusterManager] for the GoogleMap
+ * @param calculateZoneViewCenter a function that calculates the LatLngBounds for the map view
+ * @param fusedLocationProviderClient the FusedLocationProviderClient that provides location services
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,6 +146,11 @@ fun NavigationHost(
     }
 }
 
+/**
+ * Composable function that creates the navigation bar at the bottom of the screen.
+ *
+ * @param navController the NavController object used to navigate between screens.
+ */
 @Composable
 fun Navbar(navController: NavController) {
     val items = listOf("home", "map", "deck_building", "collectables")

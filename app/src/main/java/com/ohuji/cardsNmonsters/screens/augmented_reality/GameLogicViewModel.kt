@@ -6,11 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.ohuji.cardsNmonsters.repository.CollectableRepository
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel class that handles game logic
+ */
 class GameLogicViewModel(application: Application) : AndroidViewModel(application) {
     private val collectableRepo = CollectableRepository(application)
 
     /**
      * Based on monsterId returns the health value for monster
+     *
+     * @param monsterId is the monsterId of the monster the player is fighting
+     * @return the health value for monster
      */
     fun getStartingHealth(monsterId: Long): Int {
         val dragon = 1L
@@ -50,6 +56,12 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Takes the cards damage value, monsters current status, elements. Does the elementCheck and based on the result applies the damage.
      * Also executes collectables where type is "damage" based on the damage value
+     *
+     * @param cardDamage cards base damage value
+     * @param status monsters current status
+     * @param element card element type
+     * @param monsterElement monsters element type
+     * @return the damage value based monster card damage, monster status and elements
      */
 
     fun doDamage(cardDamage: Int, status: Boolean, element: String, monsterElement: String?): Int {
@@ -73,7 +85,7 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         }
 
         if (elementDamage) {
-            updateCollectableTypeDamage("Element Damage", damage)
+            updateCollectableTypeDamage("Damage", damage)
 
             return damage*2
         }
@@ -83,8 +95,12 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
         return damage
     }
 
-    /**
-     * Checks if the card used is of element type the monster has a weakness to. Returns true if card used is strong against the monsters element type.
+     /**
+     * Checks if the card used is of element type the monster has a weakness to.
+     * Returns true if card used is strong against the monsters element type.
+     * @param cardElement cards element type
+     * @param monsterElement monsters element type
+     * @return true if card used is strong against the monsters element type false if not
      */
    private fun elementCheck(cardElement: String, monsterElement: String?): Boolean {
       val fire = "Fire"
@@ -125,6 +141,9 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
      * Is called in doDamage function. Updates collectables of type damage.
      * Checks if collectable progress meets the requirement value and the unlocks it.
      * Won't update collectables where "unlocked" is true
+     *
+     * @param type collectable type
+     * @param damage value that is updated to collectable
      */
     private fun updateCollectableTypeDamage(type: String, damage: Int) {
         viewModelScope.launch {
@@ -149,6 +168,8 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
      * Is called from AR screen when monsters health reaches 0. Updates collectables of type kill.
      * Check if progress meets the requirement value and then unlocks it.
      * Won't update if unlocked is true
+     *
+     * @param type collectables type
      */
     fun updateCollectableTypeKill(type: String) {
         viewModelScope.launch {
@@ -174,6 +195,8 @@ class GameLogicViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Is called when a monster is killed. Updates players current exp and level if level requirement is met.
      * Also increases expRequirement after each level up.
+     *
+     * @param exp value that is updated to player currentLvlEXP
      */
     fun updatePlayerStats(exp: Int) {
         viewModelScope.launch {

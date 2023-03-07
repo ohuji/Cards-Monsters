@@ -22,8 +22,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,6 +63,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.material3.Card as materialCard
 
+/**
+ * Deck screen is used to build your deck and to view your built decks.
+ *
+ * @param viewModel The view model for the deck.
+ * @param navController The navigation controller for the screen.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
@@ -282,6 +286,12 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
     }
 }
 
+/**
+ * List of cards
+ *
+ * @param viewModel
+ * @param selectedCardIds Card objects that the user has tapped to be added to deck
+ */
 @Composable
 fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
     val cardList1 = viewModel.getAllCards().observeAsState(mutableListOf<Card>())
@@ -333,6 +343,12 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
     }
 }
 
+/**
+ * List of decks the user has created. User can click a deck and then is navigated to deck details screen
+ *
+ * @param viewModel
+ * @param navController the NavController that handles navigation
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeckList(viewModel: DeckViewModel, navController: NavController) {
