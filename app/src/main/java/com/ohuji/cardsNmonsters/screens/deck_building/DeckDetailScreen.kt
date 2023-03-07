@@ -57,7 +57,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(R.drawable.cm_splash),
-                contentDescription = "Paper image",
+                contentDescription = stringResource(id = R.string.paper_image_desc),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -73,7 +73,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     Box(modifier = Modifier.padding(top = 10.dp)) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.back_arrow_icon_desc),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.clickable {
                                 navController.navigate("deck_building_screen")
@@ -98,7 +98,7 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                     Box(modifier = Modifier.padding(top = 10.dp)) {
                         Icon(
                             imageVector = Icons.Default.Delete,
-                            contentDescription = null,
+                            contentDescription = stringResource(id = R.string.trash_icon_desc),
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.clickable {
                                 deleteDeck(deckId)

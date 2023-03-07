@@ -92,6 +92,6 @@
     <string name="info_icon_desc">Info icon</string>
     <string name="button_image_desc">Button rpg image</string>
     <string name="logo_image_desc">Logo image</string>
-
-
+    <string name="back_arrow_icon_desc">Back Arrow icon</string>
+    <string name="trash_icon_desc">Trash icon</string>
 </resources>

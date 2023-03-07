@@ -92,6 +92,6 @@
     <string name="info_icon_desc">Info ikoni</string>
     <string name="button_image_desc">Nappi rpg taustakuva</string>
     <string name="logo_image_desc">Logo kuva</string>
-
-
+    <string name="back_arrow_icon_desc">Takaisin nuoli ikoni</string>
+    <string name="trash_icon_desc">Roskakori ikoni</string>
 </resources>
