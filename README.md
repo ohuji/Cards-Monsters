@@ -23,7 +23,7 @@ As you battle against more monsters, you'll be able to track your progress and a
 - GitHub Actions - Automated tests
 - jUnit - Unit Testing
 - SQLite - Database implementation
-- Rerofit - Network implementation
+- Retrofit - Network implementation
 - SceneView(Incl. Google Filament & ARCore) - Augmented Reality features
 - Google Maps - Map implementation
 
