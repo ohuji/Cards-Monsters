@@ -38,7 +38,7 @@ This app uses MVVM (Model View View-Model) architecture.
 - Source: https://miro.medium.com/v2/resize:fit:640/0*EBMAxD0WE23_tZBb
 ## Environment Variables & GitHub Secrets
 
-To run this project, you will need to add the following environment variables to your local.properties file and for our GitHub Actions automated testing to work, also add it to your GitHub secrets
+To run this project, you will need to add the following environment variables to your local.properties file and for our GitHub Actions automated testing to work, also add it to your GitHub secrets.
 [How to get a Google Maps Api Key](https://developers.google.com/maps/documentation/embed/get-api-key)
 
 `GOOGLE_MAPS_API_KEY`
