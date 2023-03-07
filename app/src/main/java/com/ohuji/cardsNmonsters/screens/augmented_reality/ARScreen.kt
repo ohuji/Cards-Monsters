@@ -242,7 +242,7 @@ fun AR(
             TurnComposable(
                 turn = turn,
                 stateDazed = stateDazed,
-                monsterName = monsterName, //monster?.monsterName,
+                monsterName = monsterName,
                 health,
                 monsterElement
             )

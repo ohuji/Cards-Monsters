@@ -13,7 +13,10 @@ class CollectableRepository( application: Application) {
     private val collectableDao = db.collectableDao
     private val playerDao = db.playerDao
 
-    //Collectable related
+    /**
+     * Collectable related
+     */
+
     val allCollectables: LiveData<List<Collectable>> = collectableDao.getAllCollectables()
 
     fun addCollectable(vararg collectable: Collectable) {
@@ -36,7 +39,9 @@ class CollectableRepository( application: Application) {
         }
     }
 
-    //Player related
+    /**
+     * Player related
+     */
     val playerStats: LiveData<Player> = playerDao.getPlayer()
 
     suspend fun findPlayer(): Player {

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -306,12 +305,5 @@ fun GuideElement() {
                 .fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
-    }
-}
-
-@Composable
-fun BackButton(navController: NavController) {
-    Button(onClick = { navController.navigate("home_screen") }) {
-        Text(text = "Back")
     }
 }

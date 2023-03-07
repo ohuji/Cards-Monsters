@@ -9,6 +9,9 @@ import kotlinx.coroutines.launch
 class GameLogicViewModel(application: Application) : AndroidViewModel(application) {
     private val collectableRepo = CollectableRepository(application)
 
+    /**
+     * Based on monsterId returns the health value for monster
+     */
     fun getStartingHealth(monsterId: Long): Int {
         val dragon = 1L
         val griffin = 2L

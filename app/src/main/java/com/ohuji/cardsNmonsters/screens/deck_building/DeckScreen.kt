@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.deck_building
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -178,7 +177,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                             unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
                                         ),
                                         modifier = Modifier
-                                            .padding(top = 20.dp, bottom = 20.dp)
+                                            .padding(top = 15.dp, bottom = 15.dp)
                                             .background(Color.LightGray),
                                         onValueChange = { deckName = it })
 
@@ -196,8 +195,8 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                                 painter = painterResource(resId),
                                                 contentDescription = card.cardName,
                                                 modifier = Modifier
-                                                    .size(64.dp) // set the image size
-                                                    .padding(8.dp) // add some spacing between images
+                                                    .size(64.dp)
+                                                    .padding(8.dp)
                                             )
                                         }
                                         repeat(4 - selectedCardIds.size) {
@@ -212,7 +211,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
 
                                     Button(
                                         modifier = Modifier
-                                        .padding(top = 15.dp, bottom = 15.dp)
+                                        .padding(top = 10.dp, bottom = 10.dp)
                                         .align(Alignment.CenterHorizontally),
                                         onClick = {
                                             if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
@@ -228,11 +227,6 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                                             newestDeck?.deckId?.toInt()?.plus(1)
                                                                 ?.toLong() ?: 1L
 
-                                                        Log.d(
-                                                            "DBG",
-                                                            "Uusi pakka $newDeckId kortit $selectedCardIds"
-                                                        )
-
                                                         selectedCardIds.toMutableList().also {
                                                             viewModel.addCardsToDeck(newDeckId, it)
                                                             selectedCardIds.clear()
@@ -244,10 +238,6 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                             } else {
                                                 showErrorDialog = true
 
-                                                Log.d(
-                                                    "DBG",
-                                                    "Pakassa väärä määrä kortteja tai liian lyhyt nimi"
-                                                )
                                             }
                                         }) {
                                             Text(
@@ -300,7 +290,6 @@ fun CardList(viewModel: DeckViewModel, selectedCardIds: MutableList<Card>) {
                         Column {
                             Text(card.cardName)
 
-                            Log.d("DBG", "valitut kortit, $selectedCardIds")
                             val image = card.cardModel
                             val context = LocalContext.current
                             val resId = context.resources.getIdentifier(

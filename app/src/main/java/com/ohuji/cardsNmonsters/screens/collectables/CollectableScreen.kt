@@ -1,6 +1,7 @@
 package com.ohuji.cardsNmonsters.screens.collectables
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -107,9 +108,11 @@ fun AchievementList(viewModel: CollectablesViewModel) {
         }
         items(collectableList.value) {
             Box(modifier = Modifier
+                .background(color = Color.White, shape = RoundedCornerShape(8.dp))
                 .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(8.dp))
-                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
                 .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+
             ) {
                 Row() {
                     val image = it.collectableModel

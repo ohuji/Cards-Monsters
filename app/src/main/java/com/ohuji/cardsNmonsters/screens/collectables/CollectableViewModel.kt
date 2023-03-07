@@ -16,6 +16,10 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
     private val collectableRepo = CollectableRepository(application)
     private val monsterRepo = MonsterRepository(application)
 
+    /**
+     * Collectable related
+     */
+
     fun getAllCollectables(): LiveData<List<Collectable>> {
         return collectableRepo.allCollectables
     }
@@ -26,12 +30,17 @@ class CollectablesViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    //Player Stats
+    /**
+     * Player related
+     */
+
     fun getPlayerStats(): LiveData<Player> {
         return collectableRepo.playerStats
     }
 
-    //For Monster Testing
+    /**
+     * Monster related
+     */
     fun getAllMonsters(): LiveData<List<Monster>> {
         return monsterRepo.allMonsters
     }

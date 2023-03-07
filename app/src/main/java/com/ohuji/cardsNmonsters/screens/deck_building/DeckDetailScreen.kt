@@ -1,6 +1,5 @@
 package com.ohuji.cardsNmonsters.screens.deck_building
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -156,7 +155,6 @@ fun DeckDetailScreen(deckViewModel: DeckViewModel, deckId: Long, navController: 
                 }
 
                 if (selectedDeck != null && cardsInDeck != null) {
-                    Log.d("DBG", "deckoo ${selectedDeck.deckId} korttii ${cardsInDeck.cards}")
 
                     LazyRow(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                         items(items = cardsInDeck.cards, itemContent = {
