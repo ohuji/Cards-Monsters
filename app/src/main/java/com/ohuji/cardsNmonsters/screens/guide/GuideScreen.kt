@@ -35,7 +35,7 @@ import com.ohuji.cardsNmonsters.R
 @Composable
 fun GuideScreen(navController: NavController) {
     Column {
-        Box(modifier = Modifier.padding(top = 10.dp, bottom = 3.dp)) {
+        Box(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = null,
