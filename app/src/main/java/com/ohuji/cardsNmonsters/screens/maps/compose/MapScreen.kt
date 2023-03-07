@@ -4,15 +4,36 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.*
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -26,7 +47,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapEffect
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.ktx.model.polygonOptions
 import com.ohuji.cardsNmonsters.R
 import com.ohuji.cardsNmonsters.screens.augmented_reality.ShowDialog
@@ -190,7 +214,7 @@ fun MapScreen(
                         buttons = listOf(
                             "Fight" to {
                                 fightMonsterDismiss(
-                                    monster?.monsterId ?: 5,
+                                    monsterId = monster?.monsterId ?: 5,
                                     deckId = selectedDeckId
                                 )
                             },
@@ -221,6 +245,7 @@ fun MapScreen(
     val mapProperties = MapProperties(
         isMyLocationEnabled = state.lastKnownLocation != null,
     )
+
     val cameraPositionState = rememberCameraPositionState()
 
     Box(
@@ -229,7 +254,7 @@ fun MapScreen(
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = mapProperties,
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
         ) {
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
@@ -251,7 +276,7 @@ fun MapScreen(
                                 cameraPositionState.animate(
                                     update = CameraUpdateFactory.newLatLngBounds(
                                         calculateZoneViewCenter(),
-                                        0
+                                        0,
                                     ),
                                 )
                             }
@@ -271,12 +296,12 @@ fun MapScreen(
             OutlinedButton(
                 onClick = { fightMonster = true },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-                    contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 border = BorderStroke(
-                    2.dp,
-                    androidx.compose.material3.MaterialTheme.colorScheme.background
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.background,
                 ),
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -321,27 +346,28 @@ fun ShowAlertFound(
     buttons: List<Pair<String, () -> Unit>>,
     onDismiss: () -> Unit
 ) {
-    androidx.compose.material3.AlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
-        title = { androidx.compose.material3.Text(title) },
+        title = { Text(title) },
+        titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         text = {
             Column(modifier = Modifier.padding(10.dp)) {
-                androidx.compose.material3.Text(message, fontSize = 16.sp)
+                Text(message, fontSize = 16.sp)
             }
             Column(modifier = Modifier.padding(top = 60.dp)) {
                 DropDownMenu(deckViewModel = deckViewModel)
             }
         },
         confirmButton = {
-            androidx.compose.material3.Button(onClick = buttons[0].second) {
-                androidx.compose.material3.Text(stringResource(R.string.map_fight))
+            Button(onClick = buttons[0].second) {
+                Text(stringResource(R.string.map_fight))
             }
         },
         dismissButton = {
-            androidx.compose.material3.Button(
+            Button(
                 onClick = onDismiss
             ) {
-                androidx.compose.material3.Text(stringResource(R.string.map_run))
+                Text(stringResource(R.string.map_run))
             }
         },
     )
@@ -362,13 +388,14 @@ fun ShowAlertNotFound(
     message: String,
     onDismiss: () -> Unit
 ) {
-    androidx.compose.material3.AlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
-        title = { androidx.compose.material3.Text(title) },
-        text = { androidx.compose.material3.Text(message) },
+        title = { Text(title) },
+        text = { Text(message) },
+        titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         confirmButton = {
-            androidx.compose.material3.Button(onClick = onDismiss) {
-                androidx.compose.material3.Text("OK")
+            Button(onClick = onDismiss) {
+                Text("OK")
             }
         }
     )
@@ -407,13 +434,13 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
         ) {
             TextField(
                 value = selectedItem,
-                textStyle = TextStyle(color = Color(0xFFC8CAD5)),
+                textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant),
                 onValueChange = {},
                 readOnly = true,
                 label = {
                     Text(
                         text = stringResource(R.string.map_deck_dropdown),
-                        style = TextStyle(color = Color(0xFFC8CAD5)),
+                        style = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant),
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -422,23 +449,29 @@ fun DropDownMenu(deckViewModel: DeckViewModel) {
                         expanded = expanded
                     )
                 },
-                colors = ExposedDropdownMenuDefaults.textFieldColors()
+                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                    backgroundColor = MaterialTheme.colorScheme.background
+                )
             )
         }
 
         // menu
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background)
         ) {
             deckOptions?.forEach { selectedOption ->
                 // menu item
-                DropdownMenuItem(onClick = {
-                    selectedItem = selectedOption
-                    selectedDeckId =
-                        deckList.find { deck -> deck.deckName == selectedOption }?.deckId ?: 1
-                    expanded = false
-                }) {
+                DropdownMenuItem(
+                    onClick = {
+                        selectedItem = selectedOption
+                        selectedDeckId =
+                            deckList.find { deck -> deck.deckName == selectedOption }?.deckId ?: 1
+                        expanded = false
+                    }
+                ) {
                     Text(text = selectedOption)
                 }
             }
