@@ -39,7 +39,7 @@ This app uses MVVM (Model View View-Model) architecture.
 ## Environment Variables & GitHub Secrets
 
 To run this project, you will need to add the following environment variables to your local.properties file and for our GitHub Actions automated testing to work, also add it to your GitHub secrets.
-[How to get a Google Maps Api Key](https://developers.google.com/maps/documentation/embed/get-api-key).
+[How to get a Google Maps API Key.](https://developers.google.com/maps/documentation/embed/get-api-key)
 
 `GOOGLE_MAPS_API_KEY`
 
