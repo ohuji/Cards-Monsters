@@ -39,29 +39,29 @@ This app uses MVVM (Model View View-Model) architecture.
 ## Environment Variables & GitHub Secrets
 
 To run this project, you will need to add the following environment variables to your local.properties file and for our GitHub Actions automated testing to work, also add it to your GitHub secrets.
-[How to get a Google Maps Api Key](https://developers.google.com/maps/documentation/embed/get-api-key)
+[How to get a Google Maps Api Key](https://developers.google.com/maps/documentation/embed/get-api-key).
 
 `GOOGLE_MAPS_API_KEY`
 
 ## Run Locally
 
-Application doesn't currently have a production release
+This application doesn't currently have a production release.
 
-Clone the project
+- Clone the project
 
 ```bash
   git clone https://github.com/ohuji/Cards-Monsters.git
 ```
-Download & open Android Studio editor
+- Download & open Android Studio editor
 
-Augmented reality features can only be used on a physical android phone and not on emulator.
+- Augmented reality features can only be used on a physical android phone and not on emulator
 
-Configure your android mobile phone for dev usage. 
+- Configure your android mobile phone for dev usage.
 More info on: [Run apps on a hardware device](https://developer.android.com/studio/run/device)
 
-Choose your device instead of emulator.
+- Choose your device instead of emulator
 
-To build and run your code, choose Run > Run 'app', or click the Run button in your project’s toolbar.
+- To build and run your code, choose Run > Run 'app', or click the Run button in your project’s toolbar
 
 
 ## License
