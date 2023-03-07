@@ -151,14 +151,26 @@ fun Navbar(navController: NavController) {
                     },
                     icon = {
                         when (item) {
-                            "home" -> Icon(Icons.Filled.Home, contentDescription = "Home")
-                            "map" -> Icon(Icons.Filled.Place, contentDescription = "Map")
-                            "deck_building" -> Icon(Icons.Filled.List, contentDescription = "Decks")
+                            "home" -> Icon(
+                                Icons.Filled.Home,
+                                contentDescription = "Home"
+                            )
+                            "map" -> Icon(
+                                Icons.Filled.Place,
+                                contentDescription = "Map"
+                            )
+                            "deck_building" -> Icon(
+                                Icons.Filled.List,
+                                contentDescription = "Decks"
+                            )
                             "collectables" -> Icon(
                                 Icons.Filled.Star,
                                 contentDescription = "Collectables"
                             )
-                            else -> Icon(Icons.Default.Home, contentDescription = "Home")
+                            else -> Icon(
+                                Icons.Default.Home,
+                                contentDescription = "Home"
+                            )
                         }
                     }
                 )

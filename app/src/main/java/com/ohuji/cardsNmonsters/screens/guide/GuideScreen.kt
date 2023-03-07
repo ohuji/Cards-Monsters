@@ -45,7 +45,7 @@ fun GuideScreen(navController: NavController) {
         Box(modifier = Modifier.fillMaxHeight(0.90f)) {
             Image(
                 painter = painterResource(R.drawable.paper),
-                contentDescription = "Guide background image",
+                contentDescription = stringResource(id = R.string.paper_image_desc),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -166,7 +166,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.light_icon),
-            contentDescription = "light icon",
+            contentDescription = stringResource(id = R.string.light_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -184,7 +184,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.dark_icon),
-            contentDescription = "Dark icon",
+            contentDescription = stringResource(id = R.string.dark_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -202,7 +202,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.water_icon),
-            contentDescription = "Water icon",
+            contentDescription = stringResource(id = R.string.water_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -220,7 +220,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.fire_icon),
-            contentDescription = "Fire icon",
+            contentDescription = stringResource(id = R.string.fire_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -238,7 +238,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.wind_icon),
-            contentDescription = "Wind icon",
+            contentDescription = stringResource(id = R.string.wind_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -256,7 +256,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.earth_icon),
-            contentDescription = "Earth icon",
+            contentDescription = stringResource(id = R.string.earth_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -274,7 +274,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.electricity_icon),
-            contentDescription = "Electricity icon",
+            contentDescription = stringResource(id = R.string.electricity_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)
@@ -292,7 +292,7 @@ fun GuideElement() {
     Row() {
         Image(
             painter = painterResource(R.drawable.phys_icon),
-            contentDescription = "Element icon",
+            contentDescription = stringResource(id = R.string.element_icon_desc),
             modifier = Modifier
                 .padding(start = 3.dp, end = 5.dp, top = 3.dp, bottom = 3.dp)
                 .size(20.dp)

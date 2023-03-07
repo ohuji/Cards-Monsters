@@ -106,6 +106,14 @@ fun ARScreen(
         return health.toString()
     }
 
+    /**
+     * Create ARModelNode and load GLB model for it asynchronously
+     * Set BEST_AVAILABLE placement mode for auto refining accuracy placement of the node.
+     * Set instantAnchor set as false in order to not set anchor when node is placed.
+     * Set Float3 hitPosition coordinates and set followHitPosition as true in order to make node follow it.
+     * Set autoAnimate as true for using GLB models animation.
+     * Set centerOrigin Float3 Position for model.
+     */
     val model = ArModelNode(
         placementMode = PlacementMode.BEST_AVAILABLE,
         instantAnchor = false,
@@ -144,7 +152,7 @@ fun ARScreen(
             ) {
                 Image(
                     painter = painterResource(R.drawable.wood_background),
-                    contentDescription = "Contact profile picture",
+                    contentDescription = stringResource(id = R.string.wood_background_desc),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -213,7 +221,7 @@ fun AR(
             nodes = nodes,
             planeRenderer = true,
             onCreate = { arSceneView ->
-                // Apply your configuration
+                // Apply configuration
                 arSceneView.addChild(model)
             },
             onSessionCreate = { session ->
@@ -234,7 +242,7 @@ fun AR(
         ) {
             Image(
                 painter = painterResource(R.drawable.wood_background),
-                contentDescription = "Contact profile picture",
+                contentDescription = stringResource(id = R.string.wood_background_desc),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )

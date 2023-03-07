@@ -74,5 +74,24 @@
     <string name="map_deck_dropdown">Sinun pakkasi:</string>
     <string name="map_fight">Taistele</string>
     <string name="map_run">Pakene</string>
+    <string name="wood_background_desc">Puinen taustakuva</string>
+    <string name="main_image_desc">Pää rpg kuva</string>
+    <string name="deck_image_desc">Kuva korttipakasta</string>
+    <string name="lock_image_desc">Kuva lukosta</string>
+    <string name="list_icon_desc">Lista ikoni</string>
+    <string name="edit_icon_desc">Muokkaus ikoni</string>
+    <string name="paper_image_desc">Paperinen taustakuva</string>
+    <string name="light_icon_desc">Valo ikoni</string>
+    <string name="dark_icon_desc">Tumma ikoni</string>
+    <string name="earth_icon_desc">Maa ikoni</string>
+    <string name="water_icon_desc">Vesi ikoni</string>
+    <string name="electricity_icon_desc">Sähkö ikoni</string>
+    <string name="element_icon_desc">Elementti ikoni</string>
+    <string name="fire_icon_desc">Tuli ikoni</string>
+    <string name="wind_icon_desc">Tuuli ikoni</string>
+    <string name="info_icon_desc">Info ikoni</string>
+    <string name="button_image_desc">Nappi rpg taustakuva</string>
+    <string name="logo_image_desc">Logo kuva</string>
+
 
 </resources>

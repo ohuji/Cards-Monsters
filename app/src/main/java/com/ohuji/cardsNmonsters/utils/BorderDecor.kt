@@ -27,13 +27,13 @@ fun BorderDecor(){
         ) {
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_tl),
-                contentDescription = "deco image",
+                contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
 
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_tr),
-                contentDescription = "deco image",
+                contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
         }
@@ -43,13 +43,13 @@ fun BorderDecor(){
         ) {
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_bl),
-                contentDescription = "deco image",
+                contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
 
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_br),
-                contentDescription = "deco image",
+                contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
         }

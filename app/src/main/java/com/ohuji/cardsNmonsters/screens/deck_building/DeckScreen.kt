@@ -21,8 +21,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -79,7 +81,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(R.drawable.cm_splash),
-                contentDescription = "Paper image",
+                contentDescription = stringResource(id = R.string.main_image_desc),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -108,14 +110,15 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 70.dp)
                     .clip(RoundedCornerShape(20.dp))
                     .background(Color.Gray)
             ) {
                 Image(
                     painter = painterResource(R.drawable.paper),
-                    contentDescription = "Paper image",
+                    contentDescription = stringResource(id = R.string.paper_image_desc),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -138,8 +141,18 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                 },
                                 icon = {
                                     when (index) {
-                                        0 -> Icon(Icons.Default.Email, contentDescription = null)
-                                        1 -> Icon(Icons.Default.Home, contentDescription = null)
+                                        0 -> Icon(
+                                            Icons.Default.List,
+                                            contentDescription = stringResource(
+                                                id = R.string.list_icon_desc
+                                            ),
+                                        )
+                                        1 -> Icon(
+                                            Icons.Default.Edit,
+                                            contentDescription = stringResource(
+                                                id = R.string.edit_icon_desc
+                                            ),
+                                        )
                                     }
                                 }
                             )
@@ -156,7 +169,7 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
                                 .border(5.dp, MaterialTheme.colorScheme.primary)) {
                                 Image(
                                     painter = painterResource(R.drawable.cm_splash),
-                                    contentDescription = "another paper image:D",
+                                    contentDescription = stringResource(id = R.string.main_image_desc),
                                     modifier = Modifier.fillMaxSize(),
                                     contentScale = ContentScale.Crop
                                 )
@@ -211,8 +224,8 @@ fun DeckScreen(viewModel: DeckViewModel, navController: NavController) {
 
                                     Button(
                                         modifier = Modifier
-                                        .padding(top = 10.dp, bottom = 10.dp)
-                                        .align(Alignment.CenterHorizontally),
+                                            .padding(top = 10.dp, bottom = 10.dp)
+                                            .align(Alignment.CenterHorizontally),
                                         onClick = {
                                             if (selectedCardIds.size == 4 && deckName.length >= 3 && deckName.length < 15) {
                                                 viewModel.viewModelScope.launch(Dispatchers.IO) {
@@ -339,7 +352,7 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
                     Box(Modifier.fillMaxSize()) {
                         Image(
                             painter = painterResource(R.drawable.deck1_img),
-                            contentDescription = "Cards image",
+                            contentDescription = stringResource(id = R.string.deck_image_desc),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .align(Alignment.Center)
@@ -367,7 +380,7 @@ fun DeckList(viewModel: DeckViewModel, navController: NavController) {
                 Column() {
                     Image(
                         painter = painterResource(R.drawable.lock_icon),
-                        contentDescription = "lock icon",
+                        contentDescription = stringResource(id = R.string.lock_image_desc),
                         modifier = Modifier
                             .size(50.dp)
                             .align(Alignment.CenterHorizontally),

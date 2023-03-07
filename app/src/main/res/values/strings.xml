@@ -74,4 +74,24 @@
     <string name="map_deck_dropdown">Your decks:</string>
     <string name="map_fight">Fight</string>
     <string name="map_run">Run</string>
+    <string name="wood_background_desc">Wooden background image</string>
+    <string name="main_image_desc">Main rpg image</string>
+    <string name="deck_image_desc">Image of deck</string>
+    <string name="lock_image_desc">Image of lock</string>
+    <string name="list_icon_desc">List icon</string>
+    <string name="edit_icon_desc">Edit icon</string>
+    <string name="paper_image_desc">Background paper image</string>
+    <string name="light_icon_desc">Light icon</string>
+    <string name="dark_icon_desc">Dark icon</string>
+    <string name="earth_icon_desc">Earth icon</string>
+    <string name="water_icon_desc">Water icon</string>
+    <string name="electricity_icon_desc">Electricity icon</string>
+    <string name="element_icon_desc">Element icon</string>
+    <string name="fire_icon_desc">Fire icon</string>
+    <string name="wind_icon_desc">Wind icon</string>
+    <string name="info_icon_desc">Info icon</string>
+    <string name="button_image_desc">Button rpg image</string>
+    <string name="logo_image_desc">Logo image</string>
+
+
 </resources>

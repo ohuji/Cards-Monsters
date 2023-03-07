@@ -39,7 +39,7 @@ fun HomeScreen(navController: NavController, gotVM: GoTViewModel) {
     ) {
         Image(
             painter = painterResource(id = R.drawable.cm_splash),
-            contentDescription = "background image",
+            contentDescription = stringResource(id = R.string.main_image_desc),
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.FillHeight,
         )
@@ -52,7 +52,7 @@ fun HomeScreen(navController: NavController, gotVM: GoTViewModel) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.cm_logo),
-                contentDescription = "logo image",
+                contentDescription = stringResource(id = R.string.logo_image_desc),
                 modifier = Modifier.size(300.dp, 300.dp),
             )
 
@@ -107,7 +107,7 @@ fun CustomButtonContent(txt: String){
         )
         Image(
             painter = painterResource(id = R.drawable.cm_button),
-            contentDescription = "button image",
+            contentDescription = stringResource(id = R.string.button_image_desc),
             modifier = Modifier.size(220.dp, 60.dp),
         )
 

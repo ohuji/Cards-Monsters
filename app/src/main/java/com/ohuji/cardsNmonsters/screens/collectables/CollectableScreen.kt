@@ -42,7 +42,7 @@ fun CollectablesScreen(viewModel: CollectablesViewModel) {
         ) {
             Image(
                 painter = painterResource(R.drawable.cm_splash),
-                contentDescription = "Paper image",
+                contentDescription = stringResource(id = R.string.main_image_desc),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -109,7 +109,11 @@ fun AchievementList(viewModel: CollectablesViewModel) {
         items(collectableList.value) {
             Box(modifier = Modifier
                 .background(color = Color.White, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, MaterialTheme.colorScheme.background, shape = RoundedCornerShape(8.dp))
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(8.dp)
+                )
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
 
