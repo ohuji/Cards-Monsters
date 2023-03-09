@@ -13,7 +13,19 @@ To battle a monster, you'll need to be in the vicinity of its location, as indic
 
 As you battle against more monsters, you'll be able to track your progress and achievements through the app's collections feature. This feature allows you to track your progress towards completing different challenges.
 
-
+# Application screens
+<table>
+  <tr>
+<td><img src="https://user-images.githubusercontent.com/95070775/223972940-e535f7b8-e564-4675-9206-6a90602e41b6.JPG" width="300"></td>
+<td><img src="https://user-images.githubusercontent.com/95070775/223974673-4f0b4a6d-311e-431a-a2d3-306097aec900.JPG" width="300"></td>
+<td><img src="https://user-images.githubusercontent.com/95070775/223974719-4a9a09a9-3a78-4833-9b31-b4fdd606c27a.JPG" width="300"></td>
+</tr>
+  <tr>
+<td><img src="https://user-images.githubusercontent.com/95070775/223974779-8569666a-ae93-4a49-be4e-4eb0a7c9337f.JPG" width="300"></td>
+<td><img src="https://user-images.githubusercontent.com/95070775/223974801-1dbadcca-7455-495f-9dc5-4f7630c8b115.JPG" width="300"></td>
+<td><img src="https://user-images.githubusercontent.com/95070775/223974849-d3d5eed6-cab8-4196-a217-84f6fef11f0a.JPG" width="300"></td>
+  </tr>
+</table>
 
 ## Technologies Used
 
