@@ -14,6 +14,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.ohuji.cardsNmonsters.R
 
+/**
+ * This function draws four decorative drawables in the four corners of the screen/view, according to the max constraint dimensions
+*/
 @Composable
 fun BorderDecor(){
     Column(
@@ -25,12 +28,14 @@ fun BorderDecor(){
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
+            //top left image
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_tl),
                 contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
 
+            //top right image
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_tr),
                 contentDescription = null,
@@ -41,12 +46,14 @@ fun BorderDecor(){
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
+            //bottom left image
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_bl),
                 contentDescription = null,
                 modifier = Modifier.size(50.dp, 50.dp)
             )
 
+            //bottom right image
             Image(
                 painter = painterResource(id = R.drawable.cm_deco_br),
                 contentDescription = null,
